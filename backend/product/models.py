@@ -31,8 +31,17 @@ class Product(models.Model):
     #accessable attributes
     rating = models.DecimalField(max_digits=2, decimal_places=1, default=0)
     is_active = models.BooleanField(default=True)
-    is_featured = models.BooleanField(default=False)
+
+
+    # Boolean flags for home sections
     is_best_selling = models.BooleanField(default=False)
+    is_new_arrival = models.BooleanField(default=False)
+    is_top_brand = models.BooleanField(default=False)
+    is_featured = models.BooleanField(default=False)
+    is_free_delivery = models.BooleanField(default=False)
+    is_trending = models.BooleanField(default=False)
+    is_recently_viewed = models.BooleanField(default=False)
+    is_just_for_you = models.BooleanField(default=False)
 
 
     def __str__(self):

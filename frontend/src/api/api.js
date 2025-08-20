@@ -18,6 +18,22 @@ export const bannerList = (data) => API.get("/banner/", data);
 export const fetchProducts = () => API.get("/products/");
 export const fetchProductById = (id) => API.get(`/products/${id}/`);
 
+
+// Home page's products arrows
+export const topRatedProducts = () => API.get("/product/home/?list_type=top_rated");
+export const recentProducts = () => API.get("/product/home/?list_type=recent_selling");
+export const BestSellingProducts = () => API.get("/product/home/?list_type=best_selling");
+export const arrivalProducts = () => API.get("/product/home/?list_type=new_arrival");
+export const topBrandProducts = () => API.get("/product/home/?list_type=top_brand");
+
+export const newlyProducts = () => API.get("/product/home/?list_type=new");
+export const trendProducts = () => API.get("/product/home/?list_type=trend");
+export const featuredProducts = () => API.get("/product/home/?list_type=featured");
+export const freeDeliveryProducts = () => API.get("/product/home/?list_type=free_delivery");
+export const recentlyViewProducts = () => API.get("/product/home/?list_type=recently_view");
+export const justYouProducts = () => API.get("/product/home/?list_type=just_you");
+
+
 // Cart
 export const fetchCart = () => API.get("/cart/");
 export const addToCart = (data) => API.post("/cart/add/", data);

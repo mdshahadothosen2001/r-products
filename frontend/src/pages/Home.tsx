@@ -1,15 +1,33 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import API from "../api/api";
+import { topRatedProducts, recentProducts, BestSellingProducts, arrivalProducts, topBrandProducts,
+  newlyProducts, trendProducts, featuredProducts, freeDeliveryProducts, recentlyViewProducts, justYouProducts
+ } from "../api/api"; // import the function
 import "./style.css";
-import Footer from "../components/Footer"
+import Footer from "../components/Footer";
 import HeaderUser from "../components/HeaderUser";
 import Banner from "../components/Banner";
 import productIcon from "../assets/icons/product-icon.png";
 
 export default function HomePage() {
   const [categories, setCategories] = useState([]);
+  const [products, setProducts] = useState([]); // state for API products
+  
+// Products state
+const [topRatedProductList, setTopRatedProducts] = useState([]);
+const [recentProductList, setRecentProducts] = useState([]);
+const [bestSellingProductList, setBestSellingProducts] = useState([]);
+const [arrivalProductList, setArrivalProducts] = useState([]);
+const [topBrandProductList, setTopBrandProducts] = useState([]);
 
+const [newlyProductList, setNewlyProducts] = useState([]);
+const [trendProductList, setTrendProducts] = useState([]);
+const [featuredProductList, setFeaturedProducts] = useState([]);
+const [freeDeliveryProductList, setFreeDeliveryProducts] = useState([]);
+const [recentlyViewProductList, setRecentlyViewProducts] = useState([]);
+const [justYouProductList, setJustYouProducts] = useState([]);
+
+  // Fetch categories
   useEffect(() => {
     axios
       .get("http://localhost:8000/api/category/")
@@ -17,24 +35,89 @@ export default function HomePage() {
       .catch((err) => console.error(err));
   }, []);
 
-  // Dummy products
-  const products = [
-    { id: 1, name: "Smart Watch", image: "/dummy1.png", brand: "Brand A", category: "Wearables", rating: 4.5, price: "$49.99", thumbnail: "https://ds.rokomari.store/rokomari110/ProductNew20190903/260X372/Single_Lens_V380_Pro_PTZ_WiFi_IP_Wireles-Non_Brand-eca42-476751.png" },
-    { id: 2, name: "Hair Trimmer", image: "/dummy2.png", brand: "Brand B", category: "Grooming", rating: 4, price: "$19.99", thumbnail: "https://ds.rokomari.store/rokomari110/ProductNew20190903/260X372/Single_Lens_V380_Pro_PTZ_WiFi_IP_Wireles-Non_Brand-eca42-476751.png" },
-    { id: 3, name: "Universal Plug", image: "/dummy3.png", brand: "Brand C", category: "Electronics", rating: 3.8, price: "$9.99", thumbnail: "https://ds.rokomari.store/rokomari110/ProductNew20190903/260X372/Single_Lens_V380_Pro_PTZ_WiFi_IP_Wireles-Non_Brand-eca42-476751.png" },
-    { id: 4, name: "Electric Grill", image: "/dummy4.png", brand: "Brand D", category: "Kitchen", rating: 4.2, price: "$79.99", thumbnail: "https://ds.rokomari.store/rokomari110/ProductNew20190903/260X372/Colmi_P71_Voice_Calling_19_Inch_Display_-Colmi-0f14c-367166.png" },
-    { id: 5, name: "Smartphone", image: "/dummy5.png", brand: "Brand E", category: "Mobile", rating: 4.7, price: "$399.99", thumbnail: "https://ds.rokomari.store/rokomari110/ProductNew20190903/260X372/Single_Lens_V380_Pro_PTZ_WiFi_IP_Wireles-Non_Brand-eca42-476751.png" },
-    { id: 6, name: "Smart Watch", image: "/dummy1.png", brand: "Brand A", category: "Wearables", rating: 4.5, price: "$49.99", thumbnail: "https://ds.rokomari.store/rokomari110/ProductNew20190903/260X372/Colmi_P71_Voice_Calling_19_Inch_Display_-Colmi-0f14c-367166.png" },
-    { id: 7, name: "Hair Trimmer", image: "/dummy2.png", brand: "Brand B", category: "Grooming", rating: 4, price: "$19.99", thumbnail: "https://ds.rokomari.store/rokomari110/ProductNew20190903/260X372/Single_Lens_V380_Pro_PTZ_WiFi_IP_Wireles-Non_Brand-eca42-476751.png" },
-    { id: 8, name: "Universal Plug", image: "/dummy3.png", brand: "Brand C", category: "Electronics", rating: 3.8, price: "$9.99", thumbnail: "https://ds.rokomari.store/rokomari110/ProductNew20190903/260X372/Single_Lens_V380_Pro_PTZ_WiFi_IP_Wireles-Non_Brand-eca42-476751.png" },
-    { id: 9, name: "Electric Grill", image: "/dummy4.png", brand: "Brand D", category: "Kitchen", rating: 4.2, price: "$79.99", thumbnail: "https://ds.rokomari.store/rokomari110/ProductNew20190903/260X372/Colmi_P71_Voice_Calling_19_Inch_Display_-Colmi-0f14c-367166.png" },
-    { id: 10, name: "Smartphone", image: "/dummy5.png", brand: "Brand E", category: "Mobile", rating: 4.7, price: "$399.99", thumbnail: "https://ds.rokomari.store/rokomari110/ProductNew20190903/260X372/Single_Lens_V380_Pro_PTZ_WiFi_IP_Wireles-Non_Brand-eca42-476751.png" },
-    { id: 11, name: "Smart Watch", image: "/dummy1.png", brand: "Brand A", category: "Wearables", rating: 4.5, price: "$49.99", thumbnail: "https://ds.rokomari.store/rokomari110/ProductNew20190903/260X372/Colmi_P71_Voice_Calling_19_Inch_Display_-Colmi-0f14c-367166.png" },
-    { id: 12, name: "Hair Trimmer", image: "/dummy2.png", brand: "Brand B", category: "Grooming", rating: 4, price: "$19.99", thumbnail: "https://ds.rokomari.store/rokomari110/ProductNew20190903/260X372/Single_Lens_V380_Pro_PTZ_WiFi_IP_Wireles-Non_Brand-eca42-476751.png" },
-    { id: 13, name: "Universal Plug", image: "/dummy3.png", brand: "Brand C", category: "Electronics", rating: 3.8, price: "$9.99", thumbnail: "https://ds.rokomari.store/rokomari110/ProductNew20190903/260X372/Colmi_P71_Voice_Calling_19_Inch_Display_-Colmi-0f14c-367166.png" },
-    { id: 14, name: "Electric Grill", image: "/dummy4.png", brand: "Brand D", category: "Kitchen", rating: 4.2, price: "$79.99", thumbnail: "https://ds.rokomari.store/rokomari110/ProductNew20190903/260X372/Single_Lens_V380_Pro_PTZ_WiFi_IP_Wireles-Non_Brand-eca42-476751.png" },
-    { id: 15, name: "Smartphone", image: "/dummy5.png", brand: "Brand E", category: "Mobile", rating: 4.7, price: "$399.99", thumbnail: "https://ds.rokomari.store/rokomari110/ProductNew20190903/260X372/Colmi_P71_Voice_Calling_19_Inch_Display_-Colmi-0f14c-367166.png" },
-  ];
+
+  // Fetch top rated products
+  useEffect(() => {
+    topRatedProducts()
+      .then((res) => setTopRatedProducts(res.data))
+      .catch((err) => console.error("Failed to load products:", err));
+  }, []);
+
+
+  // Fetch recent selling products
+  useEffect(() => {
+    recentProducts()
+      .then((res) => setRecentProducts(res.data))
+      .catch((err) => console.error("Failed to load products:", err));
+  }, []);
+
+
+
+  // Fetch best selling products
+  useEffect(() => {
+    BestSellingProducts()
+      .then((res) => setBestSellingProducts(res.data))
+      .catch((err) => console.error("Failed to load products:", err));
+  }, []);
+
+
+  // Fetch new arrival products
+  useEffect(() => {
+    arrivalProducts()
+      .then((res) => setArrivalProducts(res.data))
+      .catch((err) => console.error("Failed to load products:", err));
+  }, []);
+
+  // Fetch top brand products
+  useEffect(() => {
+    topBrandProducts()
+      .then((res) => setTopBrandProducts(res.data))
+      .catch((err) => console.error("Failed to load products:", err));
+  }, []);
+
+
+  // Fetch newly products
+  useEffect(() => {
+    newlyProducts()
+      .then((res) => setNewlyProducts(res.data))
+      .catch((err) => console.error("Failed to load products:", err));
+  }, []);
+
+  // Fetch trend products
+  useEffect(() => {
+    trendProducts()
+      .then((res) => setTrendProducts(res.data))
+      .catch((err) => console.error("Failed to load products:", err));
+  }, []);
+
+  // Fetch featured products
+  useEffect(() => {
+    featuredProducts()
+      .then((res) => setFeaturedProducts(res.data))
+      .catch((err) => console.error("Failed to load products:", err));
+  }, []);
+
+  // Fetch free delivery products
+  useEffect(() => {
+    freeDeliveryProducts()
+      .then((res) => setFreeDeliveryProducts(res.data))
+      .catch((err) => console.error("Failed to load products:", err));
+  }, []);
+
+  // Fetch recently viewed products
+  useEffect(() => {
+    recentlyViewProducts()
+      .then((res) => setRecentlyViewProducts(res.data))
+      .catch((err) => console.error("Failed to load products:", err));
+  }, []);
+
+  // Fetch just for you products
+  useEffect(() => {
+    justYouProducts()
+      .then((res) => setJustYouProducts(res.data))
+      .catch((err) => console.error("Failed to load products:", err));
+  }, []);
+
 
 
   const scrollCarousel = (direction, id) => {
@@ -112,7 +195,7 @@ export default function HomePage() {
           </button>
 
           <div className="cards-container" id="top-products-carousel">
-            {products.map(product => (
+            {topRatedProductList.map(product => (
               <div key={product.id} className="product-card">
                 <img src={product.thumbnail} alt={product.name} />
                 <div className="product-info">
@@ -135,7 +218,7 @@ export default function HomePage() {
 
       {/* Recent Products */}
       <section className="scroll-section">
-        <h2 className="section-title">Recent selling Products</h2>
+        <h2 className="section-title">Recently Sold Products</h2>
 
         <div className="scroll-carousel">
           <button 
@@ -146,7 +229,7 @@ export default function HomePage() {
           </button>
 
           <div className="cards-container" id="recent-products-carousel">
-            {products.map(product => (
+            {recentProductList.map(product => (
               <div key={product.id} className="product-card">
                 <img src={product.thumbnail} alt={product.name} />
                 <div className="product-info">
@@ -180,7 +263,7 @@ export default function HomePage() {
           </button>
 
           <div className="cards-container" id="best-products-carousel">
-            {products.map(product => (
+            {bestSellingProductList.map(product => (
               <div key={product.id} className="product-card">
                 <img src={product.thumbnail} alt={product.name} />
                 <div className="product-info">
@@ -213,8 +296,8 @@ export default function HomePage() {
             &lt;
           </button>
 
-          <div className="cards-container" id="best-products-carousel">
-            {products.map(product => (
+          <div className="cards-container" id="new-arrivals-products-carousel">
+            {arrivalProductList.map(product => (
               <div key={product.id} className="product-card">
                 <img src={product.thumbnail} alt={product.name} />
                 <div className="product-info">
@@ -227,7 +310,7 @@ export default function HomePage() {
 
           <button 
             className="arrow right" 
-            onClick={() => scrollCarousel("right", "best-products-carousel")}
+            onClick={() => scrollCarousel("right", "new-arrivals-products-carousel")}
           >
             &gt;
           </button>
@@ -248,8 +331,8 @@ export default function HomePage() {
             &lt;
           </button>
 
-          <div className="cards-container" id="best-products-carousel">
-            {products.map(product => (
+          <div className="cards-container" id="top-brand-products-carousel">
+            {topBrandProductList.map(product => (
               <div key={product.id} className="product-card">
                 <img src={product.thumbnail} alt={product.name} />
                 <div className="product-info">
@@ -262,12 +345,221 @@ export default function HomePage() {
 
           <button 
             className="arrow right" 
-            onClick={() => scrollCarousel("right", "best-products-carousel")}
+            onClick={() => scrollCarousel("right", "top-brand-products-carousel")}
           >
             &gt;
           </button>
         </div>
       </section>
+
+
+      {/* Newly Released Products */}
+      <section className="scroll-section">
+        <h2 className="section-title">Newly Released Products</h2>
+
+        <div className="scroll-carousel">
+          <button 
+            className="arrow left" 
+            onClick={() => scrollCarousel("left", "newly-released-products-carousel")}
+          >
+            &lt;
+          </button>
+
+          <div className="cards-container" id="newly-released-products-carousel">
+            {newlyProductList.map(product => (
+              <div key={product.id} className="product-card">
+                <img src={product.thumbnail} alt={product.name} />
+                <div className="product-info">
+                  <h3>{product.name}</h3>
+                  <p><strong>Rating:</strong> {product.rating} ⭐</p>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <button 
+            className="arrow right" 
+            onClick={() => scrollCarousel("right", "newly-released-products-carousel")}
+          >
+            &gt;
+          </button>
+        </div>
+      </section>
+
+
+      {/* Trending Products */}
+      <section className="scroll-section">
+        <h2 className="section-title">Trending Products</h2>
+
+        <div className="scroll-carousel">
+          <button 
+            className="arrow left" 
+            onClick={() => scrollCarousel("left", "trending-products-carousel")}
+          >
+            &lt;
+          </button>
+
+          <div className="cards-container" id="trending-products-carousel">
+            {trendProductList.map(product => (
+              <div key={product.id} className="product-card">
+                <img src={product.thumbnail} alt={product.name} />
+                <div className="product-info">
+                  <h3>{product.name}</h3>
+                  <p><strong>Rating:</strong> {product.rating} ⭐</p>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <button 
+            className="arrow right" 
+            onClick={() => scrollCarousel("right", "trending-products-carousel")}
+          >
+            &gt;
+          </button>
+        </div>
+      </section>
+
+
+      {/* Featured Categories */}
+      <section className="scroll-section">
+        <h2 className="section-title">Featured Categories</h2>
+
+        <div className="scroll-carousel">
+          <button 
+            className="arrow left" 
+            onClick={() => scrollCarousel("left", "featured-products-carousel")}
+          >
+            &lt;
+          </button>
+
+          <div className="cards-container" id="featured-products-carousel">
+            {featuredProductList.map(product => (
+              <div key={product.id} className="product-card">
+                <img src={product.thumbnail} alt={product.name} />
+                <div className="product-info">
+                  <h3>{product.name}</h3>
+                  <p><strong>Rating:</strong> {product.rating} ⭐</p>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <button 
+            className="arrow right" 
+            onClick={() => scrollCarousel("right", "featured-products-carousel")}
+          >
+            &gt;
+          </button>
+        </div>
+      </section>
+
+
+      {/* Freee Delivery Products */}
+      <section className="scroll-section">
+        <h2 className="section-title">Freee Delivery Products</h2>
+
+        <div className="scroll-carousel">
+          <button 
+            className="arrow left" 
+            onClick={() => scrollCarousel("left", "free-delivery-products-carousel")}
+          >
+            &lt;
+          </button>
+
+          <div className="cards-container" id="free-delivery-products-carousel">
+            {freeDeliveryProductList.map(product => (
+              <div key={product.id} className="product-card">
+                <img src={product.thumbnail} alt={product.name} />
+                <div className="product-info">
+                  <h3>{product.name}</h3>
+                  <p><strong>Rating:</strong> {product.rating} ⭐</p>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <button 
+            className="arrow right" 
+            onClick={() => scrollCarousel("right", "free-delivery-products-carousel")}
+          >
+            &gt;
+          </button>
+        </div>
+      </section>
+
+
+
+      {/* Recently Viewed Products */}
+      <section className="scroll-section">
+        <h2 className="section-title">Recently Viewed Products</h2>
+
+        <div className="scroll-carousel">
+          <button 
+            className="arrow left" 
+            onClick={() => scrollCarousel("left", "recently-view-product-carousel")}
+          >
+            &lt;
+          </button>
+
+          <div className="cards-container" id="recently-view-product-carousel">
+            {recentlyViewProductList.map(product => (
+              <div key={product.id} className="product-card">
+                <img src={product.thumbnail} alt={product.name} />
+                <div className="product-info">
+                  <h3>{product.name}</h3>
+                  <p><strong>Rating:</strong> {product.rating} ⭐</p>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <button 
+            className="arrow right" 
+            onClick={() => scrollCarousel("right", "recently-view-product-carousel")}
+          >
+            &gt;
+          </button>
+        </div>
+      </section>
+
+
+
+      {/* Just for you Products */}
+      <section className="scroll-section">
+        <h2 className="section-title">Just for you Products</h2>
+
+        <div className="scroll-carousel">
+          <button 
+            className="arrow left" 
+            onClick={() => scrollCarousel("left", "just-for-you-products-carousel")}
+          >
+            &lt;
+          </button>
+
+          <div className="cards-container" id="just-for-you-products-carousel">
+            {justYouProductList.map(product => (
+              <div key={product.id} className="product-card">
+                <img src={product.thumbnail} alt={product.name} />
+                <div className="product-info">
+                  <h3>{product.name}</h3>
+                  <p><strong>Rating:</strong> {product.rating} ⭐</p>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <button 
+            className="arrow right" 
+            onClick={() => scrollCarousel("right", "just-for-you-products-carousel")}
+          >
+            &gt;
+          </button>
+        </div>
+      </section>
+
+
+
 
 
 
