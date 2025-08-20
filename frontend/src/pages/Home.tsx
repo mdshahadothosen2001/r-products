@@ -4,6 +4,7 @@ import API from "../api/api";
 import "./style.css";
 import Footer from "../components/Footer"
 import HeaderUser from "../components/HeaderUser";
+import Banner from "../components/Banner";
 import productIcon from "../assets/icons/product-icon.png";
 
 export default function HomePage() {
@@ -40,7 +41,7 @@ export default function HomePage() {
     const container = document.getElementById(id);
     if (!container) return;
 
-    const scrollAmount = 250; // একবারে কতটা scroll হবে
+    const scrollAmount = 250;
 
     if (direction === "left") {
       container.scrollBy({ left: -scrollAmount, behavior: "smooth" });
@@ -94,6 +95,8 @@ export default function HomePage() {
           </button>
         ))}
       </div>
+
+      <Banner></Banner>
 
 
       {/* Top Rated Products Section */}

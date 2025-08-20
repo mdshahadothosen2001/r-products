@@ -1,0 +1,36 @@
+.banner-section {
+  background-color: #e7eaee;
+  padding: 30px 20px;
+  border-radius: 12px;
+  margin: 20px auto;
+  max-width: 1200px;
+  overflow: hidden; 
+}
+.banner-section img {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+  border-radius: 12px;
+}
+
+
+
+/* Mobile styles */
+@media (max-width: 1024px) {
+  .banner-section {
+    max-width: 90%;
+    padding: 25px 15px;
+  }
+}
+
+@media (max-width: 640px) {
+  .banner-section {
+    max-width: 100%;
+    padding: 15px 10px;
+  }
+
+  .banner-section img {
+    height: auto;
+    object-fit: contain;
+  }
+}

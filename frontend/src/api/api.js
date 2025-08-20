@@ -12,6 +12,7 @@ const API = axios.create({
 export const loginUser = (data) => API.post("/auth/token/", data);
 export const registerUser = (data) => API.post("/auth/register/", data);
 export const userProfile = (data) => API.get("/auth/profile/", data);
+export const bannerList = (data) => API.get("/banner/", data);
 
 // Products
 export const fetchProducts = () => API.get("/products/");
