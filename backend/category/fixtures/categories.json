@@ -1,0 +1,23 @@
+[
+  {
+    "model": "category.category",
+    "pk": 1,
+    "fields": {
+      "name": "Top Selling"
+    }
+  },
+  {
+    "model": "category.category",
+    "pk": 2,
+    "fields": {
+      "name": "New Arrivals"
+    }
+  },
+  {
+    "model": "category.category",
+    "pk": 3,
+    "fields": {
+      "name": "Discounted Items"
+    }
+  }
+]

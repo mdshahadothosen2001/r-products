@@ -1,0 +1,229 @@
+.header-links {
+    margin-left: 100px;
+    display: flex;
+    justify-content: space-between; 
+    align-items: center;
+    padding: 0 20px;
+    font-size: 1rem;
+    font-weight: 400;
+    color: #000;
+}
+.header-links-left {
+    margin: 0;
+    padding: 0;
+}
+.header-links-right {
+    margin-right: 100px; 
+    display: flex;
+    gap: 20px;
+}
+.header-links-right a {
+    text-decoration: none;
+    color: #000;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+.header-links-right a:hover {
+  color: #2563eb;
+}
+
+
+
+#head_title {
+    margin-left: 100px;
+    font-size: 1.25rem;
+    font-weight: 700;   
+    color: #2563eb;
+}
+
+
+#head_search {
+    flex: 1;              
+    margin-left: 24px;    
+    margin-right: 24px;
+}
+#head_search input {
+    width: 100%;              
+    padding: 8px 16px;        
+    border: 2px solid #d1d5db; 
+    border-radius: 0.375rem;   
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+#head_search input:focus {
+    border-color: #3b82f6;   
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.3); 
+}
+
+
+#head_user {
+    margin-right: 100px;
+    font-size: 1.25rem;
+    font-weight: 700;   
+    color: #2563eb; 
+}
+#head_user a{
+    padding: 4px;
+}
+#head_user a:hover {
+  color: #5375dd;
+  background-color: #e7e9ec;
+}
+
+
+
+/* :: product: */
+/* Section & title */
+.scroll-section {
+  background-color: #e7eaee;
+  padding: 30px 20px;
+  border-radius: 12px;
+  margin: 20px auto;
+  max-width: 1200px;
+}
+
+.section-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 20px;
+  text-align: left;
+  color: #1e3a8a;
+}
+
+/* Carousel */
+.scroll-carousel {
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+
+.cards-container {
+  display: flex;
+  overflow-x: auto;
+  gap: 16px;
+  padding: 10px 0;
+  scroll-behavior: smooth;
+
+  /* Hide scrollbar */
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;
+}
+
+/* Product card */
+.product-card {
+  display: flex;
+  flex-direction: column;
+  min-width: 160px;
+  flex-shrink: 0;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  background-color: #fff;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.product-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.product-card img {
+  width: 100%;
+  height: 120px;
+  object-fit: cover;
+  border-top-left-radius: 12px;
+  border-top-right-radius: 12px;
+}
+
+.product-info {
+  padding: 10px;
+}
+
+.product-info h3 {
+  font-size: 1rem;
+  margin-bottom: 4px;
+  font-weight: 600;
+}
+
+.product-info p {
+  font-size: 0.85rem;
+  margin: 2px 0;
+}
+
+/* Arrows */
+.arrow {
+  background-color: #fff;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  padding: 6px 10px;
+  border-radius: 50%;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+  z-index: 10;
+}
+
+.arrow.left {
+  margin-right: 8px;
+}
+
+.arrow.right {
+  margin-left: 8px;
+}
+
+
+
+/* :: product */
+
+/* ::start category section */
+#categories-container {
+  display: flex;
+  justify-content: center;
+  gap: 16px;              
+  padding: 12px 20px;     
+  background-color: #fff;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  overflow-x: auto;        
+  scrollbar-width: thin;   
+}
+#categories-container button {
+  white-space: nowrap;
+  padding: 8px 16px;
+  background-color: #dbeafe; 
+  color: #1e40af;            
+  border: none;
+  border-radius: 0.375rem;  
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+#categories-container button:hover {
+  background-color: #bfdbfe; 
+}
+
+/* ::end category section */
+
+
+/* Mobile styles */
+@media (max-width: 640px) {
+    #head_title,
+    #head_user {
+        font-size: 0.6rem; 
+        margin-left: 0; 
+        margin-right: 0; 
+    }
+
+    .header-links {
+        margin-left: 0;       
+        padding: 0 10px;     
+        font-size: 0.875rem;  
+    }
+    .header-links-right {
+        margin-right: 0;    
+        gap: 10px;           
+    }
+
+    .home_product_title {
+        font-size: 1.25rem;     
+        margin: 15px 0 10px 0;
+    }
+}
+
