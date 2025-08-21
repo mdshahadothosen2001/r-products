@@ -9,8 +9,8 @@ import WelcomeNavBar from "../components/WelcomeNavBar";
 
 
 const OrderBilling = () => {
-  const { id } = useParams(); // URL theke order ID nibe
-  const orderId = id; // just for clarity
+  const { id } = useParams();
+  const orderId = id;
   const [formData, setFormData] = useState({
     first_name: "",
     last_name: "",
@@ -72,9 +72,15 @@ const OrderBilling = () => {
       onSubmit={handleSubmit}
       className="max-w-2xl mx-auto bg-white shadow-lg rounded-2xl p-8 space-y-6"
     >
-      <h2 className="text-2xl font-bold text-gray-800 text-center mb-6">
-        Billing Information
-      </h2>
+      <div className="flex justify-between items-center mb-6">
+        <h2 className="text-2xl font-bold text-gray-800">Billing Information</h2>
+        <button
+          onClick={() => (window.location.href = "/orders")} // বা আপনার order list route
+          className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition-colors"
+        >
+          Order List
+        </button>
+      </div>
 
       {/* First + Last Name */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
