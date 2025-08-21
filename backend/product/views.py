@@ -18,7 +18,14 @@ class ProductListView(generics.ListAPIView):
     
     filter_backends = [DjangoFilterBackend, filters.SearchFilter]
     filterset_fields = ["category", "is_best_selling"] 
-    search_fields = ["name", "brand"] 
+    search_fields = ["name", "brand"]
+
+    def get_queryset(self):
+        queryset = Product.objects.filter(is_active=True).order_by("-created_at")
+        category_id = self.request.query_params.get("category_id")
+        if category_id:
+            queryset = queryset.filter(category__id=category_id).order_by("-id")
+        return queryset
 
 
 
