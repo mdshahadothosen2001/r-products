@@ -1,17 +1,16 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
 import { topRatedProducts, recentProducts, BestSellingProducts, arrivalProducts, topBrandProducts,
   newlyProducts, trendProducts, featuredProducts, freeDeliveryProducts, recentlyViewProducts, justYouProducts
- } from "../api/api"; // import the function
+ } from "../api/api";
 import "./style.css";
 import Footer from "../components/Footer";
-import HeaderUser from "../components/HeaderUser";
 import Banner from "../components/Banner";
-import productIcon from "../assets/icons/product-icon.png";
+import WelcomeNavBar from "../components/WelcomeNavBar";
+import NavBar from "../components/NavBar";
+import Category from "../components/Category";
 
 export default function HomePage() {
-  const [categories, setCategories] = useState([]);
-  const [products, setProducts] = useState([]); // state for API products
+  const [products, setProducts] = useState([]);
   
 // Products state
 const [topRatedProductList, setTopRatedProducts] = useState([]);
@@ -27,13 +26,7 @@ const [freeDeliveryProductList, setFreeDeliveryProducts] = useState([]);
 const [recentlyViewProductList, setRecentlyViewProducts] = useState([]);
 const [justYouProductList, setJustYouProducts] = useState([]);
 
-  // Fetch categories
-  useEffect(() => {
-    axios
-      .get("http://localhost:8000/api/category/")
-      .then((res) => setCategories(res.data))
-      .catch((err) => console.error(err));
-  }, []);
+  
 
 
   // Fetch top rated products
@@ -136,48 +129,11 @@ const [justYouProductList, setJustYouProducts] = useState([]);
   return (
     <div className="min-h-screen bg-gray-100">
       
-      {/* welcome */}
-      <div className="header-links">
-        <h2 className="header-links-left">Welcome</h2>
-        <div className="header-links-right">
-          <a href="#">Order Track</a>
-          <a href="#">Recommender</a>
-          <a href="#">Cart</a>
-        </div>
-      </div>
+      <WelcomeNavBar />
 
+      <NavBar />
 
-      {/* Navbar */}
-      <nav className="bg-white shadow px-6 py-3 flex items-center justify-between">
-        <div className="" id="head_title">FemmeNest world</div>
-        <img
-          src={productIcon}
-          alt="Product Icon"
-          className="h-8 w-8 mr-2"
-        />
-
-        <div className="flex-1 mx-6" id="head_search">
-          <input
-            type="text"
-            placeholder="Search by Product | Category | Brand..."
-            className="w-full border rounded px-4 py-2 focus:outline-none focus:ring focus:border-blue-300"
-          />
-        </div>
-
-        <div>
-          <HeaderUser />
-        </div>
-
-      </nav>
-
-      {/* Categories */}
-      <div id="categories-container">
-        {categories.map((cat) => (
-          <button key={cat.id}>
-            {cat.name}
-          </button>
-        ))}
-      </div>
+      <Category />
 
       <Banner></Banner>
 

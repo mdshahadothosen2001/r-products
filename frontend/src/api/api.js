@@ -14,6 +14,8 @@ export const registerUser = (data) => API.post("/auth/register/", data);
 export const userProfile = (data) => API.get("/auth/profile/", data);
 export const bannerList = (data) => API.get("/banner/", data);
 
+export const getCategories = () => API.get("/category/");
+
 // Products
 export const fetchProducts = () => API.get("/products/");
 export const fetchProductById = (id) => API.get(`/products/${id}/`);
