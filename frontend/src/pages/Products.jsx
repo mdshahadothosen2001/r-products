@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import { getProducts } from "../api/api";
 import NavBar from "../components/NavBar"
 import Category from "../components/Category"
@@ -104,9 +104,10 @@ export default function Products() {
         ) : (
           <div className="product-grid">
             {products.map((prod) => (
-              <div
+              <Link
+                to={`/products/details/${prod.id}`}
                 key={prod.id}
-                className="product-card"
+                className="product-card hover:shadow-lg transition-transform transform hover:scale-105"
               >
                 {prod.thumbnail && (
                   <img
@@ -126,7 +127,7 @@ export default function Products() {
                     Category: {prod.category_name}
                   </span>
                 </div>
-              </div>
+              </Link>
             ))}
           </div>
         )}
