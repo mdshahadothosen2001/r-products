@@ -14,6 +14,26 @@ from order.serializers import OrderSerializer
 User = get_user_model()
 
 
+
+class OrderDetailView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, pk):
+        """
+        Retrieve a single order with its items
+        """
+        try:
+            order = Order.objects.get(pk=pk, user=request.user.id)
+        except Order.DoesNotExist:
+            return Response(
+                {"error": "Order not found"},
+                status=status.HTTP_404_NOT_FOUND
+            )
+
+        serializer = OrderSerializer(order)
+        return Response(serializer.data)
+    
+
 class OrderListCreateView(APIView):
     permission_classes = [IsAuthenticated]
 
