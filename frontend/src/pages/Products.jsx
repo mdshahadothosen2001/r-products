@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import { getProducts } from "../api/api";
 import NavBar from "../components/NavBar"
 import Category from "../components/Category"
+import Footer from "../components/Footer";
 import "./style.css";
 
 export default function Products() {
@@ -92,87 +93,93 @@ export default function Products() {
 
 
        <div className="products-wrapper">
-      {/* Header */}
-      <h1 className="text-3xl font-bold mb-8 mt-10 text-center text-gray-800">
-        {categoryName}
-      </h1>
+        {/* Header */}
+        <h1 className="text-3xl font-bold mb-8 mt-10 text-center text-gray-800">
+          {categoryName}
+        </h1>
 
-      {/* Product Grid */}
-      {products.length === 0 ? (
-        <p className="text-center text-gray-600">No products found.</p>
-      ) : (
-        <div className="product-grid">
-          {products.map((prod) => (
-            <div
-              key={prod.id}
-              className="product-card"
-            >
-              {prod.thumbnail && (
-                <img
-                  src={prod.thumbnail}
-                  alt={prod.name}
-                  className="product-img"
-                />
-              )}
-              <div className="p-4 flex flex-col flex-grow">
-                <h3 className="text-lg font-semibold mb-1">{prod.name}</h3>
-                <p className="text-sm text-gray-600 mb-1">
-                  Brand: <span className="font-medium">{prod.brand}</span>
-                </p>
-                <p className="text-sm text-gray-700 mb-2">{prod.description}</p>
-                <p className="text-sm text-gray-500 flex-grow">{prod.detail}</p>
-                <span className="mt-3 text-blue-600 text-sm font-medium">
-                  Category: {prod.category_name}
-                </span>
-              </div>
-            </div>
-          ))}
-        </div>
-      )}
-
-      {/* Pagination */}
-      <div className="flex flex-col items-center mt-8 gap-3">
-        <div className="flex gap-2">
-          <button
-            disabled={currentPage === 1}
-            onClick={() => fetchProducts(currentPage - 1)}
-            className="page-btn"
-          >
-            Prev
-          </button>
-
-          {getPageNumbers().map((page, idx) =>
-            page === "..." ? (
-              <span key={idx} className="px-3 py-1">...</span>
-            ) : (
-              <button
-                key={idx}
-                onClick={() => fetchProducts(page)}
-                className={`page-btn ${
-                  currentPage === page ? "active" : ""
-                }`}
+        {/* Product Grid */}
+        {products.length === 0 ? (
+          <p className="text-center text-gray-600">No products found.</p>
+        ) : (
+          <div className="product-grid">
+            {products.map((prod) => (
+              <div
+                key={prod.id}
+                className="product-card"
               >
-                {page}
-              </button>
-            )
-          )}
+                {prod.thumbnail && (
+                  <img
+                    src={prod.thumbnail}
+                    alt={prod.name}
+                    className="product-img"
+                  />
+                )}
+                <div className="p-4 flex flex-col flex-grow">
+                  <h3 className="text-lg font-semibold mb-1">{prod.name}</h3>
+                  <p className="text-sm text-gray-600 mb-1">
+                    Brand: <span className="font-medium">{prod.brand}</span>
+                  </p>
+                  <p className="text-sm text-gray-700 mb-2">{prod.description}</p>
+                  <p className="text-sm text-gray-500 flex-grow">{prod.detail}</p>
+                  <span className="mt-3 text-blue-600 text-sm font-medium">
+                    Category: {prod.category_name}
+                  </span>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
 
-          <button
-            disabled={currentPage === totalPages}
-            onClick={() => fetchProducts(currentPage + 1)}
-            className="page-btn"
-          >
-            Next
-          </button>
+        {/* Pagination */}
+        <div className="flex flex-col items-center mt-8 gap-3">
+          <div className="flex gap-2">
+            <button
+              disabled={currentPage === 1}
+              onClick={() => fetchProducts(currentPage - 1)}
+              className="page-btn"
+            >
+              Prev
+            </button>
+
+            {getPageNumbers().map((page, idx) =>
+              page === "..." ? (
+                <span key={idx} className="px-3 py-1">...</span>
+              ) : (
+                <button
+                  key={idx}
+                  onClick={() => fetchProducts(page)}
+                  className={`page-btn ${
+                    currentPage === page ? "active" : ""
+                  }`}
+                >
+                  {page}
+                </button>
+              )
+            )}
+
+            <button
+              disabled={currentPage === totalPages}
+              onClick={() => fetchProducts(currentPage + 1)}
+              className="page-btn"
+            >
+              Next
+            </button>
+          </div>
+
+          {/* Showing info */}
+          {/* <p className="text-sm text-gray-600">
+            Showing: {start} - {end} of {count} Products
+          </p> */}
+
         </div>
-
-        {/* Showing info */}
-        {/* <p className="text-sm text-gray-600">
-          Showing: {start} - {end} of {count} Products
-        </p> */}
-
       </div>
-    </div>
+
+
+      <div className="h-40"></div>
+
+
+      <Footer/>
 
 
     </div>
