@@ -1,5 +1,5 @@
 from rest_framework import status
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -98,3 +98,17 @@ class CartRemoveProductView(APIView):
 
         serializer = CartSerializer(cart)
         return Response(serializer.data)
+
+
+class CartAmountCalculateView(APIView):
+    permission_classes = [AllowAny]
+    
+    def post(self, request):
+        # request.data would contain: [{product_id, quantity}, ...]
+        # But here we'll just return dummy data
+        data = {
+            "total_amount": 5000,
+            "payable_amount": 4500,
+            "saved_money": 500
+        }
+        return Response(data, status=status.HTTP_200_OK)

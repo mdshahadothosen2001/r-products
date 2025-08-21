@@ -47,7 +47,8 @@ class OrderListCreateView(APIView):
         order_items = []
 
         for item in items_data:
-            product_id = item.get("product")
+            
+            product_id = item.get("product_id")
             quantity = item.get("quantity", 1)
 
             if not product_id:
@@ -75,9 +76,7 @@ class OrderListCreateView(APIView):
 
         order.total_price = total_price
         order.save()
-
-        serializer = OrderSerializer(order)
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response({"success": True}, status=status.HTTP_201_CREATED)
 
 
 
