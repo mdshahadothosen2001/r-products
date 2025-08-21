@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { FaTruck } from "react-icons/fa";
+import { FaTag } from "react-icons/fa";
 import { GETfreeDeliveryProducts } from "../api/api";
 import "../pages/style.css";
 
-const DeliveryProducts = () => {
-    const [freeDeliveryProductList, setFreeDeliveryProducts] = useState([]);
+const DiscountedProducts = () => {
+    const [discountedProductList, setDiscountedProducts] = useState([]);
 
     useEffect(() => {
         GETfreeDeliveryProducts()
-          .then((res) => setFreeDeliveryProducts(res.data))
+          .then((res) => setDiscountedProducts(res.data))
           .catch((err) => console.error("Failed to load products:", err));
     }, []);
 
@@ -28,7 +28,7 @@ const DeliveryProducts = () => {
   return (
     <div className="top-rated-products-section">
       
-      <h2 className="section-title">Freee Delivery Products</h2>
+      <h2 className="section-title">Discounted Products</h2>
 
         <div className="scroll-carousel">
           <button 
@@ -39,7 +39,7 @@ const DeliveryProducts = () => {
           </button>
 
           <div className="cards-container" id="free-delivery-products-carousel">
-            {freeDeliveryProductList.map(product => (
+            {discountedProductList.map(product => (
               <Link
                 to={`/products/details/${product.id}`}
                 key={product.id}
@@ -51,14 +51,10 @@ const DeliveryProducts = () => {
                       <h3>{product.name}</h3>
                       <p><strong>Rating:</strong> {product.rating} ⭐</p>
                       <p><strong>Price:</strong> {product.price} BDT</p>
-                      <div className="delivery-icon flex flex-col items-start gap-1 text-gray-700">
-                        <div className="flex items-center gap-2">
-                          <FaTruck size={20} className="text-green-500" />
-                          <span className="font-medium">Free Delivery</span>
-                        </div>
-                        <span className="text-sm text-gray-500">Bangladesh</span>
+                      <div className="flex items-center gap-2 bg-green-100 text-green-800 font-semibold px-4 py-2 rounded-lg inline-block mb-4 shadow-sm">
+                        <FaTag className="text-green-600" />
+                        <span>50% Discount</span>
                       </div>
-
                     </div>
                   </div>
               </Link>
@@ -78,4 +74,4 @@ const DeliveryProducts = () => {
   );
 };
 
-export default DeliveryProducts;
+export default DiscountedProducts;

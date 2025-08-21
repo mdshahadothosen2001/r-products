@@ -15,6 +15,7 @@ import FeaturedProducts from "../components/FeaturedProduct";
 import DeliveryProducts from "../components/DeliveryProduct";
 import ViewProducts from "../components/ViewProduct";
 import ForYouProducts from "../components/ForYouProduct";
+import DiscountedProducts from "../components/DiscountedProduct";
 
 
 export default function HomePage() {
@@ -69,6 +70,10 @@ export default function HomePage() {
 
       <section className="scroll-section">
         <ViewProducts />
+      </section>
+
+      <section className="scroll-section">
+        <DiscountedProducts />
       </section>
 
       <section className="scroll-section">

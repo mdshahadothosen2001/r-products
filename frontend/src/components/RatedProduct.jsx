@@ -28,41 +28,40 @@ const TopRatedProducts = () => {
     <div className="top-rated-products-section">
       <h2 className="section-title text-2xl font-bold mb-4">Top Rating Products</h2>
 
-      <button 
+      <div className="scroll-carousel">
+          <button 
             className="arrow left" 
-            onClick={() => scrollCarousel("left", "free-delivery-products-carousel")}
-      >
-        &lt;
-      </button>
-
-      <div className="cards-container flex gap-4 overflow-x-auto" id="top-products-carousel">
-        {topRatedProductList.map((product) => (
-          <Link
-            to={`/products/details/${product.id}`}
-            key={product.id}
-            className="product-card bg-white rounded-lg shadow-md p-4 hover:shadow-lg transition-transform transform hover:scale-105 flex-shrink-0 w-60"
+            onClick={() => scrollCarousel("left", "top-rated-product-carousel")}
           >
-            <img
-              src={product.thumbnail}
-              alt={product.name}
-              className="w-full h-40 object-cover rounded-md mb-2"
-            />
-            <div className="product-info">
-              <h3 className="text-lg font-semibold">{product.name}</h3>
-              <p className="text-sm text-gray-600">
-                <strong>Rating:</strong> {product.rating} ⭐
-              </p>
-            </div>
-          </Link>
-        ))}
-      </div>
+            &lt;
+          </button>
 
-      <button 
-        className="arrow right" 
-        onClick={() => scrollCarousel("right", "free-delivery-products-carousel")}
-      >
-        &gt;
-      </button>
+          <div className="cards-container" id="top-rated-product-carousel">
+            {topRatedProductList.map(product => (
+              <Link
+                  to={`/products/details/${product.id}`}
+                  key={product.id}
+                  className="product-card bg-white rounded-lg shadow-md p-4 hover:shadow-lg transition-transform transform hover:scale-105 flex-shrink-0 w-60"
+                >
+                    <div key={product.id} className="">
+                      <img src={product.thumbnail} alt={product.name} />
+                      <div className="product-info">
+                        <h3>{product.name}</h3>
+                        <p><strong>Rating:</strong> {product.rating} ⭐</p>
+                        <p><strong>Price:</strong> {product.price} BDT</p>
+                      </div>
+                    </div>
+                </Link>
+            ))}
+          </div>
+
+          <button 
+            className="arrow right" 
+            onClick={() => scrollCarousel("right", "top-rated-product-carousel")}
+          >
+            &gt;
+          </button>
+        </div>
 
 
     </div>

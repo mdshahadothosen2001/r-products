@@ -44,11 +44,13 @@ const FeaturedProducts = () => {
                 key={product.id}
                 className="product-card bg-white rounded-lg shadow-md p-4 hover:shadow-lg transition-transform transform hover:scale-105 flex-shrink-0 w-60"
               >
-                  <div key={product.id} className="product-card">
+                  <div key={product.id} className="">
                     <img src={product.thumbnail} alt={product.name} />
                     <div className="product-info">
                       <h3>{product.name}</h3>
                       <p><strong>Rating:</strong> {product.rating} ⭐</p>
+                      <p><strong>Price:</strong> {product.price} BDT</p>
+                      <p><strong>Category:</strong> {product.category_name}</p>
                     </div>
                   </div>
               </Link>
