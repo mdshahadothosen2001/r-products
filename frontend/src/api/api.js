@@ -18,6 +18,11 @@ export const getCategories = () => API.get("/category/");
 
 // Products
 export const fetchProducts = () => API.get("/products/");
+
+// based category
+export const getProducts = (categoryId) =>
+  API.get(`/product/?category_id=${categoryId}`);
+
 export const fetchProductById = (id) => API.get(`/products/${id}/`);
 
 
