@@ -4,6 +4,8 @@ import NavBar from "../components/NavBar";
 import Footer from "../components/Footer";
 import Category from "../components/Category";
 import WelcomeNavBar from "../components/WelcomeNavBar";
+import Swal from "sweetalert2";
+import { useNavigate } from "react-router-dom";
 
 export default function CartPage() {
   const [cartProducts, setCartProducts] = useState([]);
@@ -15,6 +17,8 @@ export default function CartPage() {
     saved_money: 0,
   });
   const [orderLoading, setOrderLoading] = useState(false);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetchCartProducts();
@@ -38,7 +42,6 @@ export default function CartPage() {
     }
   };
 
-  // API call for selected products
   const updateCartAmount = async (selected = selectedProducts, products = cartProducts) => {
     try {
       const payload = selected.map((id) => {
@@ -58,7 +61,6 @@ export default function CartPage() {
     }
   };
 
-  // Quantity + / - buttons
   const handleQuantityChange = (productId, delta) => {
     const updatedProducts = cartProducts.map(p =>
       p.id === productId ? { ...p, quantity: Math.max(1, p.quantity + delta) } : p
@@ -70,7 +72,6 @@ export default function CartPage() {
     }
   };
 
-  // Checkbox select/unselect
   const handleCheckboxChange = (productId, checked) => {
     let updatedSelected = [];
     if (checked) {
@@ -82,10 +83,10 @@ export default function CartPage() {
     updateCartAmount(updatedSelected);
   };
 
-  // Remove product
   const handleRemove = (productId) => {
     const updatedCart = cartProducts.filter((p) => p.id !== productId);
     setCartProducts(updatedCart);
+
     const updatedSelected = selectedProducts.filter((id) => id !== productId);
     setSelectedProducts(updatedSelected);
 
@@ -96,54 +97,82 @@ export default function CartPage() {
     updateCartAmount(updatedSelected, updatedCart);
   };
 
-  // Confirm order
-const handleConfirmOrder = async () => {
-  if (selectedProducts.length === 0) return;
-  setOrderLoading(true);
+  const handleConfirmOrder = async () => {
+    if (selectedProducts.length === 0) return;
+    setOrderLoading(true);
 
-  const payload = selectedProducts.map((id) => {
-    const product = cartProducts.find((p) => p.id === id);
-    return { product_id: product.id, quantity: product.quantity };
-  });
+    const payload = selectedProducts.map((id) => {
+      const product = cartProducts.find((p) => p.id === id);
+      return { product_id: product.id, quantity: product.quantity };
+    });
 
-  try {
-    const res = await postOrder(payload);
+    try {
+      const res = await postOrder(payload);
 
-    // Success condition 200 or 2001
-    if (res.status === 201 || res.status === 200 || res.data.code === 2001) {
-      alert("Order placed successfully!");
+      // Ensure order_id exists in res.data
+      const orderId = res.data?.order_id;
 
-      // Remove ordered product ids from localStorage
-      const cartIds = JSON.parse(localStorage.getItem("cart")) || [];
-      const remainingCart = cartIds.filter((id) => !selectedProducts.includes(id));
-      localStorage.setItem("cart", JSON.stringify(remainingCart));
+      if ((res.status === 201 || res.status === 200 || res.data.code === 2001) && orderId) {
+        Swal.fire({
+          title: "✅ Order Successful!",
+          text: "Your order has been placed successfully.",
+          icon: "success",
+          confirmButtonColor: "#16a34a",
+        }).then(() => {
+          navigate(`/order/${orderId}/billing`); // Redirect to billing page
+        });
 
-      // Update cart state
-      const updatedCartProducts = cartProducts.filter(
-        (p) => !selectedProducts.includes(p.id)
-      );
-      setCartProducts(updatedCartProducts);
-      setSelectedProducts([]);
-      setAmounts({ total_amount: 0, payable_amount: 0, saved_money: 0 });
-    } else {
-      alert("Order could not be placed. Try again.");
+        // Remove ordered products from cart
+        const cartIds = JSON.parse(localStorage.getItem("cart")) || [];
+        const remainingCart = cartIds.filter((id) => !selectedProducts.includes(id));
+        localStorage.setItem("cart", JSON.stringify(remainingCart));
+
+        const updatedCartProducts = cartProducts.filter(
+          (p) => !selectedProducts.includes(p.id)
+        );
+        setCartProducts(updatedCartProducts);
+        setSelectedProducts([]);
+        setAmounts({ total_amount: 0, payable_amount: 0, saved_money: 0 });
+      } else {
+        Swal.fire({
+          title: "⚠️ Order Failed",
+          text: "Could not place the order. Try again.",
+          icon: "error",
+          confirmButtonColor: "#dc2626",
+        });
+      }
+    } catch (error) {
+      console.error("Order failed:", error);
+      Swal.fire({
+        title: "❌ Error",
+        text: "Failed to place order. Please try again.",
+        icon: "error",
+        confirmButtonColor: "#dc2626",
+      });
+    } finally {
+      setOrderLoading(false);
     }
-  } catch (error) {
-    console.error("Order failed:", error);
-    alert("Failed to place order. Try again.");
-  } finally {
-    setOrderLoading(false);
-  }
-};
+  };
 
+  if (loading)
+    return (
+      <div>
+        <WelcomeNavBar />
+        <NavBar />
+        <Category />
+        <h2 className="text-center text-red-600 mt-10">Loading</h2>
+      </div>
+    );
 
-
-
-
-
-  if (loading) return <h2 className="text-center text-xl mt-10">Loading...</h2>;
   if (cartProducts.length === 0)
-    return <h2 className="text-center text-red-600 mt-10">Your cart is empty</h2>;
+    return (
+      <div>
+        <WelcomeNavBar />
+        <NavBar />
+        <Category />
+        <h2 className="text-center text-red-600 mt-10">Your cart is empty</h2>
+      </div>
+    );
 
   return (
     <div>
@@ -156,63 +185,88 @@ const handleConfirmOrder = async () => {
           Your Cart
         </h1>
 
-        <div className="flex flex-col gap-6">
-          {cartProducts.map((product) => (
-            <div
-              key={product.id}
-              className="flex flex-col md:flex-row items-center gap-4 border p-4 rounded-lg shadow"
-            >
-              <input
-                type="checkbox"
-                checked={selectedProducts.includes(product.id)}
-                onChange={(e) => handleCheckboxChange(product.id, e.target.checked)}
-                className="w-5 h-5"
-              />
-              <img
-                src={product.thumbnail}
-                alt={product.name}
-                className="w-32 h-32 object-cover rounded-lg"
-              />
-              <div className="flex-1">
-                <h2 className="text-xl font-bold">{product.name}</h2>
-                <p className="text-blue-600 font-semibold">${product.price}</p>
-                <div className="mt-2 flex items-center gap-2">
-                  <button
-                    onClick={() => handleQuantityChange(product.id, -1)}
-                    className="bg-gray-200 px-2 py-1 rounded hover:bg-gray-300"
-                  >
-                    -
-                  </button>
-                  <span className="px-3">{product.quantity}</span>
-                  <button
-                    onClick={() => handleQuantityChange(product.id, 1)}
-                    className="bg-gray-200 px-2 py-1 rounded hover:bg-gray-300"
-                  >
-                    +
-                  </button>
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          {/* Left side - Cart Items */}
+          <div className="lg:col-span-2 flex flex-col gap-6">
+            {cartProducts.map((product) => (
+              <div
+                key={product.id}
+                className="flex flex-col md:flex-row items-center gap-4 border p-4 rounded-lg shadow"
+              >
+                <input
+                  type="checkbox"
+                  checked={selectedProducts.includes(product.id)}
+                  onChange={(e) => handleCheckboxChange(product.id, e.target.checked)}
+                  className="w-5 h-5"
+                />
+                <img
+                  src={product.thumbnail}
+                  alt={product.name}
+                  className="w-32 h-32 object-cover rounded-lg"
+                />
+                <div className="flex-1">
+                  <h2 className="text-xl font-bold">{product.name}</h2>
+                  <p className="text-blue-600 font-semibold">${product.price}</p>
+                  <div className="mt-2 flex items-center gap-2">
+                    <button
+                      onClick={() => handleQuantityChange(product.id, -1)}
+                      className="bg-gray-200 px-2 py-1 rounded hover:bg-gray-300"
+                    >
+                      -
+                    </button>
+                    <span className="px-3">{product.quantity}</span>
+                    <button
+                      onClick={() => handleQuantityChange(product.id, 1)}
+                      className="bg-gray-200 px-2 py-1 rounded hover:bg-gray-300"
+                    >
+                      +
+                    </button>
+                  </div>
                 </div>
+                <button
+                  onClick={() => handleRemove(product.id)}
+                  className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700 transition"
+                >
+                  Remove
+                </button>
               </div>
-              <button
-                onClick={() => handleRemove(product.id)}
-                className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700 transition"
-              >
-                Remove
-              </button>
-            </div>
-          ))}
+            ))}
+          </div>
 
+          {/* Right side - Order Summary */}
           {selectedProducts.length > 0 && (
-            <div className="border-t pt-4 mt-4 text-right">
-              <p>Total Amount: ${amounts.total_amount.toFixed(2)}</p>
-              <p>Payable Amount: ${amounts.payable_amount.toFixed(2)}</p>
-              <p>Saved Money: ${amounts.saved_money.toFixed(2)}</p>
-              <button
-                onClick={handleConfirmOrder}
-                disabled={orderLoading}
-                className="bg-green-600 text-white px-6 py-3 rounded mt-2 hover:bg-green-700 transition disabled:opacity-50"
-              >
-                {orderLoading ? "Placing Order..." : "Confirm Order"}
-              </button>
+            <div className="lg:col-span-1">
+              <div className="w-full bg-white shadow-lg rounded-2xl p-6 border border-gray-200 sticky top-24">
+                <h2 className="text-xl font-bold text-gray-800 mb-4 border-b pb-2">
+                  Order Summary
+                </h2>
+                <div className="space-y-3">
+                  <div className="flex justify-between text-gray-700">
+                    <span>Total Amount:</span>
+                    <span className="font-semibold">${amounts.total_amount.toFixed(2)}</span>
+                  </div>
+                  <div className="flex justify-between text-gray-700">
+                    <span>Payable Amount:</span>
+                    <span className="font-bold text-green-600">
+                      ${amounts.payable_amount.toFixed(2)}
+                    </span>
+                  </div>
+                  <div className="flex justify-between text-gray-700">
+                    <span>Saved Money:</span>
+                    <span className="font-semibold text-blue-600">
+                      ${amounts.saved_money.toFixed(2)}
+                    </span>
+                  </div>
+                </div>
+
+                <button
+                  onClick={handleConfirmOrder}
+                  disabled={orderLoading}
+                  className="w-full bg-green-600 text-white font-semibold py-3 rounded-xl mt-6 hover:bg-green-700 transition disabled:opacity-50"
+                >
+                  {orderLoading ? "Placing Order..." : "Confirm Order"}
+                </button>
+              </div>
             </div>
           )}
         </div>
