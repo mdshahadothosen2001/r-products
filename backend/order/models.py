@@ -13,6 +13,7 @@ class Order(models.Model):
     status = models.CharField(
         max_length=20, 
         choices=[
+            ("paid", "paid"),
             ("pay_first", "pay_first"),
             ("pending", "Pending"),
             ("processing", "Processing"),

@@ -4,7 +4,7 @@ from django.shortcuts import get_object_or_404
 
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework import status
 
 from order.models import Order, OrderItem
@@ -101,7 +101,7 @@ class OrderStatusUpdateView(APIView):
         if not new_status:
             return Response({"error": "status field is required"}, status=status.HTTP_400_BAD_REQUEST)
 
-        allowed_status = ["pending", "processing", "shipped" "delivered", "cancelled"]
+        allowed_status = ["paid", "pending", "processing", "shipped" "delivered", "cancelled"]
         if new_status not in allowed_status:
             return Response({"error": f"status must be one of {allowed_status}"}, status=status.HTTP_400_BAD_REQUEST)
 
@@ -109,3 +109,15 @@ class OrderStatusUpdateView(APIView):
         order.save()
 
         return Response({"message": "Order status updated", "status": order.status}, status=status.HTTP_200_OK)
+
+
+class OrderBillingView(APIView):
+    permission_classes = [AllowAny]
+
+    def post(self, request, order_id):
+        """
+        Update order status without serializer
+        PATCH data: {"status": "delivered"}
+        """
+
+        return Response({"success": True, "message": "Order status updated",}, status=status.HTTP_200_OK)

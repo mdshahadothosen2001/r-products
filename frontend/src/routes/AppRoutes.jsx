@@ -10,6 +10,7 @@ import Cart from "../pages/Cart";
 // import Register from "../pages/Register";
 // import Profile from "../pages/Profile";
 import NotFound from "../pages/NotFound";
+import OrderBilling from "../pages/OrderBilling";
 
 export default function AppRoutes() {
   return (
@@ -25,7 +26,9 @@ export default function AppRoutes() {
         <Route path="/orders/cancel/:id" element={<OrderCancel />} />
         <Route path="/register" element={<Register />} />
         <Route path="/profile" element={<Profile />} /> */}
+        <Route path="order/:id/billing" element={<OrderBilling />} />
         <Route path="*" element={<NotFound />} />
+
       </Routes>
     </Router>
   );

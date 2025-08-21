@@ -68,17 +68,18 @@ export const postOrder = (items) => {
 };
 
 
-export const patchPayOrder = (id, items) => {
+export const postBillingInfoOrder = (id, data) => {
   const token = localStorage.getItem("access_token");
-  return API.patch(
-    `/order/${id}`,
-    { items },
-    {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    }
-  );
+  return API.post(`/order/${id}/billing/`, data, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+};
+
+export const patchPayOrder = (id, data) => {
+  const token = localStorage.getItem("access_token");
+  return API.patch(`/order/${id}/`, data, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
 };
 
 // Orders
