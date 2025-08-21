@@ -76,7 +76,11 @@ class OrderListCreateView(APIView):
 
         order.total_price = total_price
         order.save()
-        return Response({"success": True}, status=status.HTTP_201_CREATED)
+        return Response({
+                "success": True,
+                "message": "Successfully done",
+                "order_id": order.id 
+            }, status=status.HTTP_201_CREATED)
 
 
 
@@ -86,7 +90,7 @@ class OrderStatusUpdateView(APIView):
     def patch(self, request, order_id):
         """
         Update order status without serializer
-        PATCH data: {"status": "completed"}
+        PATCH data: {"status": "delivered"}
         """
         order = get_object_or_404(Order, id=order_id)
 
@@ -97,7 +101,7 @@ class OrderStatusUpdateView(APIView):
         if not new_status:
             return Response({"error": "status field is required"}, status=status.HTTP_400_BAD_REQUEST)
 
-        allowed_status = ["pending", "processing", "completed", "cancelled"]
+        allowed_status = ["pending", "processing", "shipped" "delivered", "cancelled"]
         if new_status not in allowed_status:
             return Response({"error": f"status must be one of {allowed_status}"}, status=status.HTTP_400_BAD_REQUEST)
 
