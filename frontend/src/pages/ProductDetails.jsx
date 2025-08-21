@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import { getProductById } from "../api/api";
 import NavBar from "../components/NavBar";
 import Footer from "../components/Footer";
+import Category from "../components/Category";
 
 export default function ProductDetails() {
   const { id } = useParams();
@@ -49,6 +50,7 @@ export default function ProductDetails() {
   return (
     <div>
       <NavBar />
+      <Category />
       
 
 
