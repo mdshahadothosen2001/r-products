@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { getCategories } from "../api/api";
 import { useNavigate } from "react-router-dom";
-import "./style.css";
+import "./components.css";
 
 export default function Category() {
   const [categories, setCategories] = useState([]);

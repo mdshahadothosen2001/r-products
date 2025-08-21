@@ -1,6 +1,6 @@
 import HeaderUser from "./HeaderUser";
 import productIcon from "../assets/icons/product-icon.png";
-import "./style.css";
+import "./components.css";
 
 export default function NavBar() {
   return (

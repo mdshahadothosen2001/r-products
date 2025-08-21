@@ -27,18 +27,18 @@ export const getProductById = (id) => API.get(`/product/${id}/`);
 
 
 // Home page's products arrows
-export const topRatedProducts = () => API.get("/product/home/?list_type=top_rated");
-export const recentProducts = () => API.get("/product/home/?list_type=recent_selling");
-export const BestSellingProducts = () => API.get("/product/home/?list_type=best_selling");
-export const arrivalProducts = () => API.get("/product/home/?list_type=new_arrival");
-export const topBrandProducts = () => API.get("/product/home/?list_type=top_brand");
+export const GETtopRatedProducts = () => API.get("/product/home/?list_type=top_rated");
+export const GETrecentProducts = () => API.get("/product/home/?list_type=recent_selling");
+export const GETbestSellingProducts = () => API.get("/product/home/?list_type=best_selling");
+export const GETarrivalProducts = () => API.get("/product/home/?list_type=new_arrival");
+export const GETtopBrandProducts = () => API.get("/product/home/?list_type=top_brand");
 
-export const newlyProducts = () => API.get("/product/home/?list_type=new");
-export const trendProducts = () => API.get("/product/home/?list_type=trend");
-export const featuredProducts = () => API.get("/product/home/?list_type=featured");
-export const freeDeliveryProducts = () => API.get("/product/home/?list_type=free_delivery");
-export const recentlyViewProducts = () => API.get("/product/home/?list_type=recently_view");
-export const justYouProducts = () => API.get("/product/home/?list_type=just_you");
+export const GETnewlyProducts = () => API.get("/product/home/?list_type=new");
+export const GETtrendProducts = () => API.get("/product/home/?list_type=trend");
+export const GETfeaturedProducts = () => API.get("/product/home/?list_type=featured");
+export const GETfreeDeliveryProducts = () => API.get("/product/home/?list_type=free_delivery");
+export const GETrecentlyViewProducts = () => API.get("/product/home/?list_type=recently_view");
+export const GETjustYouProducts = () => API.get("/product/home/?list_type=just_you");
 
 
 // Cart

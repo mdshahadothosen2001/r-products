@@ -1,6 +1,6 @@
 import { useRef, useEffect, useState } from "react";
 import Slider from "react-slick";
-import "./style.css";
+import "./components.css";
 import { bannerList } from "../api/api";
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
 
