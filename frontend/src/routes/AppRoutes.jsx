@@ -2,7 +2,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Home from "../pages/Home";
 import Login from "../pages/Login";
 import Products from "../pages/Products";
-// import ProductDetails from "../pages/ProductDetails";
+import ProductDetails from "../pages/ProductDetails";
 // import Cart from "../pages/Cart";
 // import Checkout from "../pages/Checkout";
 // import OrderHistory from "../pages/OrderHistory";
@@ -18,8 +18,8 @@ export default function AppRoutes() {
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/products/:id" element={<Products />} />
-        {/* <Route path="/products/:id" element={<ProductDetails />} />
-        <Route path="/cart" element={<Cart />} />
+        <Route path="/products/details/:id" element={<ProductDetails />} />
+        {/* <Route path="/cart" element={<Cart />} />
         <Route path="/checkout" element={<Checkout />} />
         <Route path="/orders" element={<OrderHistory />} />
         <Route path="/orders/cancel/:id" element={<OrderCancel />} />

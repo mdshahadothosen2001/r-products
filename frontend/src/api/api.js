@@ -23,7 +23,7 @@ export const fetchProducts = () => API.get("/products/");
 export const getProducts = (categoryId) =>
   API.get(`/product/?category_id=${categoryId}`);
 
-export const fetchProductById = (id) => API.get(`/products/${id}/`);
+export const getProductById = (id) => API.get(`/product/${id}/`);
 
 
 // Home page's products arrows
