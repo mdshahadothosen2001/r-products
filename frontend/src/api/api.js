@@ -82,8 +82,26 @@ export const patchPayOrder = (id, data) => {
   });
 };
 
+// ✅ GET order list
+export const getOrder = () => {
+  const token = localStorage.getItem("access_token");
+  return API.get("/order/", {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+};
+
+
+// ✅ GET single order by ID
+export const getOrderById = (id) => {
+  const token = localStorage.getItem("access_token");
+  return API.get(`/order/details/${id}/`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+};
+
+
 // Orders
-export const fetchOrders = () => API.get("/orders/");
+export const fetchOrders = () => API.get("/order/");
 export const createOrder = (data) => API.post("/orders/", data);
 export const cancelOrder = (id) => API.patch(`/orders/${id}/cancel/`);
 
