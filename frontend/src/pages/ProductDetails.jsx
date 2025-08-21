@@ -29,33 +29,22 @@ export default function ProductDetails() {
     }
   };
 
-  if (loading) return <h2 className="text-center text-xl mt-10">Loading...</h2>;
-  if (!product) return <h2 className="text-center text-red-600 mt-10">Product not found</h2>;
-
-  // Function to parse detail/specifications with bold labels
-  const formatText = (text) => {
-    return text.split(/\r\n|\n/).map((line, index) => {
-      if (!line.trim()) return null; // skip empty lines
-      const [label, ...rest] = line.split(":");
-      const value = rest.join(":").trim();
-      return (
-        <p key={index} className="mb-1">
-          <span className="font-semibold text-gray-700">{label}:</span>{" "}
-          <span className="text-gray-600">{value}</span>
-        </p>
-      );
-    });
-  };
+  if (loading)
+    return <h2 className="text-center text-xl mt-10">Loading...</h2>;
+  if (!product)
+    return (
+      <h2 className="text-center text-red-600 mt-10">Product not found</h2>
+    );
 
   return (
     <div>
       <NavBar />
       <Category />
-      
-
 
       <div className="max-w-6xl mx-auto p-4">
-        <h1 className="text-3xl font-bold mb-10 mt-10 text-center text-gray-800">{product.name}</h1>
+        <h1 className="text-3xl font-bold mb-10 mt-10 text-center text-gray-800">
+          {product.name}
+        </h1>
 
         <div className="flex flex-col lg:flex-row gap-6">
           {/* Left: Image gallery */}
@@ -84,8 +73,12 @@ export default function ProductDetails() {
           {/* Right: Product info */}
           <div className="w-full lg:w-1/2 flex flex-col gap-4">
             <p className="text-gray-600 font-medium">Brand: {product.brand}</p>
-            <p className="text-gray-600 font-medium">Category: {product.category_name}</p>
-            {product.price && <p className="text-2xl font-bold text-blue-600">${product.price}</p>}
+            <p className="text-gray-600 font-medium">
+              Category: {product.category_name}
+            </p>
+            {product.price && (
+              <p className="text-2xl font-bold text-blue-600">${product.price}</p>
+            )}
 
             <button className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition mt-2">
               Add to Cart
@@ -96,7 +89,9 @@ export default function ProductDetails() {
               <div className="flex border-b border-gray-300">
                 <button
                   className={`px-4 py-2 font-medium ${
-                    activeTab === "description" ? "border-b-2 border-blue-600 text-blue-600" : "text-gray-600"
+                    activeTab === "description"
+                      ? "border-b-2 border-blue-600 text-blue-600"
+                      : "text-gray-600"
                   }`}
                   onClick={() => setActiveTab("description")}
                 >
@@ -104,7 +99,9 @@ export default function ProductDetails() {
                 </button>
                 <button
                   className={`px-4 py-2 font-medium ${
-                    activeTab === "details" ? "border-b-2 border-blue-600 text-blue-600" : "text-gray-600"
+                    activeTab === "details"
+                      ? "border-b-2 border-blue-600 text-blue-600"
+                      : "text-gray-600"
                   }`}
                   onClick={() => setActiveTab("details")}
                 >
@@ -112,7 +109,9 @@ export default function ProductDetails() {
                 </button>
                 <button
                   className={`px-4 py-2 font-medium ${
-                    activeTab === "specs" ? "border-b-2 border-blue-600 text-blue-600" : "text-gray-600"
+                    activeTab === "specs"
+                      ? "border-b-2 border-blue-600 text-blue-600"
+                      : "text-gray-600"
                   }`}
                   onClick={() => setActiveTab("specs")}
                 >
@@ -121,10 +120,27 @@ export default function ProductDetails() {
               </div>
 
               <div className="mt-4 text-gray-700">
-                {activeTab === "description" && <p>{product.description}</p>}
-                {activeTab === "details" && <div>{formatText(product.detail)}</div>}
+                {activeTab === "description" && (
+                  <div
+                    className="prose max-w-none"
+                    dangerouslySetInnerHTML={{ __html: product.description }}
+                  />
+                )}
+                {activeTab === "details" && (
+                  <div
+                    className="prose max-w-none"
+                    dangerouslySetInnerHTML={{ __html: product.detail }}
+                  />
+                )}
                 {activeTab === "specs" && (
-                  <div>{formatText(product.specifications || "No specifications available")}</div>
+                  <div
+                    className="prose max-w-none"
+                    dangerouslySetInnerHTML={{
+                      __html:
+                        product.specifications ||
+                        "<p>No specifications available</p>",
+                    }}
+                  />
                 )}
               </div>
             </div>
@@ -132,11 +148,8 @@ export default function ProductDetails() {
         </div>
       </div>
 
-     <div className="h-40"></div>
-
-
-      <Footer/>
-
+      <div className="h-40"></div>
+      <Footer />
     </div>
   );
 }
