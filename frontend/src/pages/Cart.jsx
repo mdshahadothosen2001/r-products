@@ -97,6 +97,8 @@ export default function CartPage() {
     updateCartAmount(updatedSelected, updatedCart);
   };
 
+
+
   const handleConfirmOrder = async () => {
     if (selectedProducts.length === 0) return;
     setOrderLoading(true);
@@ -108,18 +110,17 @@ export default function CartPage() {
 
     try {
       const res = await postOrder(payload);
-
-      // Ensure order_id exists in res.data
       const orderId = res.data?.order_id;
+      const message = res.data?.message || "Operation completed";
 
       if ((res.status === 201 || res.status === 200 || res.data.code === 2001) && orderId) {
         Swal.fire({
-          title: "✅ Order Successful!",
-          text: "Your order has been placed successfully.",
+          title: "✅ Success",
+          text: message,
           icon: "success",
           confirmButtonColor: "#16a34a",
         }).then(() => {
-          navigate(`/order/${orderId}/billing`); // Redirect to billing page
+          navigate(`/order/${orderId}/billing`);
         });
 
         // Remove ordered products from cart
@@ -135,8 +136,8 @@ export default function CartPage() {
         setAmounts({ total_amount: 0, payable_amount: 0, saved_money: 0 });
       } else {
         Swal.fire({
-          title: "⚠️ Order Failed",
-          text: "Could not place the order. Try again.",
+          title: "⚠️ Failed",
+          text: message,
           icon: "error",
           confirmButtonColor: "#dc2626",
         });
@@ -145,7 +146,7 @@ export default function CartPage() {
       console.error("Order failed:", error);
       Swal.fire({
         title: "❌ Error",
-        text: "Failed to place order. Please try again.",
+        text: error?.response?.data?.message || "Failed to place order. Please try again.",
         icon: "error",
         confirmButtonColor: "#dc2626",
       });
@@ -153,6 +154,9 @@ export default function CartPage() {
       setOrderLoading(false);
     }
   };
+
+
+
 
   if (loading)
     return (
