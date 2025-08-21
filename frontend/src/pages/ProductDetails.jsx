@@ -12,6 +12,7 @@ export default function ProductDetails() {
   const [loading, setLoading] = useState(true);
   const [selectedImage, setSelectedImage] = useState(null);
   const [activeTab, setActiveTab] = useState("description");
+  const [showPopup, setShowPopup] = useState(false);
 
   useEffect(() => {
     fetchProduct();
@@ -22,12 +23,23 @@ export default function ProductDetails() {
       setLoading(true);
       const res = await getProductById(id);
       setProduct(res.data);
-      setSelectedImage(res.data.thumbnail); // main image
+      setSelectedImage(res.data.thumbnail);
     } catch (error) {
       console.error("Error fetching product details:", error);
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleAddToCart = () => {
+    const cart = JSON.parse(localStorage.getItem("cart")) || [];
+    if (!cart.includes(product.id)) {
+      cart.push(product.id);
+      localStorage.setItem("cart", JSON.stringify(cart));
+    }
+
+    setShowPopup(true);
+    setTimeout(() => setShowPopup(false), 2000); // hide after 2 seconds
   };
 
   if (loading)
@@ -58,8 +70,6 @@ export default function ProductDetails() {
                 className="w-full h-96 object-cover rounded-xl shadow-md mb-4"
               />
             )}
-
-            {/* Thumbnail */}
             {product.thumbnail && (
               <div className="flex gap-3">
                 <img
@@ -82,9 +92,19 @@ export default function ProductDetails() {
               <p className="text-2xl font-bold text-blue-600">${product.price}</p>
             )}
 
-            <button className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition mt-2">
+            <button
+              onClick={handleAddToCart}
+              className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition mt-2"
+            >
               Add to Cart
             </button>
+
+            {/* Popup */}
+            {showPopup && (
+              <div className="fixed top-20 right-10 bg-green-500 text-white px-4 py-2 rounded shadow-lg">
+                Product added to cart!
+              </div>
+            )}
 
             {/* Tabs */}
             <div className="mt-6">

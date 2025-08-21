@@ -11,7 +11,7 @@ export default function WelcomeNavBar() {
         <a href="#" className="flex items-center gap-2 text-gray-700 hover:text-blue-600 transition">
           <FaChartLine /> Recommender
         </a>
-        <a href="#" className="flex items-center gap-2 text-gray-700 hover:text-blue-600 transition">
+        <a href="/cart/" className="flex items-center gap-2 text-gray-700 hover:text-blue-600 transition">
           <FaShoppingCart /> Cart
         </a>
       </div>

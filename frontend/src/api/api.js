@@ -48,6 +48,26 @@ export const removeFromCart = (id) => API.delete(`/cart/${id}/`);
 export const updateCartQuantity = (id, quantity) =>
   API.patch(`/cart/${id}/`, { quantity });
 
+
+export const GetCartAmount = async (payload) => {
+  // payload = [{product_id, quantity}, ...]
+  return API.post("/cart/amount-calculate/", payload);
+};
+
+export const postOrder = (items) => {
+  const token = localStorage.getItem("access_token");
+  return API.post(
+    "/order/",
+    { items },
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+};
+
+
 // Orders
 export const fetchOrders = () => API.get("/orders/");
 export const createOrder = (data) => API.post("/orders/", data);
