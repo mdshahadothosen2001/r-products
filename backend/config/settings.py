@@ -41,6 +41,8 @@ LOCAL_APPS = [
 THIRD_PARTY_APPS = [
     "rest_framework",
     "corsheaders",
+    'ckeditor',
+    'ckeditor_uploader',
 ]
 
 INSTALLED_APPS = DJANGO_APPS + LOCAL_APPS + THIRD_PARTY_APPS
@@ -178,3 +180,5 @@ MESSAGE_TAGS = {
 }
 
 AUTH_USER_MODEL = "user.UserAccount"
+
+CKEDITOR_UPLOAD_PATH = "uploads/ckeditor/"
