@@ -4,6 +4,8 @@ import { getProducts } from "../api/api";
 import NavBar from "../components/NavBar"
 import Category from "../components/Category"
 import Footer from "../components/Footer";
+import WelcomeNavBar from "../components/WelcomeNavBar";
+import { FaBoxOpen } from "react-icons/fa";
 import "./style.css";
 
 export default function Products() {
@@ -85,6 +87,7 @@ export default function Products() {
   return (
     <div>
 
+      <WelcomeNavBar />
       <NavBar />
       <Category />
 
@@ -100,7 +103,10 @@ export default function Products() {
 
         {/* Product Grid */}
         {products.length === 0 ? (
-          <p className="text-center text-gray-600">No products found.</p>
+          <div className="flex flex-col items-center justify-center h-[60vh] text-gray-500">
+            <FaBoxOpen size={40} className="mb-4" />
+            <p className="text-lg font-medium">No products found.</p>
+          </div>
         ) : (
           <div className="product-grid">
             {products.map((prod) => (
