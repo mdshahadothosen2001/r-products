@@ -1,6 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import Swal from "sweetalert2";
+import NavBar from "../components/NavBar";
+import Footer from "../components/Footer";
+import Category from "../components/Category";
+import WelcomeNavBar from "../components/WelcomeNavBar";
 import { getOrderById, patchPayOrder } from "../api/api";
 
 const OrderDetails = () => {
@@ -57,7 +61,12 @@ const OrderDetails = () => {
   if (!order) return null;
 
   return (
-    <div className="max-w-5xl mx-auto p-6">
+    <div>
+      <WelcomeNavBar />
+      <NavBar />
+
+
+      <div className="max-w-5xl mx-auto p-6">
       <h1 className="text-3xl font-bold mb-6 text-center">Order #{order.id}</h1>
 
       {/* Order Status */}
@@ -130,6 +139,12 @@ const OrderDetails = () => {
           Date: {new Date(order.created_at).toLocaleString()}
         </p>
       </div>
+    </div>
+
+
+    <Footer/>
+
+
     </div>
   );
 };

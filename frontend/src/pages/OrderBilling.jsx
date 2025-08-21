@@ -2,6 +2,11 @@ import React, { useState } from "react";
 import { useParams } from "react-router-dom";
 import Swal from "sweetalert2";
 import { postBillingInfoOrder, patchPayOrder } from "../api/api";
+import NavBar from "../components/NavBar";
+import Footer from "../components/Footer";
+import Category from "../components/Category";
+import WelcomeNavBar from "../components/WelcomeNavBar";
+
 
 const OrderBilling = () => {
   const { id } = useParams(); // URL theke order ID nibe
@@ -58,80 +63,126 @@ const OrderBilling = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="max-w-md mx-auto p-4 space-y-4">
-      <div>
-        <label>First Name *</label>
-        <input
-          type="text"
-          name="first_name"
-          value={formData.first_name}
-          onChange={handleChange}
-          required
-          className="w-full border rounded p-2"
-        />
+   <div>
+
+    <WelcomeNavBar />
+    <NavBar />
+
+    <form
+      onSubmit={handleSubmit}
+      className="max-w-2xl mx-auto bg-white shadow-lg rounded-2xl p-8 space-y-6"
+    >
+      <h2 className="text-2xl font-bold text-gray-800 text-center mb-6">
+        Billing Information
+      </h2>
+
+      {/* First + Last Name */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div>
+          <label className="block text-gray-700 font-medium mb-1">
+            First Name <span className="text-red-500">*</span>
+          </label>
+          <input
+            type="text"
+            name="first_name"
+            value={formData.first_name}
+            onChange={handleChange}
+            required
+            className="w-full border-gray-300 rounded-xl p-3 border focus:ring-2 focus:ring-blue-500 focus:outline-none"
+          />
+        </div>
+        <div>
+          <label className="block text-gray-700 font-medium mb-1">
+            Last Name <span className="text-red-500">*</span>
+          </label>
+          <input
+            type="text"
+            name="last_name"
+            value={formData.last_name}
+            onChange={handleChange}
+            required
+            className="w-full border-gray-300 rounded-xl p-3 border focus:ring-2 focus:ring-blue-500 focus:outline-none"
+          />
+        </div>
       </div>
+
+      {/* Address */}
       <div>
-        <label>Last Name *</label>
-        <input
-          type="text"
-          name="last_name"
-          value={formData.last_name}
-          onChange={handleChange}
-          required
-          className="w-full border rounded p-2"
-        />
-      </div>
-      <div>
-        <label>Address (Street, P.O. box) *</label>
+        <label className="block text-gray-700 font-medium mb-1">
+          Address (Street, P.O. box) <span className="text-red-500">*</span>
+        </label>
         <input
           type="text"
           name="address1"
           value={formData.address1}
           onChange={handleChange}
           required
-          className="w-full border rounded p-2"
+          className="w-full border-gray-300 rounded-xl p-3 border focus:ring-2 focus:ring-blue-500 focus:outline-none"
         />
       </div>
+
       <div>
-        <label>Address line 2 (Apartment, suite, unit)</label>
+        <label className="block text-gray-700 font-medium mb-1">
+          Address line 2 (Apartment, suite, unit)
+        </label>
         <input
           type="text"
           name="address2"
           value={formData.address2}
           onChange={handleChange}
-          className="w-full border rounded p-2"
+          className="w-full border-gray-300 rounded-xl p-3 border focus:ring-2 focus:ring-blue-500 focus:outline-none"
         />
       </div>
-      <div>
-        <label>City *</label>
-        <input
-          type="text"
-          name="city"
-          value={formData.city}
-          onChange={handleChange}
-          required
-          className="w-full border rounded p-2"
-        />
+
+      {/* City + Postal */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div>
+          <label className="block text-gray-700 font-medium mb-1">
+            City <span className="text-red-500">*</span>
+          </label>
+          <input
+            type="text"
+            name="city"
+            value={formData.city}
+            onChange={handleChange}
+            required
+            className="w-full border-gray-300 rounded-xl p-3 border focus:ring-2 focus:ring-blue-500 focus:outline-none"
+          />
+        </div>
+        <div>
+          <label className="block text-gray-700 font-medium mb-1">
+            Postal/Zip Code <span className="text-red-500">*</span>
+          </label>
+          <input
+            type="text"
+            name="postal_code"
+            value={formData.postal_code}
+            onChange={handleChange}
+            required
+            className="w-full border-gray-300 rounded-xl p-3 border focus:ring-2 focus:ring-blue-500 focus:outline-none"
+          />
+        </div>
       </div>
-      <div>
-        <label>Postal/Zip code *</label>
-        <input
-          type="text"
-          name="postal_code"
-          value={formData.postal_code}
-          onChange={handleChange}
-          required
-          className="w-full border rounded p-2"
-        />
+
+      {/* Submit */}
+      <div className="pt-4">
+        <button
+          type="submit"
+          disabled={loading}
+          className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 text-white font-semibold py-3 px-6 rounded-xl shadow-md transition-all duration-200"
+        >
+          {loading ? "Processing..." : "Submit Order"}
+        </button>
       </div>
-      <button
-        type="submit"
-        disabled={loading}
-        className="bg-blue-600 text-white px-4 py-2 rounded"
-      >
-        {loading ? "Processing..." : "Submit Order"}
-      </button>
     </form>
+
+
+
+
+
+
+    <Footer/>
+   </div>
   );
 };
 

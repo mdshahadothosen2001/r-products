@@ -1,6 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { getOrder } from "../api/api";
+import NavBar from "../components/NavBar";
+import Footer from "../components/Footer";
+import Category from "../components/Category";
+import WelcomeNavBar from "../components/WelcomeNavBar";
 
 const Order = () => {
   const [orders, setOrders] = useState([]);
@@ -30,7 +34,12 @@ const Order = () => {
     return <p className="text-center mt-10 text-red-500">{error}</p>;
 
   return (
-    <div className="max-w-6xl mx-auto p-4">
+   <div>
+
+    <WelcomeNavBar />
+    <NavBar />
+
+     <div className="max-w-6xl mx-auto p-4">
       <h1 className="text-3xl font-bold mb-6 text-center">My Orders</h1>
       {orders.length === 0 ? (
         <p className="text-center text-gray-500">No orders found.</p>
@@ -67,6 +76,9 @@ const Order = () => {
         </div>
       )}
     </div>
+
+    <Footer />
+   </div>
   );
 };
 
