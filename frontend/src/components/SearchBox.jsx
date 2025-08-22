@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { GETsearchProducts } from "../api/api";
 import SearchModal from "./SearchModal";
+import { useNavigate } from "react-router-dom";
 
 export default function SearchBox() {
   const [query, setQuery] = useState("");
@@ -8,6 +9,8 @@ export default function SearchBox() {
   const [recentSearches, setRecentSearches] = useState([]);
   const [products, setProducts] = useState([]);
   const [showModal, setShowModal] = useState(false);
+  const navigate = useNavigate();
+
 
   const inputRef = useRef(null);
 
@@ -54,12 +57,17 @@ export default function SearchBox() {
   }, [query]);
 
   // Save to localStorage recent searches
-  const handleSearch = (text) => {
+ const handleSearch = (text) => {
     if (!text) return;
+
     const updated = [text, ...recentSearches.filter((s) => s !== text)].slice(0, 5);
     setRecentSearches(updated);
     localStorage.setItem("recentSearches", JSON.stringify(updated));
+
+    // Navigate to search result page
+    navigate(`/products/s?q=${encodeURIComponent(text)}`);
   };
+
 
   const handleInputChange = (e) => {
     setQuery(e.target.value);
