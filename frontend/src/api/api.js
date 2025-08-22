@@ -100,6 +100,40 @@ export const getOrderById = (id) => {
 };
 
 
+// ✅ Activity Log API
+export const getActivityLogs = (actionType, uid) =>
+  API.get("/activity/log/", {
+    params: { action_type: actionType, uid: uid },
+  });
+
+
+
+// search box recommendation products  
+export const GETsearchProducts = async (query) => {
+  try {
+    const response = await API.get("/product/home/", {
+      params: { q: query },
+    });
+
+    // Assuming response.data is an array of products directly,
+    // and you want to treat product names as suggestions too
+    const products = response.data || [];
+
+    // suggestions could be unique product names or categories or brands, up to you
+    // For example, get unique product names for suggestions:
+    const suggestions = [...new Set(products.map((p) => p.name))].map((name) => ({ name }));
+
+    return {
+      suggestions,
+      products,
+    };
+  } catch (error) {
+    return { suggestions: [], products: [] };
+  }
+};
+
+
+
 // Orders
 export const fetchOrders = () => API.get("/order/");
 export const createOrder = (data) => API.post("/orders/", data);
