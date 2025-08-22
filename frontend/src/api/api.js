@@ -133,6 +133,19 @@ export const GETsearchProducts = async (query) => {
 };
 
 
+// after search display products
+export const GETsearchResultProducts = async (query) => {
+  const response = await API.get(`/product/home/?q=${encodeURIComponent(query)}`);
+  return response.data;
+};
+
+
+// recommendation products in product details page
+export const GETrecomProducts = async (query) => {
+  const response = await API.get(`/product/home/?q=${encodeURIComponent(query)}`);
+  return response.data;
+};
+
 
 // Orders
 export const fetchOrders = () => API.get("/order/");
