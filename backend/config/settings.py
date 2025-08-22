@@ -36,6 +36,7 @@ LOCAL_APPS = [
     'cart',
     'order',
     'banner',
+    'activity',
 ]
 
 THIRD_PARTY_APPS = [
