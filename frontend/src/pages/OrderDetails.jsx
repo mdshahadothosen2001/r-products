@@ -6,6 +6,7 @@ import NavBar from "../components/NavBar";
 import Footer from "../components/Footer";
 import WelcomeNavBar from "../components/WelcomeNavBar";
 import { FiDollarSign } from "react-icons/fi";
+import TrackingUpdate from "../components/TrackUpdate";
 
 export default function OrderDetails() {
   const { id } = useParams();
@@ -133,6 +134,7 @@ export default function OrderDetails() {
 
 
 
+        <TrackingUpdate actionType="order" uid={order.id} />
         <Footer />
     </div>
   );
