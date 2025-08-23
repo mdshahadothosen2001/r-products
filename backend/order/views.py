@@ -159,7 +159,7 @@ class OrderStatusUpdateView(APIView):
 
         order.save()
 
-        return Response({"message": "Order status updated", "status": order.status}, status=status.HTTP_200_OK)
+        return Response({"message": "Order status updated", "status": order.status, "order_id": order.id}, status=status.HTTP_200_OK)
 
 
 class OrderBillingView(APIView):
@@ -169,6 +169,7 @@ class OrderBillingView(APIView):
         """
         Update order billing info (all fields required).
         POST data: {
+            "phone": "...",
             "first_name": "...",
             "last_name": "...",
             "address1": "...",
@@ -179,7 +180,7 @@ class OrderBillingView(APIView):
         """
         order = get_object_or_404(Order, id=order_id)
 
-        required_fields = ["first_name", "last_name", "address1", "address2", "city", "postal_code"]
+        required_fields = ["phone", "first_name", "last_name", "address1", "address2", "city", "postal_code"]
 
         # Check missing fields
         missing = [f for f in required_fields if f not in request.data or not request.data[f]]
@@ -189,6 +190,7 @@ class OrderBillingView(APIView):
                 status=status.HTTP_400_BAD_REQUEST
             )
 
+        order.receiver_phone = request.data["phone"]
         order.first_name = request.data["first_name"]
         order.last_name = request.data["last_name"]
         order.address_line_1 = request.data["address1"]
@@ -204,6 +206,8 @@ class OrderBillingView(APIView):
             order=order,
             action = (
                         "Billing Information added: "
+                        f"{request.data['first_name']}  {request.data['last_name']} "
+                        f"{request.data['phone']}, "
                         f"{request.data['address1']}, "
                         f"{request.data['address2']}, "
                         f"{request.data['city']}, "
@@ -215,8 +219,6 @@ class OrderBillingView(APIView):
         order.save()
 
         return Response(
-            {"success": True, "message": "Order billing information updated"},
+            {"success": True, "message": "Order billing information updated", "order_id": order.id},
             status=status.HTTP_200_OK
         )
-
-        return Response({"success": True, "message": "Order status updated",}, status=status.HTTP_200_OK)

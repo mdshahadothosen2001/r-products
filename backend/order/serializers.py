@@ -33,7 +33,7 @@ class OrderSerializer(serializers.ModelSerializer):
         return {
             "first_name": obj.first_name,
             "last_name": obj.last_name,
-            "phone": obj.user.phone_number,
+            "phone": obj.receiver_phone,
             "address_line_1": obj.address_line_1,
             "address_line_2": obj.address_line_2,
             "city": obj.city,

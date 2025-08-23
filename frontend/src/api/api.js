@@ -52,19 +52,15 @@ export const GETrecentlyViewProducts = () => API.get("/product/home/?list_type=r
 export const GETjustYouProducts = () => API.get("/product/home/?list_type=just_you");
 
 
-// Cart
-export const fetchCart = () => API.get("/cart/");
-export const addToCart = (data) => API.post("/cart/add/", data);
-export const removeFromCart = (id) => API.delete(`/cart/${id}/`);
-export const updateCartQuantity = (id, quantity) =>
-  API.patch(`/cart/${id}/`, { quantity });
 
-
+// B:: Cart amount
 export const GetCartAmount = async (payload) => {
   // payload = [{product_id, quantity}, ...]
   return API.post("/cart/amount-calculate/", payload);
 };
 
+
+//B:: make order
 export const postOrder = (items) => {
   const token = localStorage.getItem("access_token");
   return API.post(
@@ -79,6 +75,7 @@ export const postOrder = (items) => {
 };
 
 
+//B:: biling address
 export const postBillingInfoOrder = (id, data) => {
   const token = localStorage.getItem("access_token");
   return API.post(`/order/${id}/billing/`, data, {
@@ -86,12 +83,14 @@ export const postBillingInfoOrder = (id, data) => {
   });
 };
 
-export const patchPayOrder = (id, data) => {
-  const token = localStorage.getItem("access_token");
-  return API.patch(`/order/${id}/`, data, {
-    headers: { Authorization: `Bearer ${token}` },
-  });
-};
+
+// //B:: address confirm
+// export const patchPayOrder = (id, data) => {
+//   const token = localStorage.getItem("access_token");
+//   return API.patch(`/order/${id}/`, data, {
+//     headers: { Authorization: `Bearer ${token}` },
+//   });
+// };
 
 // ✅ GET order list
 export const getOrder = () => {

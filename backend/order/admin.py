@@ -20,7 +20,8 @@ class ActivityLogInline(admin.TabularInline):
     model = ActivityLog
     extra = 1
     fields = ('action_type', 'action', 'performed_by', 'timestamp')
-    readonly_fields = ('timestamp',)
+    readonly_fields = ('action_type', 'performed_by', 'timestamp',)
+    can_delete = False
     
     # Filter so that only activities related to this order show
     def get_queryset(self, request):

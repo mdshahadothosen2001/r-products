@@ -24,6 +24,7 @@ class Order(models.Model):
         default="start"
     )
     total_price = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
+    receiver_phone = models.CharField(max_length=15, null=True, blank=True)
     first_name = models.CharField(max_length=100, null=True, blank=True)
     last_name = models.CharField(max_length=100, null=True, blank=True)
     address_line_1 = models.CharField(max_length=100, null=True, blank=True)

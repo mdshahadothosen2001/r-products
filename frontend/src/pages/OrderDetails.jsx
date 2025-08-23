@@ -80,7 +80,7 @@ export default function OrderDetails() {
                 className="flex items-center bg-indigo-600 text-white px-6 py-2 rounded-lg shadow-md hover:bg-indigo-700 transition-colors"
               >
                 <FiDollarSign className="mr-2 text-lg" />
-                Now Pay It
+                Billing Address
               </button>
             )}
 

@@ -1,15 +1,17 @@
 import React, { useState } from "react";
 import { useParams } from "react-router-dom";
 import Swal from "sweetalert2";
-import { postBillingInfoOrder, patchPayOrder } from "../api/api";
+import { postBillingInfoOrder } from "../api/api";
 import NavBar from "../components/NavBar";
 import Footer from "../components/Footer";
 import Category from "../components/Category";
 import WelcomeNavBar from "../components/WelcomeNavBar";
 import { ArrowLeft } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 
 const OrderBilling = () => {
+  const navigate = useNavigate();
   const { id } = useParams();
   const orderId = id;
   const [formData, setFormData] = useState({
@@ -31,21 +33,22 @@ const OrderBilling = () => {
     e.preventDefault();
     setLoading(true);
     try {
-      // 1️⃣ Post billing info
-      await postBillingInfoOrder(orderId, formData);
-
-      // 2️⃣ Patch order status to 'paid'
-      await patchPayOrder(orderId, { status: "address" });
+      const response = await postBillingInfoOrder(orderId, formData);
 
       Swal.fire({
         icon: "success",
         title: "Order completed",
-        text: "Billing info submitted and order marked as paid.",
+        text: response.data.message || "Billing info submitted and order marked as paid.",
       });
 
+      // Navigate to order details page using returned order_id
+      navigate(`/order/details/${response.data.order_id}`);
+
+      // Reset form
       setFormData({
         first_name: "",
         last_name: "",
+        phone: "",
         address1: "",
         address2: "",
         city: "",
@@ -123,6 +126,22 @@ const OrderBilling = () => {
             className="w-full border-gray-300 rounded-xl p-3 border focus:ring-2 focus:ring-blue-500 focus:outline-none"
           />
         </div>
+      </div>
+
+
+      {/* Phone Number */}
+      <div>
+        <label className="block text-gray-700 font-medium mb-1">
+          Phone Number <span className="text-red-500">*</span>
+        </label>
+        <input
+          type="text"
+          name="phone"
+          value={formData.phone}
+          onChange={handleChange}
+          required
+          className="w-full border-gray-300 rounded-xl p-3 border focus:ring-2 focus:ring-blue-500 focus:outline-none"
+        />
       </div>
 
       {/* Address */}
