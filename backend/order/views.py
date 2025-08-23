@@ -14,16 +14,15 @@ from order.serializers import OrderSerializer
 User = get_user_model()
 
 
-
 class OrderDetailView(APIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [AllowAny]
 
     def get(self, request, pk):
         """
         Retrieve a single order with its items
         """
         try:
-            order = Order.objects.get(pk=pk, user=request.user.id)
+            order = Order.objects.get(pk=pk)
         except Order.DoesNotExist:
             return Response(
                 {"error": "Order not found"},
@@ -126,7 +125,7 @@ class OrderStatusUpdateView(APIView):
             return Response({"error": f"status must be one of {allowed_status}"}, status=status.HTTP_400_BAD_REQUEST)
 
         order.status = new_status
-        order.save()
+        # order.save()
 
         return Response({"message": "Order status updated", "status": order.status}, status=status.HTTP_200_OK)
 
@@ -136,8 +135,39 @@ class OrderBillingView(APIView):
 
     def post(self, request, order_id):
         """
-        Update order status without serializer
-        PATCH data: {"status": "delivered"}
+        Update order billing info (all fields required).
+        POST data: {
+            "first_name": "...",
+            "last_name": "...",
+            "address1": "...",
+            "address2": "...",
+            "city": "...",
+            "postal_code": "..."
+        }
         """
+        order = get_object_or_404(Order, id=order_id)
 
-        return Response({"success": True, "message": "Order status updated",}, status=status.HTTP_200_OK)
+        required_fields = ["first_name", "last_name", "address1", "address2", "city", "postal_code"]
+
+        # Check missing fields
+        missing = [f for f in required_fields if f not in request.data or not request.data[f]]
+        if missing:
+            return Response(
+                {"success": False, "message": f"Missing required fields: {', '.join(missing)}"},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        order.first_name = request.data["first_name"]
+        order.last_name = request.data["last_name"]
+        order.address_line_1 = request.data["address1"]
+        order.address_line_2 = request.data["address2"]
+        order.city = request.data["city"]
+        order.postal_or_zip_code = request.data["postal_code"]
+        order.status = "paid"
+
+        order.save()
+
+        return Response(
+            {"success": True, "message": "Order billing information updated"},
+            status=status.HTTP_200_OK
+        )

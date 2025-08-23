@@ -91,14 +91,19 @@ export const getOrder = () => {
 };
 
 
-// ✅ GET single order by ID
-export const getOrderById = (id) => {
-  const token = localStorage.getItem("access_token");
-  return API.get(`/order/details/${id}/`, {
-    headers: { Authorization: `Bearer ${token}` },
-  });
-};
+// // ✅ GET single order by ID
+// export const getOrderById = (id) => {
+//   const token = localStorage.getItem("access_token");
+//   return API.get(`/order/details/${id}/`, {
+//     headers: { Authorization: `Bearer ${token}` },
+//   });
+// };
 
+
+// ✅ GET single order by ID (without token)
+export const getOrderById = (id) => {
+  return API.get(`/order/details/${id}/`);
+};
 
 // Orders
 export const fetchOrders = () => API.get("/order/");
