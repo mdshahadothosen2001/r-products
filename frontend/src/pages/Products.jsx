@@ -107,10 +107,15 @@ export default function Products() {
           }}
           className="border rounded px-3 py-1 text-gray-700"
         >
-          <option value="">Select option...</option>
+          <option value="">All Products</option>
           <option value="price">Price: Low to High</option>
+          <option value="rprice">Price: High to Low</option>
           <option value="newest">Newest</option>
           <option value="sold">Best Selling</option>
+          <option value="tbrand">Top Brand's product</option>
+          <option value="featured">Featured Products</option>
+          <option value="viewed">Recently viewed product</option>
+          <option value="delivery">Free Delivery</option>
         </select>
       </div>
 

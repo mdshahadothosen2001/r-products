@@ -13,21 +13,41 @@ from common.custom_pagination import ProductPagination
 
 
 class ProductListView(generics.ListAPIView):
-    queryset = Product.objects.filter(is_active=True).order_by("-created_at")
     serializer_class = ProductSerializer
     pagination_class = ProductPagination
-    permission_classes = [permissions.AllowAny] 
-
-    
+    permission_classes = [permissions.AllowAny]
     filter_backends = [DjangoFilterBackend, filters.SearchFilter]
-    filterset_fields = ["category", "is_best_selling"] 
+    filterset_fields = ["category", "is_best_selling"]
     search_fields = ["name", "brand"]
 
     def get_queryset(self):
-        queryset = Product.objects.filter(is_active=True).order_by("-created_at")
+        queryset = Product.objects.filter(is_active=True)
+        
+        # Filter by category
         category_id = self.request.query_params.get("category_id")
         if category_id:
-            queryset = queryset.filter(category__id=category_id).order_by("-id")
+            queryset = queryset.filter(category__id=category_id)
+        
+        # Apply sorting/filtering based on the 'filter' query param
+        filter_type = self.request.query_params.get("filter")
+        
+        if filter_type == "price":
+            queryset = queryset.order_by("price")  # Low to high
+        elif filter_type == "rprice":
+            queryset = queryset.order_by("-price")  # high to low
+        elif filter_type == "newest":
+            queryset = queryset.order_by("-created_at")  # Newest first
+        elif filter_type == "sold":
+            queryset = queryset.filter(is_best_selling=True).order_by("-created_at")  # Best selling
+        elif filter_type == "tbrand":
+            queryset = queryset.filter(is_top_brand=True).order_by("-created_at")  # Top Brand
+        elif filter_type == "featured":
+            queryset = queryset.filter(is_featured=True).order_by("-created_at")  # Featured
+        elif filter_type == "viewed":
+            queryset = queryset.filter(is_recently_viewed=True).order_by("-created_at")  # Recently Viewed
+        elif filter_type == "delivery":
+            queryset = queryset.filter(is_free_delivery=True).order_by("-created_at")  # Free Delivery
+
         return queryset
 
 
