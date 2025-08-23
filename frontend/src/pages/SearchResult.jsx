@@ -4,6 +4,7 @@ import { GETsearchResultProducts } from "../api/api";
 import NavBar from "../components/NavBar";
 import Footer from "../components/Footer";
 import WelcomeNavBar from "../components/WelcomeNavBar";
+import RecommendedProducts from "../components/RecommendedProducts";
 
 function useQuery() {
   return new URLSearchParams(useLocation().search);
@@ -120,6 +121,8 @@ export default function SearchResult() {
       </div>
 
       <div className="h-60"></div>
+
+      <RecommendedProducts productId={0} />
       <Footer />
     </div>
   );

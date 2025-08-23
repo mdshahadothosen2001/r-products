@@ -39,9 +39,10 @@ const RecommendedProducts = ({ productId = null }) => {
   if (!recommendedProducts.length) {
     return <div className="text-center text-gray-400 py-6">No recommended products found.</div>;
   }
-
+  
+  
   return (
-    <div className="relative w-full mb-10 mt-20">
+    <div className="relative max-w-[1600px] mx-auto mb-10 mt-20 px-4">
       <h3 className="text-xl font-semibold mb-4">Recommended Products</h3>
 
       {/* Arrow buttons */}
@@ -62,43 +63,35 @@ const RecommendedProducts = ({ productId = null }) => {
       {/* Scrollable product list */}
       <div
         ref={scrollRef}
-        className="flex overflow-x-auto gap-5 px-10"
+        className="flex overflow-x-auto gap-5 px-6 no-scrollbar"
         style={{
           scrollBehavior: 'smooth',
-          msOverflowStyle: 'none', // IE/Edge
-          scrollbarWidth: 'none',  // Firefox
+          msOverflowStyle: 'none',
+          scrollbarWidth: 'none',
         }}
       >
-        {/* Hide scrollbar for Chrome/Safari */}
-        <style>
-          {`
-            .no-scrollbar::-webkit-scrollbar {
-              display: none;
-            }
-          `}
-        </style>
-
-        <div className="flex gap-5 no-scrollbar">
-          {recommendedProducts.map((product) => (
-            <div
-              key={product.id}
-              onClick={() => navigate(`/products/details/${product.id}`)}
-              className="min-w-[200px] max-w-[200px] bg-white border rounded-2xl shadow-sm hover:shadow-lg cursor-pointer transition-transform transform hover:scale-105"
-            >
-              <img
-                src={product.thumbnail}
-                alt={product.name}
-                className="w-full h-40 object-cover rounded-t-2xl"
-              />
-              <div className="p-3">
-                <h4 className="text-sm font-medium truncate">{product.name}</h4>
-                <p className="text-xs text-gray-500">{product.brand}</p>
-                <p className="text-lg font-semibold text-indigo-600 mt-1">${product.price}</p>
-              </div>
+        {recommendedProducts.map((product) => (
+          <div
+            key={product.id}
+            onClick={() => navigate(`/products/details/${product.id}`)}
+            className="min-w-[200px] max-w-[200px] bg-white border rounded-2xl shadow-sm hover:shadow-lg cursor-pointer transition-transform transform hover:scale-105"
+          >
+            <img
+              src={product.thumbnail}
+              alt={product.name}
+              className="w-full h-40 object-cover rounded-t-2xl"
+            />
+            <div className="p-3">
+              <h4 className="text-sm font-medium truncate">{product.name}</h4>
+              <p className="text-xs text-gray-500">{product.brand}</p>
+              <p className="text-lg font-semibold text-indigo-600 mt-1">${product.price}</p>
             </div>
-          ))}
-        </div>
+          </div>
+        ))}
+
       </div>
+
+      
     </div>
   );
 };
