@@ -1,13 +1,17 @@
 import React, { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { userProfile } from "../api/api";
+import { FaUserCircle, FaSignOutAlt } from "react-icons/fa";
+
+
 
 export default function HeaderUser() {
   const navigate = useNavigate();
   const [userData, setUserData] = useState(null);
   const [menuOpen, setMenuOpen] = useState(false);
   const menuRef = useRef(null);
-
+  
+  
   useEffect(() => {
     const fetchProfile = async () => {
       try {
@@ -45,9 +49,14 @@ export default function HeaderUser() {
   };
 
   const handleLogout = () => {
+    // Remove tokens from localStorage
     localStorage.removeItem("access_token");
-    setUserData(null);
-    setMenuOpen(false);
+    localStorage.removeItem("refresh_token");
+
+    // Optionally clear user context
+    setUser(null);
+
+    // Redirect to login
     navigate("/login");
   };
 
@@ -71,37 +80,55 @@ export default function HeaderUser() {
       </button>
 
       {userData && menuOpen && (
-  <div
-    className="absolute right-0 bg-white border rounded shadow-lg z-50"
-    style={{
-      marginTop: "75px",
-      width: "320px",        // 2x width
-      padding: "8px 0",      // vertical padding
-      boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
-      borderRadius: "10px",
-    }}
-  >
-    <div
-      className="px-6 py-4 text-center font-medium mb-2"
-      style={{ letterSpacing: "0.5px" }}
-    >
-      {userData.name || "User"}
-    </div>
-    {/* Black line under name */}
-    <div className="w-full border-t border-black mt-10 mb-2"></div>
+        <div
+          className="absolute right-0 bg-white border rounded-xl shadow-lg z-50"
+          style={{
+            marginTop: "75px",
+            width: "320px",
+            padding: "12px 0",
+            boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
+            borderRadius: "10px",
+          }}
+        >
+          <div className="px-6 py-4 text-center mb-2 flex flex-col items-center">
+            {/* Profile Avatar */}
+            {userData.picture ? (
+              <img
+                src={userData.picture}
+                alt={userData.name || "User"}
+                className="w-16 h-16 rounded-full object-cover mb-3 border-2 border-gray-200"
+              />
+            ) : (
+              <FaUserCircle className="text-gray-400 w-16 h-16 mb-3" />
+            )}
 
-    <button
-      onClick={handleLogout}
-      className="w-full text-center px-6 py-4 font-semibold hover:bg-blue-100 hover:text-blue-500 transition-colors duration-200"
-      style={{ letterSpacing: "0.5px" }}
-    >
-      Logout
-    </button>
-  </div>
-)}
+            {/* User Name */}
+            <div className="text-lg font-semibold text-gray-800" style={{ letterSpacing: "0.5px" }}>
+              {userData.name || "User"}
+            </div>
 
+            {/* Phone Number */}
+            <div className="text-sm text-gray-500 mt-1" style={{ letterSpacing: "0.5px" }}>
+              {userData.phone_number || ""}
+            </div>
+          </div>
 
+          {/* Divider */}
+          <div className="w-full border-t border-gray-200 mt-2 mb-2"></div>
 
+          {/* Logout Button */}
+          <button
+            onClick={handleLogout}
+            className="w-full flex items-center justify-center gap-2 px-6 py-3 font-semibold hover:bg-blue-50 hover:text-blue-600 transition-colors duration-200 rounded-b-xl"
+            style={{ letterSpacing: "0.5px" }}
+          >
+            <FaSignOutAlt /> Logout
+          </button>
+        </div>
+      )}
+      
+      
+      
     </div>
   );
 }

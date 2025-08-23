@@ -79,6 +79,8 @@ const Order = () => {
       )}
     </div>
 
+    <div className="h-40"></div>
+    
     <Footer />
    </div>
   );

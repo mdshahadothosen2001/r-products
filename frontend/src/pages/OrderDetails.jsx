@@ -123,6 +123,7 @@ export default function OrderDetails() {
 
           
           
+        <div className="h-40"></div>
         <Footer />
     </div>
   );

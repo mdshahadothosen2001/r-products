@@ -59,7 +59,7 @@ class OrderListCreateView(APIView):
         if not items_data or not isinstance(items_data, list):
             return Response({"error": "items list is required"}, status=status.HTTP_400_BAD_REQUEST)
 
-        user_id = 1 
+        user_id = request.user.id
         user_instance = User.objects.get(pk=user_id)  
 
        
