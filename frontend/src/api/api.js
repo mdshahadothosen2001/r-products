@@ -19,9 +19,20 @@ export const getCategories = () => API.get("/category/");
 // Products
 export const fetchProducts = () => API.get("/products/");
 
-// based category
-export const getProducts = (categoryId) =>
-  API.get(`/product/?category_id=${categoryId}`);
+export const getProducts = (categoryId, filters = {}) => {
+  // filters: { filter: "price" | "sold" | "newest" }
+  let query = `category_id=${categoryId}`;
+
+  if (filters.filter) {
+    query += `&filter=${filters.filter}`;
+  }
+
+  if (filters.page) {
+    query += `&page=${filters.page}`;
+  }
+
+  return API.get(`/product/?${query}`);
+};
 
 export const getProductById = (id) => API.get(`/product/${id}/`);
 

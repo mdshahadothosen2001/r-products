@@ -6,7 +6,9 @@ import Category from "../components/Category"
 import Footer from "../components/Footer";
 import WelcomeNavBar from "../components/WelcomeNavBar";
 import { FaBoxOpen } from "react-icons/fa";
+import { FaFilter } from "react-icons/fa";
 import "./style.css";
+
 
 export default function Products() {
   const { id } = useParams();
@@ -15,22 +17,22 @@ export default function Products() {
   const [count, setCount] = useState(0);
   const [pageSize, setPageSize] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
+  const [filter, setFilter] = useState("");
+
 
   useEffect(() => {
     fetchProducts(1);
   }, [id]);
 
-  const fetchProducts = async (page = 1) => {
+  const fetchProducts = async (page = 1, appliedFilter = filter) => {
     try {
       setLoading(true);
-      const res = await getProducts(`${id}&page=${page}`);
+      const res = await getProducts(id, { page, filter: appliedFilter });
       const response = res.data;
       setProducts(response.results);
       setCount(response.count);
       setCurrentPage(page);
-      if (response.results.length > 0) {
-        setPageSize(response.results.length);
-      }
+      if (response.results.length > 0) setPageSize(response.results.length);
     } catch (error) {
       console.error("Error fetching products:", error);
     } finally {
@@ -92,6 +94,25 @@ export default function Products() {
       <Category />
 
 
+
+
+
+      <div className="flex justify-end items-center mt-4 mr-10 gap-2">
+        <FaFilter className="text-gray-600" size={18} />
+        <select
+          value={filter}
+          onChange={(e) => {
+            setFilter(e.target.value);
+            fetchProducts(1, e.target.value);
+          }}
+          className="border rounded px-3 py-1 text-gray-700"
+        >
+          <option value="">Select option...</option>
+          <option value="price">Price: Low to High</option>
+          <option value="newest">Newest</option>
+          <option value="sold">Best Selling</option>
+        </select>
+      </div>
 
 
 
