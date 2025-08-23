@@ -7,6 +7,8 @@ import Footer from "../components/Footer";
 import WelcomeNavBar from "../components/WelcomeNavBar";
 import { FiDollarSign } from "react-icons/fi";
 import TrackingUpdate from "../components/TrackUpdate";
+import OrderSummary from "../components/OrderSummary";
+import OrderTrack from "../components/OrderTrack";
 
 export default function OrderDetails() {
   const { id } = useParams();
@@ -49,7 +51,9 @@ export default function OrderDetails() {
       <WelcomeNavBar />
       <NavBar />
 
+      <OrderTrack />
       
+
 
 
         <div className="max-w-4xl mx-auto py-8 space-y-8">
@@ -86,55 +90,16 @@ export default function OrderDetails() {
           <OrderStatusTracker currentStatus={order?.status} />
 
 
+          <OrderSummary order={order} />
 
-          <h2 className="text-2xl font-bold text-gray-800">Order Information</h2>
-          {/* ✅ Order Info Section */}
-          <div className="bg-white shadow rounded-lg p-6 space-y-4">
-            <div className="flex justify-between">
-              <p>
-                <span className="font-semibold">Status:</span>{" "}
-                {order.status}
-              </p>
-              <p>
-                <span className="font-semibold">Total:</span> $
-                {order.total_price}
-              </p>
-            </div>
-            <p>
-              <span className="font-semibold">Date:</span>{" "}
-              {new Date(order.created_at).toLocaleString()}
-            </p>
-          </div>
-
-          {/* ✅ Items Section */}
-          <div className="bg-white shadow rounded-lg p-6">
-            <h2 className="text-lg font-semibold mb-4">Items</h2>
-            {order.items?.length === 0 ? (
-              <p>No items found.</p>
-            ) : (
-              <div className="space-y-4">
-                {order.items.map((item) => (
-                  <div
-                    key={item.id}
-                    className="flex justify-between items-center p-4 border rounded-lg hover:shadow-md transition-shadow"
-                  >
-                    <div>
-                      <p className="font-medium">{item.product_name}</p>
-                      <p className="text-gray-500 text-sm">
-                        Quantity: {item.quantity}
-                      </p>
-                    </div>
-                    <div className="font-semibold">${item.price}</div>
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
         </div>
 
 
 
         <TrackingUpdate actionType="order" uid={order.id} />
+
+          
+          
         <Footer />
     </div>
   );

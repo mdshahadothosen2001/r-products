@@ -5,6 +5,7 @@ import NavBar from "../components/NavBar";
 import Footer from "../components/Footer";
 import Category from "../components/Category";
 import WelcomeNavBar from "../components/WelcomeNavBar";
+import OrderTrack from "../components/OrderTrack";
 
 const Order = () => {
   const [orders, setOrders] = useState([]);
@@ -38,9 +39,10 @@ const Order = () => {
 
     <WelcomeNavBar />
     <NavBar />
+    <OrderTrack />
 
      <div className="max-w-6xl mx-auto p-4">
-      <h1 className="text-3xl font-bold mb-6 text-center">My Orders</h1>
+      <h1 className="text-3xl font-bold mb-6 text-center">Your Orders</h1>
       {orders.length === 0 ? (
         <p className="text-center text-gray-500">No orders found.</p>
       ) : (

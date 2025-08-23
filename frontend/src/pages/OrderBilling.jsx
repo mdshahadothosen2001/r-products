@@ -6,6 +6,7 @@ import NavBar from "../components/NavBar";
 import Footer from "../components/Footer";
 import Category from "../components/Category";
 import WelcomeNavBar from "../components/WelcomeNavBar";
+import { ArrowLeft } from "lucide-react";
 
 
 const OrderBilling = () => {
@@ -72,15 +73,27 @@ const OrderBilling = () => {
       onSubmit={handleSubmit}
       className="max-w-2xl mx-auto bg-white shadow-lg rounded-2xl p-8 space-y-6"
     >
-      <div className="flex justify-between items-center mb-6">
-        <h2 className="text-2xl font-bold text-gray-800">Billing Information</h2>
-        <button
-          onClick={() => (window.location.href = "/orders")} // বা আপনার order list route
-          className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition-colors"
-        >
-          Order List
-        </button>
-      </div>
+      
+    <div className="flex justify-between items-center mb-20">
+      <h2 className="text-2xl font-bold text-gray-800">Billing Information</h2>
+
+      <button
+        onClick={() => (window.location.href = "/orders")}
+        className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition-colors"
+      >
+        Order List
+      </button>
+
+      <button
+        onClick={() => (window.location.href = "/order/details/" + orderId)}
+        className="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition-colors"
+      >
+        <ArrowLeft size={18} />
+        Back
+      </button>
+    </div>
+    <div className="h-20"></div>
+
 
       {/* First + Last Name */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -187,6 +200,7 @@ const OrderBilling = () => {
 
 
 
+    <div className="h-40"></div>
     <Footer/>
    </div>
   );
