@@ -6,6 +6,7 @@ import NavBar from "../components/NavBar";
 import Footer from "../components/Footer";
 import WelcomeNavBar from "../components/WelcomeNavBar";
 import { FiDollarSign } from "react-icons/fi";
+import TrackingUpdate from "../components/TrackUpdate";
 import OrderSummary from "../components/OrderSummary";
 import OrderTrack from "../components/OrderTrack";
 
@@ -51,8 +52,8 @@ export default function OrderDetails() {
       <NavBar />
 
       <OrderTrack />
-
       
+
 
 
         <div className="max-w-4xl mx-auto py-8 space-y-8">
@@ -91,11 +92,12 @@ export default function OrderDetails() {
 
           <OrderSummary order={order} />
 
-          </div>
+        </div>
 
 
 
-      
+        <TrackingUpdate actionType="order" uid={order.id} />
+
 
 
 

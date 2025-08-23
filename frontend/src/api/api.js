@@ -91,19 +91,61 @@ export const getOrder = () => {
 };
 
 
-// // ✅ GET single order by ID
-// export const getOrderById = (id) => {
-//   const token = localStorage.getItem("access_token");
-//   return API.get(`/order/details/${id}/`, {
-//     headers: { Authorization: `Bearer ${token}` },
-//   });
-// };
-
-
-// ✅ GET single order by ID (without token)
+// ✅ GET single order by ID
 export const getOrderById = (id) => {
-  return API.get(`/order/details/${id}/`);
+  const token = localStorage.getItem("access_token");
+  return API.get(`/order/details/${id}/`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
 };
+
+
+// ✅ Activity Log API
+export const getActivityLogs = (actionType, uid) =>
+  API.get("/activity/log/", {
+    params: { action_type: actionType, uid: uid },
+  });
+
+
+
+// search box recommendation products  
+export const GETsearchProducts = async (query) => {
+  try {
+    const response = await API.get("/product/home/", {
+      params: { q: query },
+    });
+
+    // Assuming response.data is an array of products directly,
+    // and you want to treat product names as suggestions too
+    const products = response.data || [];
+
+    // suggestions could be unique product names or categories or brands, up to you
+    // For example, get unique product names for suggestions:
+    const suggestions = [...new Set(products.map((p) => p.name))].map((name) => ({ name }));
+
+    return {
+      suggestions,
+      products,
+    };
+  } catch (error) {
+    return { suggestions: [], products: [] };
+  }
+};
+
+
+// after search display products
+export const GETsearchResultProducts = async (query) => {
+  const response = await API.get(`/product/home/?q=${encodeURIComponent(query)}`);
+  return response.data;
+};
+
+
+// recommendation products in product details page
+export const GETrecomProducts = async (query) => {
+  const response = await API.get(`/product/home/?q=${encodeURIComponent(query)}`);
+  return response.data;
+};
+
 
 // Orders
 export const fetchOrders = () => API.get("/order/");

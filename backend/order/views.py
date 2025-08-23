@@ -10,8 +10,10 @@ from rest_framework import status
 from order.models import Order, OrderItem
 from product.models import Product
 from order.serializers import OrderSerializer
+from activity.models import ActivityLog
 
 User = get_user_model()
+
 
 
 class OrderDetailView(APIView):
@@ -95,6 +97,15 @@ class OrderListCreateView(APIView):
 
         order.total_price = total_price
         order.save()
+
+        # activity log add
+        user = get_object_or_404(User, id=request.user.id)
+        ActivityLog.objects.create(
+            action_type='order',
+            uid=order.id,
+            action='Order placed by user without payment confirm',
+            performed_by=user
+        )
         return Response({
                 "success": True,
                 "message": "Successfully done",
@@ -125,7 +136,25 @@ class OrderStatusUpdateView(APIView):
             return Response({"error": f"status must be one of {allowed_status}"}, status=status.HTTP_400_BAD_REQUEST)
 
         order.status = new_status
-        # order.save()
+
+        # activity log add
+        status_messages = {
+            "paid": "Payment confirmed.",
+            "pending": "Order is pending.",
+            "processing": "We are processing your order.",
+            "shipped": "Order has been shipped.",
+            "delivered": "Order has been delivered.",
+            "cancelled": "Order has been cancelled."
+        }
+        user = get_object_or_404(User, id=request.user.id)        
+        ActivityLog.objects.create(
+            action_type='order',
+            uid=order.id,
+            action= status_messages.get(status, "Some action happed"),
+            performed_by=user
+        )
+
+        order.save()
 
         return Response({"message": "Order status updated", "status": order.status}, status=status.HTTP_200_OK)
 
@@ -171,3 +200,5 @@ class OrderBillingView(APIView):
             {"success": True, "message": "Order billing information updated"},
             status=status.HTTP_200_OK
         )
+
+        return Response({"success": True, "message": "Order status updated",}, status=status.HTTP_200_OK)
