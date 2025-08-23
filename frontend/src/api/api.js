@@ -100,6 +100,17 @@ export const getOrderById = (id) => {
 };
 
 
+// ✅ Cancel Order (PATCH)
+export const cancelOrder = (id) => {
+  const token = localStorage.getItem("access_token");
+  return API.patch(
+    `/order/${id}/`,
+    { status: "cancelled" },
+    { headers: { Authorization: `Bearer ${token}` } }
+  );
+};
+
+
 // ✅ Activity Log API
 export const getActivityLogs = (actionType, uid) =>
   API.get("/activity/log/", {
@@ -150,6 +161,5 @@ export const GETrecomProducts = async (query) => {
 // Orders
 export const fetchOrders = () => API.get("/order/");
 export const createOrder = (data) => API.post("/orders/", data);
-export const cancelOrder = (id) => API.patch(`/orders/${id}/cancel/`);
 
 export default API;

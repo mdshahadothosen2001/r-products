@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { getOrderById } from "../api/api";
+import { getOrderById, cancelOrder } from "../api/api";
 import OrderStatusTracker from "../components/OrderStatusTracker";
 import NavBar from "../components/NavBar";
 import Footer from "../components/Footer";
@@ -83,7 +83,30 @@ export default function OrderDetails() {
                 Now Pay It
               </button>
             )}
+
+
+
+
+            {order.status !== "cancelled" && order.status !== "delivered" && (
+              <button
+                onClick={async () => {
+                  try {
+                    await cancelOrder(order.id);
+                    setOrder({ ...order, status: "cancelled" });
+                  } catch (err) {
+                    console.error("Failed to cancel order", err);
+                  }
+                }}
+                className="bg-red-600 text-white px-6 py-2 rounded-lg shadow-md hover:bg-red-700 transition-colors"
+              >
+                Cancel Order
+              </button>
+            )}
           </div>
+
+
+
+          
 
 
           {/* ✅ Order Status Tracking */}
