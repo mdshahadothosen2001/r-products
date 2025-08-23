@@ -7,7 +7,7 @@ import Cart from "../pages/Cart";
 // import Checkout from "../pages/Checkout";
 // import OrderHistory from "../pages/OrderHistory";
 // import OrderCancel from "../pages/OrderCancel";
-// import Register from "../pages/Register";
+import Register from "../pages/Register";
 // import Profile from "../pages/Profile";
 import NotFound from "../pages/NotFound";
 import OrderBilling from "../pages/OrderBilling";
@@ -21,6 +21,7 @@ export default function AppRoutes() {
     <Router>
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
         <Route path="/products/:id" element={<Products />} />
         <Route path="/products/details/:id" element={<ProductDetails />} />
@@ -28,7 +29,6 @@ export default function AppRoutes() {
         {/*<Route path="/checkout" element={<Checkout />} />
         <Route path="/orders" element={<OrderHistory />} />
         <Route path="/orders/cancel/:id" element={<OrderCancel />} />
-        <Route path="/register" element={<Register />} />
         <Route path="/profile" element={<Profile />} /> */}
         <Route path="orders" element={<Order/>}/>
         <Route path="order/details/:id" element={<OrderDetails/>}/>

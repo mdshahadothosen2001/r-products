@@ -10,7 +10,7 @@ const API = axios.create({
 
 // Auth
 export const loginUser = (data) => API.post("/auth/token/", data);
-export const registerUser = (data) => API.post("/auth/register/", data);
+export const registerUser = (data) => API.post("/auth/profile/", data);
 export const userProfile = (data) => API.get("/auth/profile/", data);
 export const bannerList = (data) => API.get("/banner/", data);
 
@@ -83,14 +83,6 @@ export const postBillingInfoOrder = (id, data) => {
   });
 };
 
-
-// //B:: address confirm
-// export const patchPayOrder = (id, data) => {
-//   const token = localStorage.getItem("access_token");
-//   return API.patch(`/order/${id}/`, data, {
-//     headers: { Authorization: `Bearer ${token}` },
-//   });
-// };
 
 // ✅ GET order list
 export const getOrder = () => {
