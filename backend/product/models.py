@@ -19,7 +19,7 @@ class Product(models.Model):
     
     # manage info
     discount = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
-    discount_percent = models.PositiveIntegerField(default=0)
+    discount_percent = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
     stock = models.PositiveIntegerField(default=0)
     status = models.CharField(max_length=255, null=True, blank=True)
 
@@ -44,6 +44,14 @@ class Product(models.Model):
     is_trending = models.BooleanField(default=False)
     is_recently_viewed = models.BooleanField(default=False)
     is_just_for_you = models.BooleanField(default=False)
+    
+
+    def save(self, *args, **kwargs):
+        if self.price > 0:
+            self.discount_percent = (self.discount / self.price) * 100
+        else:
+            self.discount_percent = 0
+        super().save(*args, **kwargs)
 
 
     def __str__(self):

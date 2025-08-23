@@ -37,7 +37,7 @@ class ProductAdmin(admin.ModelAdmin):
     
     list_per_page = 25
 
-    readonly_fields = ("created_at", "updated_at")
+    readonly_fields = ("discount_percent", "created_at", "updated_at")
 
 
 admin.site.register(Product, ProductAdmin)

@@ -1,4 +1,5 @@
 from django.contrib import admin
+from django.db import models
 from .models import Order, OrderItem
 from activity.models import ActivityLog
 
@@ -37,7 +38,12 @@ class ActivityLogInline(admin.TabularInline):
 
 @admin.register(Order)
 class OrderAdmin(admin.ModelAdmin):
-    list_display = ('id', 'user', 'status', 'total_price', 'created_at')
+    list_display = ('id', 'user', 'status', 'total_price', 'total_saved_amount', 'created_at')
     list_filter = ('status', 'created_at', 'updated_at')
     search_fields = ('user__username', 'id')
-    inlines = [OrderItemInline, ActivityLogInline]  # OrderItem + ActivityLog
+    inlines = [OrderItemInline, ActivityLogInline]
+
+    def total_saved_amount(self, obj):
+        # Sum all saved_amount from related OrderItems
+        return obj.items.aggregate(total=models.Sum('saved_amount'))['total'] or 0
+    total_saved_amount.short_description = 'Total Saved Amount'

@@ -1,114 +1,50 @@
-from rest_framework import status
-from rest_framework.permissions import IsAuthenticated, AllowAny
-from rest_framework.response import Response
 from rest_framework.views import APIView
-
-from cart.models import Cart, CartItem
+from rest_framework.permissions import AllowAny
+from rest_framework.response import Response
+from rest_framework import status
 from product.models import Product
-from cart.serializers import CartSerializer, CartItemSerializer
+from decimal import Decimal, ROUND_HALF_UP
 
-
-class CartDetailView(APIView):
-    permission_classes = [IsAuthenticated]
-
-    def get(self, request):
-        if not request.user or not request.user.is_authenticated:
-            return Response({"detail": "Authentication required."}, status=401)
-
-        cart = Cart.objects.filter(user=request.user.id).first()
-        
-        if not cart:
-            return Response({"detail": "No cart found."}, status=404)
-
-        serializer = CartSerializer(cart)
-        return Response(serializer.data)
-
-
-class CartAddProductView(APIView):
-    permission_classes = [IsAuthenticated]
-
-    def post(self, request):
-        cart, _ = Cart.objects.get_or_create(user=request.user.id)
-        product_id = request.data.get("product_id")
-        quantity = int(request.data.get("quantity", 1))
-
-        if not product_id:
-            return Response({"error": "Product ID is required"}, status=status.HTTP_400_BAD_REQUEST)
-
-        try:
-            product = Product.objects.get(id=product_id)
-        except Product.DoesNotExist:
-            return Response({"error": "Product not found"}, status=status.HTTP_404_NOT_FOUND)
-
-        cart_item, created = CartItem.objects.get_or_create(cart=cart, product=product)
-        if not created:
-            cart_item.quantity += quantity
-        else:
-            cart_item.quantity = quantity
-            cart_item.price = product.price
-            cart_item.discount = product.discount
-            cart_item.discount_percent = product.discount_percent
-
-        cart_item.save()
-
-        serializer = CartSerializer(cart)
-        return Response(serializer.data)
-
-
-class CartRemoveProductView(APIView):
-    permission_classes = [IsAuthenticated]
-
-    def delete(self, request):
-        cart, _ = Cart.objects.get_or_create(user=request.user.id)
-        product_id = request.data.get("product_id")
-
-        if not product_id:
-            return Response({"error": "Product ID is required"}, status=status.HTTP_400_BAD_REQUEST)
-
-        try:
-            cart_item = CartItem.objects.get(cart=cart, product_id=product_id)
-            cart_item.delete()
-        except CartItem.DoesNotExist:
-            return Response({"error": "Product not in cart"}, status=status.HTTP_404_NOT_FOUND)
-
-        serializer = CartSerializer(cart)
-        return Response(serializer.data)
-    
-    def patch(self, request):
-        cart, _ = Cart.objects.get_or_create(user=request.user.id)
-        product_id = request.data.get("product_id")
-        quantity = request.data.get("quantity")
-
-        if not product_id or quantity is None:
-            return Response({"error": "Product ID and quantity are required"}, status=status.HTTP_400_BAD_REQUEST)
-
-        try:
-            quantity = int(quantity)
-            if quantity < 1:
-                return Response({"error": "Quantity must be at least 1"}, status=status.HTTP_400_BAD_REQUEST)
-        except ValueError:
-            return Response({"error": "Quantity must be an integer"}, status=status.HTTP_400_BAD_REQUEST)
-
-        try:
-            cart_item = CartItem.objects.get(cart=cart, product_id=product_id)
-            cart_item.quantity = quantity
-            cart_item.save()
-        except CartItem.DoesNotExist:
-            return Response({"error": "Product not in cart"}, status=status.HTTP_404_NOT_FOUND)
-
-        serializer = CartSerializer(cart)
-        return Response(serializer.data)
 
 
 class CartAmountCalculateView(APIView):
     permission_classes = [AllowAny]
-    
+
     def post(self, request):
-        # request.data would contain: [{product_id, quantity}, ...]
-        # But here we'll just return dummy data
+        cart_items = request.data
+
+        total_amount = Decimal('0.00')
+        payable_amount = Decimal('0.00')
+        saved_money = Decimal('0.00')
+
+        for item in cart_items:
+            product_id = item.get("product_id")
+            quantity = item.get("quantity", 1)
+
+            try:
+                product = Product.objects.get(id=product_id)
+            except Product.DoesNotExist:
+                return Response(
+                    {"error": f"Product with id {product_id} does not exist."},
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+
+            # Convert discount_percent to Decimal
+            discount_percent = Decimal(product.discount_percent) / Decimal('100')
+            discounted_price = (product.price * (Decimal('1.00') - discount_percent)).quantize(Decimal('0.01'), rounding=ROUND_HALF_UP)
+
+            total_item_price = (product.price * quantity).quantize(Decimal('0.01'), rounding=ROUND_HALF_UP)
+            discounted_item_price = (discounted_price * quantity).quantize(Decimal('0.01'), rounding=ROUND_HALF_UP)
+            saved_item = (total_item_price - discounted_item_price).quantize(Decimal('0.01'), rounding=ROUND_HALF_UP)
+
+            total_amount += total_item_price
+            payable_amount += discounted_item_price
+            saved_money += saved_item
+
         data = {
-            "total_amount": 5000,
-            "payable_amount": 4500,
-            "saved_money": 500
+            "total_amount": total_amount,
+            "payable_amount": int(payable_amount),
+            "saved_money": saved_money
         }
+
         return Response(data, status=status.HTTP_200_OK)
