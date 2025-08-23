@@ -1,10 +1,9 @@
 import { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { GETsearchResultProducts } from "../api/api";
 import NavBar from "../components/NavBar";
 import Footer from "../components/Footer";
 import WelcomeNavBar from "../components/WelcomeNavBar";
-
 
 function useQuery() {
   return new URLSearchParams(useLocation().search);
@@ -15,8 +14,9 @@ export default function SearchResult() {
   const query = useQuery().get("q");
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
-  // ✅ Add to Cart function inside the component
+  // ✅ Add to Cart function
   const addToCart = (productId, productName) => {
     let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
@@ -28,7 +28,6 @@ export default function SearchResult() {
       setToastMessage(`"${productName}" is already in the cart`);
     }
 
-    // Hide message after 2 seconds
     setTimeout(() => setToastMessage(""), 2000);
   };
 
@@ -55,8 +54,6 @@ export default function SearchResult() {
       <WelcomeNavBar />
       <NavBar />
 
-
-
       <div className="container mx-auto px-4 py-6">
         <h2 className="text-2xl font-semibold mb-6">
           Search results for "<span className="text-blue-600">{query}</span>"
@@ -71,7 +68,8 @@ export default function SearchResult() {
             {products.map((product) => (
               <div
                 key={product.id}
-                className="border rounded shadow hover:shadow-lg transition duration-200 flex flex-col"
+                onClick={() => navigate(`/products/details/${product.id}`)}
+                className="border rounded shadow hover:shadow-lg transition duration-200 flex flex-col cursor-pointer"
               >
                 <img
                   src={product.thumbnail}
@@ -89,7 +87,10 @@ export default function SearchResult() {
                     ${parseFloat(product.price).toFixed(2)}
                   </p>
                   <button
-                    onClick={() => addToCart(product.id, product.name)}
+                    onClick={(e) => {
+                      e.stopPropagation(); // ✅ prevent triggering card click
+                      addToCart(product.id, product.name);
+                    }}
                     className="mt-auto bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700 transition"
                   >
                     Add to Cart
@@ -102,16 +103,21 @@ export default function SearchResult() {
 
         {/* ✅ Toast Message */}
         {toastMessage && (
-            <div className="fixed top-6 left-1/2 transform -translate-x-1/2 z-50">
-              <div className={`px-6 py-4 text-lg font-medium rounded shadow-lg transition-all duration-300
-                ${toastMessage.includes('already') ? 'bg-yellow-400 text-black' : 'bg-green-600 text-white'}
-              `}>
-                {toastMessage}
-              </div>
+          <div className="fixed top-6 left-1/2 transform -translate-x-1/2 z-50">
+            <div
+              className={`px-6 py-4 text-lg font-medium rounded shadow-lg transition-all duration-300
+                ${
+                  toastMessage.includes("already")
+                    ? "bg-yellow-400 text-black"
+                    : "bg-green-600 text-white"
+                }
+              `}
+            >
+              {toastMessage}
             </div>
-          )}
+          </div>
+        )}
       </div>
-
 
       <div className="h-60"></div>
       <Footer />

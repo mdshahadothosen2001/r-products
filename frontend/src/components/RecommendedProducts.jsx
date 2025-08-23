@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { GETrecomProducts } from '../api/api'; // adjust path as needed
+import { GETrecomProducts } from '../api/api';
+import { useNavigate } from 'react-router-dom';
 
 const RecommendedProducts = ({ productIds }) => {
   const [recommendedProducts, setRecommendedProducts] = useState([]);
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (productIds && productIds.length > 0) {
@@ -37,13 +39,18 @@ const RecommendedProducts = ({ productIds }) => {
           <div
             key={product.id}
             className="product-card"
+            onClick={() => navigate(`/products/details/${product.id}`)}
             style={{
               width: '200px',
               border: '1px solid #ddd',
               borderRadius: '8px',
               padding: '10px',
               boxShadow: '0 2px 5px rgba(0,0,0,0.1)',
+              cursor: 'pointer',
+              transition: 'transform 0.2s',
             }}
+            onMouseEnter={(e) => (e.currentTarget.style.transform = 'scale(1.03)')}
+            onMouseLeave={(e) => (e.currentTarget.style.transform = 'scale(1)')}
           >
             <img
               src={product.thumbnail}
