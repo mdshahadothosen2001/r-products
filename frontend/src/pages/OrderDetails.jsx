@@ -119,7 +119,7 @@ export default function OrderDetails() {
 
 
 
-        <TrackingUpdate actionType="order" uid={order.id} />
+        <TrackingUpdate actionType="order" order_id={order.id} />
 
           
           

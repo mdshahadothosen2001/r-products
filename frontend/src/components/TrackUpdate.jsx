@@ -58,15 +58,15 @@ const styles = {
   },
 };
 
-const TrackingUpdate = ({ actionType, uid }) => {
+const TrackingUpdate = ({ actionType, order_id }) => {
   const [logs, setLogs] = useState(null); // null = untouched, [] = empty
 
   useEffect(() => {
-    if (!actionType || !uid) return;
+    if (!actionType || !order_id) return;
 
     const fetchLogs = async () => {
       try {
-        const response = await getActivityLogs(actionType, uid);
+        const response = await getActivityLogs(actionType, order_id);
         if (Array.isArray(response.data) && response.data.length > 0) {
           setLogs(response.data);
         } else {
@@ -78,7 +78,7 @@ const TrackingUpdate = ({ actionType, uid }) => {
     };
 
     fetchLogs();
-  }, [actionType, uid]);
+  }, [actionType, order_id]);
 
   // Don’t render anything if logs not loaded or empty
   if (!logs || logs.length === 0) return null;

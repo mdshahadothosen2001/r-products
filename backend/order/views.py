@@ -102,7 +102,7 @@ class OrderListCreateView(APIView):
         user = get_object_or_404(User, id=request.user.id)
         ActivityLog.objects.create(
             action_type='order',
-            uid=order.id,
+            order=order,
             action='Order placed by user without billing address',
             performed_by=user
         )
@@ -152,7 +152,7 @@ class OrderStatusUpdateView(APIView):
             user = get_object_or_404(User, id=request.user.id)        
             ActivityLog.objects.create(
                 action_type='order',
-                uid=order.id,
+                order=order,
                 action= status_messages.get(new_status, "Some updated"),
                 performed_by=user
             )
@@ -201,7 +201,7 @@ class OrderBillingView(APIView):
         user = get_object_or_404(User, id=request.user.id)        
         ActivityLog.objects.create(
             action_type='order',
-            uid=order.id,
+            order=order,
             action = (
                         "Billing Information added: "
                         f"{request.data['address1']}, "

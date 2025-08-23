@@ -11,11 +11,11 @@ class ActivityLogListAPIView(APIView):
 
     def get(self, request):
         action_type = request.query_params.get('action_type')
-        uid = request.query_params.get('uid')
+        order_id = request.query_params.get('order_id')
 
-        if not action_type or not uid:
-            return Response({'detail': 'action_type and uid are required'}, status=status.HTTP_400_BAD_REQUEST)
+        if not action_type or not order_id:
+            return Response({'detail': 'action_type and order id are required'}, status=status.HTTP_400_BAD_REQUEST)
 
-        logs = ActivityLog.objects.filter(action_type=action_type, uid=uid).order_by('-timestamp')
+        logs = ActivityLog.objects.filter(action_type=action_type, order_id=order_id).order_by('-timestamp')
         serializer = ActivityLogSerializer(logs, many=True)
         return Response(serializer.data)

@@ -5,14 +5,14 @@ from activity.models import ActivityLog
 
 @admin.register(ActivityLog)
 class ActivityLogAdmin(admin.ModelAdmin):
-    list_display = ('id', 'action_type', 'uid', 'action_summary', 'performed_by', 'timestamp')
+    list_display = ('id', 'action_type', 'action_summary', 'performed_by', 'timestamp')
     list_filter = ('action_type', 'performed_by')
-    search_fields = ('action', 'uid', 'performed_by__username')
+    search_fields = ('action', 'performed_by__username')
     ordering = ('-timestamp',)
 
     fieldsets = (
         (None, {
-            'fields': ('action_type', 'uid', 'action', 'performed_by')
+            'fields': ('action_type', 'action', 'performed_by')
         }),
         ('Metadata', {
             'fields': ('timestamp',),

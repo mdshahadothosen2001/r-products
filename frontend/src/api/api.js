@@ -123,9 +123,9 @@ export const cancelOrder = (id) => {
 
 
 // ✅ Activity Log API
-export const getActivityLogs = (actionType, uid) =>
+export const getActivityLogs = (actionType, order_id) =>
   API.get("/activity/log/", {
-    params: { action_type: actionType, uid: uid },
+    params: { action_type: actionType, order_id: order_id },
   });
 
 
