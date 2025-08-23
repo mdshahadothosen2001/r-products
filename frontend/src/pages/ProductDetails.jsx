@@ -5,6 +5,7 @@ import NavBar from "../components/NavBar";
 import Footer from "../components/Footer";
 import Category from "../components/Category";
 import WelcomeNavBar from "../components/WelcomeNavBar";
+import RecommendedProducts from "../components/RecommendedProducts";
 
 export default function ProductDetails() {
   const { id } = useParams();
@@ -13,6 +14,7 @@ export default function ProductDetails() {
   const [selectedImage, setSelectedImage] = useState(null);
   const [activeTab, setActiveTab] = useState("description");
   const [showPopup, setShowPopup] = useState(false);
+  const relatedProductIds = [1, 2, 3, 4];
 
   useEffect(() => {
     fetchProduct();
@@ -170,6 +172,7 @@ export default function ProductDetails() {
         </div>
       </div>
 
+      <RecommendedProducts productIds={relatedProductIds} />
       <div className="h-40"></div>
       <Footer />
     </div>

@@ -13,6 +13,8 @@ import NotFound from "../pages/NotFound";
 import OrderBilling from "../pages/OrderBilling";
 import Order from "../pages/OrderHistory";
 import OrderDetails from "../pages/OrderDetails";
+import SearchResult from "../pages/SearchResult";
+
 
 export default function AppRoutes() {
   return (
@@ -31,6 +33,7 @@ export default function AppRoutes() {
         <Route path="orders" element={<Order/>}/>
         <Route path="order/details/:id" element={<OrderDetails/>}/>
         <Route path="order/:id/billing" element={<OrderBilling />} />
+        <Route path="/products/s" element={<SearchResult />} />
         <Route path="*" element={<NotFound />} />
 
       </Routes>

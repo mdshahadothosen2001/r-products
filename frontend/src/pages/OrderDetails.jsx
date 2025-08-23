@@ -98,9 +98,8 @@ export default function OrderDetails() {
 
         <TrackingUpdate actionType="order" uid={order.id} />
 
-
-
-
+          
+          
         <Footer />
     </div>
   );
