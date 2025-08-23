@@ -9,6 +9,7 @@ import { FiDollarSign } from "react-icons/fi";
 import TrackingUpdate from "../components/TrackUpdate";
 import OrderSummary from "../components/OrderSummary";
 import OrderTrack from "../components/OrderTrack";
+import RatingReview from "../components/RatingReview";
 
 export default function OrderDetails() {
   const { id } = useParams();
@@ -102,6 +103,10 @@ export default function OrderDetails() {
                 Cancel Order
               </button>
             )}
+
+
+
+
           </div>
 
 
@@ -114,8 +119,14 @@ export default function OrderDetails() {
 
 
           <OrderSummary order={order} />
+          <p>{order.is_review}</p>
 
         </div>
+
+        {/* RatingReview component */}
+      <div className="mt-6">
+        <RatingReview order={order} />
+      </div>
 
 
 

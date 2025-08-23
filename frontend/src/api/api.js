@@ -167,4 +167,19 @@ export const GETsearchResultProducts = async (query) => {
 export const fetchOrders = () => API.get("/order/");
 export const createOrder = (data) => API.post("/orders/", data);
 
+
+
+// Create review
+export const postReview = (data) => {
+  const token = localStorage.getItem("access_token");
+  return API.post("/product/review/create/", data, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+};
+
+// Get reviews for an order
+export const getProductReviews = (orderId) => {
+  return API.get(`/product/review/${orderId}/`); // orderId instead of productId
+};
+
 export default API;

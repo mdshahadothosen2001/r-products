@@ -17,10 +17,10 @@ class OrderSerializer(serializers.ModelSerializer):
     class Meta:
         model = Order
         fields = (
-            'id', 'user', 'status', 'total_price', 'created_at', 'items',
+            'id', 'user', 'status', 'total_price', 'created_at', 'items', 'is_review',
             'sender_info', 'receiver_info'
         )
-        read_only_fields = ('user', 'total_price', 'created_at')
+        read_only_fields = ('user', 'total_price', 'is_review', 'created_at')
 
     def get_sender_info(self, obj):
         return {
