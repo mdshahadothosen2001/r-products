@@ -97,9 +97,6 @@ const TrackingUpdate = ({ actionType, uid }) => {
               {log.extra_line && (
                 <div style={styles.extraLine}>{log.extra_line}</div>
               )}
-              {log.performed_by && (
-                <div style={styles.performedBy}>by {log.performed_by}</div>
-              )}
             </div>
           </div>
         ))}

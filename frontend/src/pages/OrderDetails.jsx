@@ -74,7 +74,7 @@ export default function OrderDetails() {
           <div className="flex justify-between items-center mt-10">
             <h1 className="text-2xl font-bold">Order #{order.id}</h1>
 
-            {order.status === "payment" && (
+            {order.status === "start" && (
               <button
                 onClick={() => (window.location.href = `/order/${order.id}/billing`)}
                 className="flex items-center bg-indigo-600 text-white px-6 py-2 rounded-lg shadow-md hover:bg-indigo-700 transition-colors"

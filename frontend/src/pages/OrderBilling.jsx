@@ -35,7 +35,7 @@ const OrderBilling = () => {
       await postBillingInfoOrder(orderId, formData);
 
       // 2️⃣ Patch order status to 'paid'
-      await patchPayOrder(orderId, { status: "paid" });
+      await patchPayOrder(orderId, { status: "address" });
 
       Swal.fire({
         icon: "success",

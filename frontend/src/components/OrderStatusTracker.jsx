@@ -1,8 +1,8 @@
 import React from "react";
 
 const statuses = [
-  "payment",
-  "paid",
+  "start",
+  "address",
   "pending",
   "processing",
   "shipped",

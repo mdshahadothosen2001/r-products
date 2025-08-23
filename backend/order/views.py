@@ -103,7 +103,7 @@ class OrderListCreateView(APIView):
         ActivityLog.objects.create(
             action_type='order',
             uid=order.id,
-            action='Order placed by user without payment confirm',
+            action='Order placed by user without billing address',
             performed_by=user
         )
         return Response({
@@ -131,7 +131,7 @@ class OrderStatusUpdateView(APIView):
         if not new_status:
             return Response({"error": "status field is required"}, status=status.HTTP_400_BAD_REQUEST)
 
-        allowed_status = ["paid", "pending", "processing", "shipped" "delivered", "cancelled"]
+        allowed_status = ["start", "address", "processing", "shipped" "delivered", "cancelled"]
         if new_status not in allowed_status:
             return Response({"error": f"status must be one of {allowed_status}"}, status=status.HTTP_400_BAD_REQUEST)
 
@@ -139,20 +139,23 @@ class OrderStatusUpdateView(APIView):
 
         # activity log add
         status_messages = {
-            "paid": "Payment confirmed.",
+            "start": "Needed Billing Information",
+            "address": "Billing information given.",
             "pending": "Order is pending.",
             "processing": "We are processing your order.",
             "shipped": "Order has been shipped.",
             "delivered": "Order has been delivered.",
             "cancelled": "Order has been cancelled."
         }
-        user = get_object_or_404(User, id=request.user.id)        
-        ActivityLog.objects.create(
-            action_type='order',
-            uid=order.id,
-            action= status_messages.get(status, "Some action happed"),
-            performed_by=user
-        )
+        
+        if new_status in allowed_status and new_status != "address":
+            user = get_object_or_404(User, id=request.user.id)        
+            ActivityLog.objects.create(
+                action_type='order',
+                uid=order.id,
+                action= status_messages.get(new_status, "Some updated"),
+                performed_by=user
+            )
 
         order.save()
 
@@ -192,7 +195,22 @@ class OrderBillingView(APIView):
         order.address_line_2 = request.data["address2"]
         order.city = request.data["city"]
         order.postal_or_zip_code = request.data["postal_code"]
-        order.status = "paid"
+        order.status = "order_placed"
+
+
+        user = get_object_or_404(User, id=request.user.id)        
+        ActivityLog.objects.create(
+            action_type='order',
+            uid=order.id,
+            action = (
+                        "Billing Information added: "
+                        f"{request.data['address1']}, "
+                        f"{request.data['address2']}, "
+                        f"{request.data['city']}, "
+                        f"{request.data['postal_code']}"
+                    ),
+            performed_by=user
+        )
 
         order.save()
 

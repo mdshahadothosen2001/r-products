@@ -13,15 +13,15 @@ class Order(models.Model):
     status = models.CharField(
         max_length=20, 
         choices=[
-            ("paid", "paid"),
-            ("payment", "Payment Pending"),
+            ("start", "start"),
+            ("address", "Billing Information"),
             ("pending", "Pending"),
             ("processing", "Processing"),
             ("shipped", "shipped"),
             ("delivered", "delivered"),
             ("cancelled", "Cancelled"),
         ], 
-        default="payment"
+        default="start"
     )
     total_price = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
     first_name = models.CharField(max_length=100, null=True, blank=True)
