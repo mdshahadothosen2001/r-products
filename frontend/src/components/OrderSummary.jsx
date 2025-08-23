@@ -37,7 +37,7 @@ export default function OrderSummaryPro({ order }) {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
           <p><span className="text-gray-500">Name:</span> {order.sender_info?.name}</p>
           <p><span className="text-gray-500">Email:</span> {order.sender_info?.email}</p>
-          <p><span className="text-gray-500">Phone:</span> {order.sender_info?.phone_number}</p>
+          <p><span className="text-gray-500">Phone:</span> {order.sender_info?.phone}</p>
         </div>
       </section>
 

@@ -120,6 +120,15 @@ export const getActivityLogs = (actionType, order_id) =>
   });
 
 
+  // ✅ Product based Recommendation API
+export const getRecommendations = (productId = null) => {
+  const url = productId
+    ? `/product/product-based-recommendations/${productId}/`
+    : `/product/product-based-recommendations/`;
+
+  return API.get(url);
+};
+
 
 // search box recommendation products  
 export const GETsearchProducts = async (query) => {
@@ -152,12 +161,6 @@ export const GETsearchResultProducts = async (query) => {
   return response.data;
 };
 
-
-// recommendation products in product details page
-export const GETrecomProducts = async (query) => {
-  const response = await API.get(`/product/home/?q=${encodeURIComponent(query)}`);
-  return response.data;
-};
 
 
 // Orders

@@ -172,7 +172,7 @@ export default function ProductDetails() {
         </div>
       </div>
 
-      <RecommendedProducts productIds={relatedProductIds} />
+      <RecommendedProducts productId={product.id} />
       <div className="h-40"></div>
       <Footer />
     </div>

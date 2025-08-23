@@ -1,67 +1,103 @@
-import React, { useEffect, useState } from 'react';
-import { GETrecomProducts } from '../api/api';
+import React, { useEffect, useState, useRef } from 'react';
+import { getRecommendations } from '../api/api';
 import { useNavigate } from 'react-router-dom';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 
-const RecommendedProducts = ({ productIds }) => {
+const RecommendedProducts = ({ productId = null }) => {
   const [recommendedProducts, setRecommendedProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
+  const scrollRef = useRef(null);
 
   useEffect(() => {
-    if (productIds && productIds.length > 0) {
-      const query = productIds.join(',');
-      GETrecomProducts(query)
-        .then((data) => {
-          setRecommendedProducts(data);
-        })
-        .catch((error) => {
-          console.error('Error fetching recommended products:', error);
-        })
-        .finally(() => {
-          setLoading(false);
-        });
-    }
-  }, [productIds]);
+    setLoading(true);
+    getRecommendations(productId)
+      .then((res) => {
+        setRecommendedProducts(res.data);
+      })
+      .catch((error) => {
+        console.error('Error fetching recommended products:', error);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  }, [productId]);
+
+  const scroll = (direction) => {
+    if (!scrollRef.current) return;
+    const scrollAmount = 250;
+    scrollRef.current.scrollBy({
+      left: direction === 'left' ? -scrollAmount : scrollAmount,
+      behavior: 'smooth',
+    });
+  };
 
   if (loading) {
-    return <div>Loading recommended products...</div>;
+    return <div className="text-center text-gray-500 py-6">Loading recommended products...</div>;
   }
 
   if (!recommendedProducts.length) {
-    return <div>No recommended products found.</div>;
+    return <div className="text-center text-gray-400 py-6">No recommended products found.</div>;
   }
 
   return (
-    <div className="recommended-products">
-      <h3>Recommended Products</h3>
-      <div className="products-grid" style={{ display: 'flex', flexWrap: 'wrap', gap: '20px' }}>
-        {recommendedProducts.map(product => (
-          <div
-            key={product.id}
-            className="product-card"
-            onClick={() => navigate(`/products/details/${product.id}`)}
-            style={{
-              width: '200px',
-              border: '1px solid #ddd',
-              borderRadius: '8px',
-              padding: '10px',
-              boxShadow: '0 2px 5px rgba(0,0,0,0.1)',
-              cursor: 'pointer',
-              transition: 'transform 0.2s',
-            }}
-            onMouseEnter={(e) => (e.currentTarget.style.transform = 'scale(1.03)')}
-            onMouseLeave={(e) => (e.currentTarget.style.transform = 'scale(1)')}
-          >
-            <img
-              src={product.thumbnail}
-              alt={product.name}
-              style={{ width: '100%', height: '150px', objectFit: 'cover', borderRadius: '4px' }}
-            />
-            <h4 style={{ fontSize: '16px', margin: '10px 0 5px' }}>{product.name}</h4>
-            <p style={{ margin: 0, color: '#555' }}>{product.brand}</p>
-            <p style={{ fontWeight: 'bold', marginTop: '5px' }}>${product.price}</p>
-          </div>
-        ))}
+    <div className="relative w-full mb-10 mt-20">
+      <h3 className="text-xl font-semibold mb-4">Recommended Products</h3>
+
+      {/* Arrow buttons */}
+      <button
+        onClick={() => scroll('left')}
+        className="absolute -left-4 top-1/2 -translate-y-1/2 z-10 bg-white shadow-md rounded-full p-2 hover:bg-gray-100"
+      >
+        <ChevronLeft className="w-6 h-6 text-gray-600" />
+      </button>
+
+      <button
+        onClick={() => scroll('right')}
+        className="absolute -right-4 top-1/2 -translate-y-1/2 z-10 bg-white shadow-md rounded-full p-2 hover:bg-gray-100"
+      >
+        <ChevronRight className="w-6 h-6 text-gray-600" />
+      </button>
+
+      {/* Scrollable product list */}
+      <div
+        ref={scrollRef}
+        className="flex overflow-x-auto gap-5 px-10"
+        style={{
+          scrollBehavior: 'smooth',
+          msOverflowStyle: 'none', // IE/Edge
+          scrollbarWidth: 'none',  // Firefox
+        }}
+      >
+        {/* Hide scrollbar for Chrome/Safari */}
+        <style>
+          {`
+            .no-scrollbar::-webkit-scrollbar {
+              display: none;
+            }
+          `}
+        </style>
+
+        <div className="flex gap-5 no-scrollbar">
+          {recommendedProducts.map((product) => (
+            <div
+              key={product.id}
+              onClick={() => navigate(`/products/details/${product.id}`)}
+              className="min-w-[200px] max-w-[200px] bg-white border rounded-2xl shadow-sm hover:shadow-lg cursor-pointer transition-transform transform hover:scale-105"
+            >
+              <img
+                src={product.thumbnail}
+                alt={product.name}
+                className="w-full h-40 object-cover rounded-t-2xl"
+              />
+              <div className="p-3">
+                <h4 className="text-sm font-medium truncate">{product.name}</h4>
+                <p className="text-xs text-gray-500">{product.brand}</p>
+                <p className="text-lg font-semibold text-indigo-600 mt-1">${product.price}</p>
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );

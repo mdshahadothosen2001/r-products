@@ -14,6 +14,7 @@ import OrderBilling from "../pages/OrderBilling";
 import Order from "../pages/OrderHistory";
 import OrderDetails from "../pages/OrderDetails";
 import SearchResult from "../pages/SearchResult";
+import RecomPage from "../pages/RecomPage";
 
 
 export default function AppRoutes() {
@@ -25,7 +26,9 @@ export default function AppRoutes() {
         <Route path="/login" element={<Login />} />
         <Route path="/products/:id" element={<Products />} />
         <Route path="/products/details/:id" element={<ProductDetails />} />
-         <Route path="/cart" element={<Cart />} />
+        <Route path="/cart" element={<Cart />} />
+        <Route path="/recomm/products" element={<RecomPage />} />
+
         {/*<Route path="/checkout" element={<Checkout />} />
         <Route path="/orders" element={<OrderHistory />} />
         <Route path="/orders/cancel/:id" element={<OrderCancel />} />

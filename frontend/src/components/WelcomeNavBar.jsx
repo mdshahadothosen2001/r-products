@@ -8,7 +8,7 @@ export default function WelcomeNavBar() {
         <a href="/orders/" className="flex items-center gap-2 text-gray-700 hover:text-blue-600 transition">
           <FaBoxOpen /> Order Track
         </a>
-        <a href="#" className="flex items-center gap-2 text-gray-700 hover:text-blue-600 transition">
+        <a href="/recomm/products/" className="flex items-center gap-2 text-gray-700 hover:text-blue-600 transition">
           <FaChartLine /> Recommender
         </a>
         <a href="/cart/" className="flex items-center gap-2 text-gray-700 hover:text-blue-600 transition">

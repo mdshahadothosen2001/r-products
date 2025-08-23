@@ -1,5 +1,8 @@
+from django.db.models import Count, Q
+
 from django_filters.rest_framework import DjangoFilterBackend
 
+from rest_framework.views import APIView
 from rest_framework import generics, filters, permissions
 from rest_framework.response import Response
 
@@ -68,3 +71,48 @@ class ProductForHomeView(generics.ListAPIView):
 
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
+
+
+
+
+
+class ProductRecommendationView(APIView):
+    permission_classes = [permissions.AllowAny]
+    
+    def get(self, request, pk=None):
+        queryset = Product.objects.filter(is_active=True)
+
+        if pk:
+            try:
+                product = Product.objects.get(pk=pk, is_active=True)
+                same_brand = queryset.filter(brand=product.brand).exclude(pk=product.pk)
+                same_category = queryset.filter(category=product.category).exclude(pk=product.pk)
+
+                queryset = (same_brand | same_category |
+                            queryset.filter(
+                                Q(is_best_selling=True) |
+                                Q(is_trending=True) |
+                                Q(is_featured=True)
+                            )).distinct()
+            except Product.DoesNotExist:
+                queryset = queryset.filter(
+                    Q(is_best_selling=True) |
+                    Q(is_trending=True) |
+                    Q(is_featured=True)
+                )
+
+        queryset = queryset.order_by('-rating', '-discount_percent', '-stock')[:20]
+
+        data = [
+            {
+                "id": p.id,
+                "name": p.name,
+                "brand": p.brand,
+                "price": str(p.price),
+                "discount_percent": float(p.discount_percent),
+                "rating": float(p.rating),
+                "thumbnail": request.build_absolute_uri(p.thumbnail.url) if p.thumbnail else None,
+            }
+            for p in queryset
+        ]
+        return Response(data)
