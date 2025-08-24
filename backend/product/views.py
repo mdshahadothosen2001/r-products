@@ -68,6 +68,19 @@ class ProductForHomeView(generics.ListAPIView):
         queryset = self.get_queryset()
         list_type = request.query_params.get("list_type")
 
+        # search from web search box
+        q_from_search = request.query_params.get("q", None)
+        if q_from_search:
+            queryset = queryset.filter(
+                Q(name__icontains=q_from_search) |
+                Q(brand__icontains=q_from_search) |
+                Q(category__name__icontains=q_from_search)
+            )
+            serializer = self.get_serializer(queryset, many=True)
+            return self.get_paginated_response(serializer.data) if self.paginator else Response(serializer.data)
+
+        
+        # home page suggested list
         # mapping: list_type -> (filters, ordering)
         filter_map = {
             "top_rated":       (None, "-rating"),

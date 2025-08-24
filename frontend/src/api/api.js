@@ -2,7 +2,7 @@ import axios from "axios";
 import { data } from "react-router-dom";
 
 const API = axios.create({
-  baseURL: "http://127.0.0.1:8000/api", // Your DRF backend
+  baseURL: "http://127.0.0.1:2000/api", // Your DRF backend
   headers: {
     "Content-Type": "application/json",
   },
