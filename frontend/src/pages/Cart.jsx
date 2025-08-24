@@ -6,6 +6,8 @@ import Category from "../components/Category";
 import WelcomeNavBar from "../components/WelcomeNavBar";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
+import { FaShoppingCart,  FaSmile, FaCoins, FaMoneyCheckAlt } from "react-icons/fa";
+
 
 export default function CartPage() {
   const [cartProducts, setCartProducts] = useState([]);
@@ -200,14 +202,28 @@ export default function CartPage() {
     );
 
   if (cartProducts.length === 0)
-    return (
-      <div>
-        <WelcomeNavBar />
-        <NavBar />
-        <Category />
-        <h2 className="text-center text-red-600 mt-10">Your cart is empty</h2>
+  return (
+    <div>
+      <WelcomeNavBar />
+      <NavBar />
+      <Category />
+
+      <div className="flex flex-col items-center justify-center mt-20 mb-20 text-gray-500">
+        <FaShoppingCart className="text-8xl mb-6 text-gray-400" />
+        <h2 className="text-2xl font-semibold mb-2 text-red-600">Your cart is empty</h2>
+        <p className="text-center max-w-md text-gray-600">
+          Start exploring our products and add items to your cart. 
+          Our main goal is to make your shopping easy and enjoyable.
+        </p>
       </div>
-    );
+
+
+      <div className="h-40"></div>
+      <div className="h-40"></div>
+
+      <Footer />
+    </div>
+  );
 
   return (
     <div>
@@ -307,7 +323,53 @@ export default function CartPage() {
         </div>
       </div>
 
+      
       <div className="h-40"></div>
+
+      <div className="max-w-[1200px] mx-auto my-12 px-4 grid grid-cols-1 sm:grid-cols-3 gap-6">
+        {/* Return Policy */}
+        <div className="relative flex flex-col items-center justify-center bg-white shadow-md rounded-lg p-6 hover:shadow-xl transition">
+          {/* New Badge */}
+          <span className="absolute top-3 right-3 bg-red-500 text-white text-xs font-bold px-3 py-1 rounded-full">
+          + NEW
+          </span>
+
+          <FaSmile className="text-5xl text-green-500 mb-4" />
+          <h3 className="text-lg font-semibold mb-2">7-Day Return</h3>
+          <p className="text-gray-600 text-center">
+            Shop with confidence with our easy 7-day return policy.
+          </p>
+        </div>
+
+        {/* Earn Points */}
+        <div className="relative flex flex-col items-center justify-center bg-white shadow-md rounded-lg p-6 hover:shadow-xl transition">
+          <span className="absolute top-3 right-3 bg-red-500 text-white text-xs font-bold px-3 py-1 rounded-full">
+          + NEW
+          </span>
+
+          <FaCoins className="text-5xl text-yellow-500 mb-4" />
+          <h3 className="text-lg font-semibold mb-2">Earn Points</h3>
+          <p className="text-gray-600 text-center">
+            Earn reward points on every purchase and save on future orders.
+          </p>
+        </div>
+
+        {/* EMI Option */}
+        <div className="relative flex flex-col items-center justify-center bg-white shadow-md rounded-lg p-6 hover:shadow-xl transition">
+          <span className="absolute top-3 right-3 bg-red-500 text-white text-xs font-bold px-3 py-1 rounded-full">
+          + NEW
+          </span>
+
+          <FaMoneyCheckAlt className="text-5xl text-blue-500 mb-4" />
+          <h3 className="text-lg font-semibold mb-2">EMI Available</h3>
+          <p className="text-gray-600 text-center">
+            Flexible EMI options available for hassle-free shopping.
+          </p>
+        </div>
+      </div>
+      
+
+
       <Footer />
     </div>
   );

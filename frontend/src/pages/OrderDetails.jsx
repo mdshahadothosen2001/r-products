@@ -10,6 +10,8 @@ import TrackingUpdate from "../components/TrackUpdate";
 import OrderSummary from "../components/OrderSummary";
 import OrderTrack from "../components/OrderTrack";
 import RatingReview from "../components/RatingReview";
+import { FaShoppingBag, FaTimesCircle } from "react-icons/fa";
+
 
 export default function OrderDetails() {
   const { id } = useParams();
@@ -96,8 +98,9 @@ export default function OrderDetails() {
                     console.error("Failed to cancel order", err);
                   }
                 }}
-                className="bg-red-600 text-white px-6 py-2 rounded-lg shadow-md hover:bg-red-700 transition-colors"
+                className="flex items-center gap-2 bg-red-600 text-white px-6 py-2 rounded-lg shadow-md hover:bg-red-700 transition-colors"
               >
+                <FaTimesCircle className="text-lg" />
                 Cancel Order
               </button>
             )}
@@ -118,7 +121,13 @@ export default function OrderDetails() {
           <TrackingUpdate actionType="order" order_id={order.id} />
         </div>
       ) : (
-        <p className="text-center text-gray-500 py-20">No order found.</p>
+        <p className="flex flex-col items-center justify-center mt-20 mb-20 text-gray-500">
+          <FaShoppingBag className="text-8xl mb-4" />
+          <span className="text-lg font-medium">Track Your Order Here by Order ID.</span>
+          <span className="text-sm mt-2 text-center max-w-md">
+            Our main goal is to make your order tracking easy and reliable.
+          </span>
+        </p>
       )}
 
       <div className="h-40"></div>

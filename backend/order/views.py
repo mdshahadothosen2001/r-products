@@ -206,7 +206,7 @@ class OrderBillingView(APIView):
         order.address_line_2 = request.data["address2"]
         order.city = request.data["city"]
         order.postal_or_zip_code = request.data["postal_code"]
-        order.status = "order_placed"
+        order.status = "address"
 
 
         user = get_object_or_404(User, id=request.user.id)        
