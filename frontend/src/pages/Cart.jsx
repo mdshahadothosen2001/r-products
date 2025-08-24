@@ -7,6 +7,7 @@ import WelcomeNavBar from "../components/WelcomeNavBar";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
 import { FaShoppingCart,  FaSmile, FaCoins, FaMoneyCheckAlt } from "react-icons/fa";
+import FAQ from "../components/FAQ";
 
 
 export default function CartPage() {
@@ -370,6 +371,8 @@ export default function CartPage() {
       
 
 
+      
+      <FAQ />
       <Footer />
     </div>
   );

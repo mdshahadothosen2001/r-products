@@ -8,6 +8,7 @@ import Category from "../components/Category";
 import WelcomeNavBar from "../components/WelcomeNavBar";
 import { ArrowLeft } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import FAQ from "../components/FAQ";
 
 
 const OrderBilling = () => {
@@ -220,6 +221,7 @@ const OrderBilling = () => {
 
 
     <div className="h-40"></div>
+    <FAQ />
     <Footer/>
    </div>
   );

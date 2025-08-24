@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { FaExclamationTriangle } from "react-icons/fa";
 import WelcomeNavBar from "../components/WelcomeNavBar";
+import FAQ from "../components/FAQ";
 
 export default function NotFound() {
   return (

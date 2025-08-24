@@ -7,6 +7,7 @@ import NavBar from "../components/NavBar";
 import Category from "../components/Category";
 import Footer from "../components/Footer";
 import { FaStar, FaHeart, FaBolt } from "react-icons/fa"
+import FAQ from "../components/FAQ";
 
 
 const RecomPage = () => {
@@ -81,6 +82,8 @@ const RecomPage = () => {
 
 
       <div className="h-40"></div>
+
+      <FAQ />
       <Footer />
     </div>
   );

@@ -2,3 +2,4 @@ npm install react-icons
 npm install react-slick slick-carousel
 npm install sweetalert2
 npm install lucide-react
+npm install @heroicons/react

@@ -5,6 +5,8 @@ import NavBar from "../components/NavBar";
 import Footer from "../components/Footer";
 import WelcomeNavBar from "../components/WelcomeNavBar";
 import RecommendedProducts from "../components/RecommendedProducts";
+import FAQ from "../components/FAQ";
+
 
 function useQuery() {
   return new URLSearchParams(useLocation().search);
@@ -123,6 +125,9 @@ export default function SearchResult() {
       <div className="h-60"></div>
 
       <RecommendedProducts productId={0} />
+
+
+      <FAQ />
       <Footer />
     </div>
   );

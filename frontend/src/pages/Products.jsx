@@ -8,6 +8,7 @@ import WelcomeNavBar from "../components/WelcomeNavBar";
 import { FaBoxOpen } from "react-icons/fa";
 import { FaFilter } from "react-icons/fa";
 import "./style.css";
+import FAQ from "../components/FAQ";
 
 
 export default function Products() {
@@ -164,53 +165,61 @@ export default function Products() {
         )}
 
         {/* Pagination */}
-        <div className="flex flex-col items-center mt-8 gap-3">
-          <div className="flex gap-2">
-            <button
-              disabled={currentPage === 1}
-              onClick={() => fetchProducts(currentPage - 1)}
-              className="page-btn"
-            >
-              Prev
-            </button>
-
-            {getPageNumbers().map((page, idx) =>
-              page === "..." ? (
-                <span key={idx} className="px-3 py-1">...</span>
-              ) : (
+        {products.length === 0 ? (
+            <p></p>
+          ) : ( 
+            <div className="flex flex-col items-center mt-8 gap-3">
+              <div className="flex gap-2">
                 <button
-                  key={idx}
-                  onClick={() => fetchProducts(page)}
-                  className={`page-btn ${
-                    currentPage === page ? "active" : ""
-                  }`}
+                  disabled={currentPage === 1}
+                  onClick={() => fetchProducts(currentPage - 1)}
+                  className="page-btn"
                 >
-                  {page}
+                  Prev
                 </button>
-              )
-            )}
 
-            <button
-              disabled={currentPage === totalPages}
-              onClick={() => fetchProducts(currentPage + 1)}
-              className="page-btn"
-            >
-              Next
-            </button>
-          </div>
+                {getPageNumbers().map((page, idx) =>
+                  page === "..." ? (
+                    <span key={idx} className="px-3 py-1">...</span>
+                  ) : (
+                    <button
+                      key={idx}
+                      onClick={() => fetchProducts(page)}
+                      className={`page-btn ${
+                        currentPage === page ? "active" : ""
+                      }`}
+                    >
+                      {page}
+                    </button>
+                  )
+                )}
 
-          {/* Showing info */}
-          {/* <p className="text-sm text-gray-600">
-            Showing: {start} - {end} of {count} Products
-          </p> */}
+                <button
+                  disabled={currentPage === totalPages}
+                  onClick={() => fetchProducts(currentPage + 1)}
+                  className="page-btn"
+                >
+                  Next
+                </button>
+              </div>
 
-        </div>
+              {/* Showing info */}
+              {/* <p className="text-sm text-gray-600">
+                Showing: {start} - {end} of {count} Products
+              </p> */}
+
+            </div>
+
+          )}
+
+
       </div>
 
 
       <div className="h-40"></div>
 
 
+      <FAQ />
       <Footer/>
 
 

@@ -6,6 +6,7 @@ import Footer from "../components/Footer";
 import Category from "../components/Category";
 import WelcomeNavBar from "../components/WelcomeNavBar";
 import RecommendedProducts from "../components/RecommendedProducts";
+import FAQ from "../components/FAQ";
 
 export default function ProductDetails() {
   const { id } = useParams();
@@ -198,6 +199,8 @@ export default function ProductDetails() {
 
       <RecommendedProducts productId={product.id} />
       <div className="h-40"></div>
+
+      <FAQ />
       <Footer />
     </div>
   );
