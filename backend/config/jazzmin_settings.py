@@ -30,15 +30,6 @@ JAZZMIN_SETTINGS = {
         # URL that gets reversed (Permissions can be added)
         {"name": "Home", "url": "admin:index", "permissions": ["auth.view_user"]},
 
-        # External URL that opens in a new window (Permissions can be added)
-        {"name": "website", "url": "http://localhost:5173", "new_window": True},
-
-        # Management site to make order
-        {"name": "ORDER MANAGEMENT", "url": "management_site", "new_window": False},
-
-        # Model admin to link to (Permissions checked against model)
-        {"model": "auth.User"},
-
         # App with dropdown menu to all its models pages (Permissions checked against models)
         {},
     ],
@@ -49,8 +40,6 @@ JAZZMIN_SETTINGS = {
 
     # Additional links to include in the user menu on the top right
     "usermenu_links": [
-        {"name": "website", "url": "http://localhost:5173", "new_window": True, "button": True, "button_classes": "btn btn-primary usermenu-hover"},
-        {"name": "ORDER MANAGEMENT", "url": "management_site", "new_window": False, "button": True, "button_classes": "btn btn-success usermenu-hover"},
         {"model": "auth.user"}
     ],
 

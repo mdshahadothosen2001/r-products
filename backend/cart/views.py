@@ -1,10 +1,11 @@
+from decimal import Decimal, ROUND_HALF_UP
+
 from rest_framework.views import APIView
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework import status
-from product.models import Product
-from decimal import Decimal, ROUND_HALF_UP
 
+from product.models import Product
 
 
 class CartAmountCalculateView(APIView):
