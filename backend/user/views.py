@@ -25,6 +25,7 @@ class UserProfileView(APIView):
     permission_classes = [AllowAny]
 
     def get(self, request):
+        print('.........................', request.user.id)
         user = get_object_or_404(UserAccount, pk=request.user.id)
         serializer = UserAccountSerializer(user)
         return Response(serializer.data)

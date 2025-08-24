@@ -20,7 +20,7 @@ const Order = () => {
         setOrders(res.data);
       } catch (err) {
         console.error(err);
-        setError(err.response?.data?.message || "Failed to fetch orders");
+        setError(err.response?.data?.message || "Login to view order list");
       } finally {
         setLoading(false);
       }

@@ -5,7 +5,7 @@ export default function WelcomeNavBar() {
     <div className="flex justify-between items-center px-6 py-4 bg-white shadow-md">
       <h2 className="text-xl font-semibold text-gray-800">Welcome</h2>
       <div className="flex items-center gap-6">
-        <a href="/orders/" className="flex items-center gap-2 text-gray-700 hover:text-blue-600 transition">
+        <a href="/order/details/0" className="flex items-center gap-2 text-gray-700 hover:text-blue-600 transition">
           <FaBoxOpen /> Order Track
         </a>
         <a href="/recomm/products/" className="flex items-center gap-2 text-gray-700 hover:text-blue-600 transition">

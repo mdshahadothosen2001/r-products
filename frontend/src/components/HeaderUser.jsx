@@ -12,25 +12,25 @@ export default function HeaderUser() {
   const menuRef = useRef(null);
   
   
-  useEffect(() => {
-    const fetchProfile = async () => {
-      try {
-        const token = localStorage.getItem("access_token");
-        if (!token) return; // Not logged in
+useEffect(() => {
+  const fetchProfile = async () => {
+    try {
+      const token = localStorage.getItem("access_token");
+      if (!token) return;
 
-        const res = await userProfile({
-          headers: { Authorization: `Bearer ${token}` },
-        });
+      const res = await userProfile({
+        headers: { Authorization: `Bearer ${token}` },
+      });
 
-        if (res.status === 200) setUserData(res.data);
-      } catch (err) {
-        console.error("Failed to fetch profile:", err);
-        setUserData(null);
-      }
-    };
+      if (res.status === 200) setUserData(res.data);
+    } catch (err) {
+      console.error("Failed to fetch profile:", err);
+      setUserData(null);
+    }
+  };
 
-    fetchProfile();
-  }, []);
+  fetchProfile();
+}, []);
 
   // Close menu if clicked outside
   useEffect(() => {
@@ -48,17 +48,16 @@ export default function HeaderUser() {
     setMenuOpen(!menuOpen);
   };
 
-  const handleLogout = () => {
-    // Remove tokens from localStorage
+const handleLogout = () => {
     localStorage.removeItem("access_token");
     localStorage.removeItem("refresh_token");
 
-    // Optionally clear user context
-    setUser(null);
+    // if you are using context
+    // setUser(null);
 
-    // Redirect to login
-    navigate("/login");
+    navigate("/login", { replace: true }); // replace avoids back navigation
   };
+
 
   return (
     <div className="relative" ref={menuRef}>
@@ -94,7 +93,7 @@ export default function HeaderUser() {
             {/* Profile Avatar */}
             {userData.picture ? (
               <img
-                src={userData.picture}
+                src="https://cdn-icons-png.flaticon.com/512/1077/1077114.png"
                 alt={userData.name || "User"}
                 className="w-16 h-16 rounded-full object-cover mb-3 border-2 border-gray-200"
               />

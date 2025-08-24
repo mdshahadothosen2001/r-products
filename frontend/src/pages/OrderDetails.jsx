@@ -29,10 +29,12 @@ export default function OrderDetails() {
   useEffect(() => {
     const fetchOrder = async () => {
       try {
-        const res = await getOrderById(id);
-        setOrder(res.data);
+        const res = await getOrderById(id); // API hit always
+        // Check if response is empty object
+        setOrder(Object.keys(res.data).length ? res.data : null);
       } catch (err) {
         console.error("Failed to fetch order", err);
+        setOrder(null);
       } finally {
         setLoading(false);
       }
@@ -41,36 +43,32 @@ export default function OrderDetails() {
   }, [id]);
 
   if (loading) return <p className="text-center">Loading...</p>;
-  if (!order) return <p className="text-center text-red-500">Order not found</p>;
-
-  // ✅ current status index
-  const currentIndex = statuses.indexOf(order.status);
 
   return (
     <div>
-
       <WelcomeNavBar />
       <NavBar />
 
       <OrderTrack />
-      
 
-
-
+      {order ? (
         <div className="max-w-4xl mx-auto py-8 space-y-8">
-          {/* ✅ Page Header */}
+          {/* Page Header */}
 
 
+          {/* Order list btn only login */}
           <div className="flex justify-between items-center mb-6">
-            <h2 className="text-2xl font-bold text-gray-800">Order Track</h2>
-            <button
-              onClick={() => (window.location.href = "/orders")}
-              className="bg-white text-blue-600 border border-blue-600 px-4 py-2 rounded hover:bg-blue-600 hover:text-white transition-colors"
-            >
-              Order List
-            </button>
+            {localStorage.getItem("access_token") && (
+              <div className="flex justify-between items-center">
+                <button
+                  onClick={() => (window.location.href = "/orders/")}
+                  className="bg-white text-blue-600 border border-blue-600 px-4 py-2 rounded hover:bg-blue-600 hover:text-white transition-colors"
+                >
+                  Order List
+                </button>
+              </div>
+            )}
           </div>
-
 
           <div className="flex justify-between items-center mt-10">
             <h1 className="text-2xl font-bold">Order #{order.id}</h1>
@@ -84,9 +82,6 @@ export default function OrderDetails() {
                 Billing Address
               </button>
             )}
-
-
-
 
             {order.status !== "cancelled" && order.status !== "delivered" && (
               <button
@@ -103,39 +98,23 @@ export default function OrderDetails() {
                 Cancel Order
               </button>
             )}
-
-
-
-
           </div>
 
-
-
-          
-
-
-          {/* ✅ Order Status Tracking */}
-          <OrderStatusTracker currentStatus={order?.status} />
-
+          {/* Order Status Tracking */}
+          <OrderStatusTracker currentStatus={order.status} />
 
           <OrderSummary order={order} />
           <p>{order.is_review}</p>
 
+          <RatingReview order={order} />
+          <TrackingUpdate actionType="order" order_id={order.id} />
         </div>
+      ) : (
+        <p className="text-center text-gray-500 py-20">No order found.</p>
+      )}
 
-        {/* RatingReview component */}
-      <div className="mt-6">
-        <RatingReview order={order} />
-      </div>
-
-
-
-        <TrackingUpdate actionType="order" order_id={order.id} />
-
-          
-          
-        <div className="h-40"></div>
-        <Footer />
+      <div className="h-40"></div>
+      <Footer />
     </div>
   );
 }

@@ -93,12 +93,9 @@ export const getOrder = () => {
 };
 
 
-// ✅ GET single order by ID
+// ✅ GET single order by ID (no token needed)
 export const getOrderById = (id) => {
-  const token = localStorage.getItem("access_token");
-  return API.get(`/order/details/${id}/`, {
-    headers: { Authorization: `Bearer ${token}` },
-  });
+  return API.get(`/order/details/${id}/`);
 };
 
 

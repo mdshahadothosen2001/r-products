@@ -100,60 +100,76 @@ export default function CartPage() {
 
 
   const handleConfirmOrder = async () => {
-    if (selectedProducts.length === 0) return;
-    setOrderLoading(true);
+  if (selectedProducts.length === 0) return;
 
-    const payload = selectedProducts.map((id) => {
-      const product = cartProducts.find((p) => p.id === id);
-      return { product_id: product.id, quantity: product.quantity };
+  // ✅ Check login
+  const token = localStorage.getItem("access_token");
+  if (!token) {
+    Swal.fire({
+      title: "⚠️ Login Required",
+      text: "Please login to confirm your order.",
+      icon: "warning",
+      confirmButtonText: "Go to Login",
+      confirmButtonColor: "#2563eb",
+    }).then(() => {
+      navigate("/login"); // redirect to login page
     });
+    return;
+  }
 
-    try {
-      const res = await postOrder(payload);
-      const orderId = res.data?.order_id;
-      const message = res.data?.message || "Operation completed";
+  setOrderLoading(true);
 
-      if ((res.status === 201 || res.status === 200 || res.data.code === 2001) && orderId) {
-        Swal.fire({
-          title: "✅ Success",
-          text: message,
-          icon: "success",
-          confirmButtonColor: "#16a34a",
-        }).then(() => {
-          navigate(`/order/${orderId}/billing`);
-        });
+  const payload = selectedProducts.map((id) => {
+    const product = cartProducts.find((p) => p.id === id);
+    return { product_id: product.id, quantity: product.quantity };
+  });
 
-        // Remove ordered products from cart
-        const cartIds = JSON.parse(localStorage.getItem("cart")) || [];
-        const remainingCart = cartIds.filter((id) => !selectedProducts.includes(id));
-        localStorage.setItem("cart", JSON.stringify(remainingCart));
+  try {
+    const res = await postOrder(payload);
+    const orderId = res.data?.order_id;
+    const message = res.data?.message || "Operation completed";
 
-        const updatedCartProducts = cartProducts.filter(
-          (p) => !selectedProducts.includes(p.id)
-        );
-        setCartProducts(updatedCartProducts);
-        setSelectedProducts([]);
-        setAmounts({ total_amount: 0, payable_amount: 0, saved_money: 0 });
-      } else {
-        Swal.fire({
-          title: "⚠️ Failed",
-          text: message,
-          icon: "error",
-          confirmButtonColor: "#dc2626",
-        });
-      }
-    } catch (error) {
-      console.error("Order failed:", error);
+    if ((res.status === 201 || res.status === 200 || res.data.code === 2001) && orderId) {
       Swal.fire({
-        title: "❌ Error",
-        text: error?.response?.data?.message || "Failed to place order. Please try again.",
+        title: "✅ Success",
+        text: message,
+        icon: "success",
+        confirmButtonColor: "#16a34a",
+      }).then(() => {
+        navigate(`/order/${orderId}/billing`);
+      });
+
+      // ✅ Update cart after order
+      const cartIds = JSON.parse(localStorage.getItem("cart")) || [];
+      const remainingCart = cartIds.filter((id) => !selectedProducts.includes(id));
+      localStorage.setItem("cart", JSON.stringify(remainingCart));
+
+      const updatedCartProducts = cartProducts.filter(
+        (p) => !selectedProducts.includes(p.id)
+      );
+      setCartProducts(updatedCartProducts);
+      setSelectedProducts([]);
+      setAmounts({ total_amount: 0, payable_amount: 0, saved_money: 0 });
+    } else {
+      Swal.fire({
+        title: "⚠️ Failed",
+        text: message,
         icon: "error",
         confirmButtonColor: "#dc2626",
       });
-    } finally {
-      setOrderLoading(false);
     }
-  };
+  } catch (error) {
+    console.error("Order failed:", error);
+    Swal.fire({
+      title: "❌ Error",
+      text: error?.response?.data?.message || "Failed to place order. Please try again.",
+      icon: "error",
+      confirmButtonColor: "#dc2626",
+    });
+  } finally {
+    setOrderLoading(false);
+  }
+};
 
 
 
