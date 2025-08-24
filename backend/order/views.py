@@ -138,7 +138,7 @@ class OrderStatusUpdateView(APIView):
         if not new_status:
             return Response({"error": "status field is required"}, status=status.HTTP_400_BAD_REQUEST)
 
-        allowed_status = ["start", "address", "processing", "shipped" "delivered", "cancelled"]
+        allowed_status = ["start", "address", "processing", "shipped" "delivered", "cancelled", "return"]
         if new_status not in allowed_status:
             return Response({"error": f"status must be one of {allowed_status}"}, status=status.HTTP_400_BAD_REQUEST)
 
@@ -152,10 +152,14 @@ class OrderStatusUpdateView(APIView):
             "processing": "We are processing your order.",
             "shipped": "Order has been shipped.",
             "delivered": "Order has been delivered.",
-            "cancelled": "Order has been cancelled."
+            "cancelled": "Order has been cancelled.",
+            "return": "Order has been return from customer with policy."
         }
         
         user_id = order.user.id
+
+        if new_status == "return":
+            order.order_return_condition = False
 
         if new_status in allowed_status and new_status != "address":
             user = get_object_or_404(User, id=user_id)        

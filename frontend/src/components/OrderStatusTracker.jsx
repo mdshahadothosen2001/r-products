@@ -6,8 +6,9 @@ const statuses = [
   "pending",
   "processing",
   "shipped",
-  "delivered",
   "cancelled",
+  "delivered",
+  "return",
 ];
 
 export default function OrderStatusTracker({ currentStatus }) {

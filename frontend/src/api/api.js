@@ -110,6 +110,18 @@ export const cancelOrder = (id) => {
 };
 
 
+// ✅ Return Order (PATCH)
+export const returnOrder = (id) => {
+  const token = localStorage.getItem("access_token");
+  return API.patch(
+    `/order/${id}/`,
+    { status: "return" },
+    { headers: { Authorization: `Bearer ${token}` } }
+  );
+};
+
+
+
 // ✅ Activity Log API
 export const getActivityLogs = (actionType, order_id) =>
   API.get("/activity/log/", {

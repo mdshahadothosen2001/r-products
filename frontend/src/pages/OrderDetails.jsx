@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { getOrderById, cancelOrder } from "../api/api";
+import { getOrderById, cancelOrder, returnOrder } from "../api/api";
 import OrderStatusTracker from "../components/OrderStatusTracker";
 import NavBar from "../components/NavBar";
 import Footer from "../components/Footer";
@@ -10,7 +10,7 @@ import TrackingUpdate from "../components/TrackUpdate";
 import OrderSummary from "../components/OrderSummary";
 import OrderTrack from "../components/OrderTrack";
 import RatingReview from "../components/RatingReview";
-import { FaShoppingBag, FaTimesCircle } from "react-icons/fa";
+import { FaShoppingBag, FaTimesCircle, FaUndo } from "react-icons/fa";
 
 
 export default function OrderDetails() {
@@ -104,6 +104,28 @@ export default function OrderDetails() {
                 Cancel Order
               </button>
             )}
+
+
+            {/* Return Order Button */}
+            {order.status === "delivered" && order.order_return_condition && (
+              <button
+                onClick={async () => {
+                  try {
+                    await returnOrder(order.id);
+                    setOrder({ ...order, status: "returned" }); // optional if you track returned status
+                    window.location.reload();
+                  } catch (err) {
+                    console.error("Failed to return order", err);
+                  }
+                }}
+                className="flex items-center gap-2 bg-blue-600 text-white px-6 py-2 rounded-lg shadow-md hover:bg-blue-700 transition-colors"
+              >
+                <FaUndo className="text-lg" />
+                Return Order
+              </button>
+            )}
+
+            
           </div>
 
           {/* Order Status Tracking */}

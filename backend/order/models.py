@@ -20,6 +20,7 @@ class Order(models.Model):
             ("shipped", "shipped"),
             ("delivered", "delivered"),
             ("cancelled", "Cancelled"),
+            ("return", "return"),
         ], 
         default="start"
     )
@@ -31,6 +32,8 @@ class Order(models.Model):
     address_line_2 = models.CharField(max_length=100, null=True, blank=True)
     city = models.CharField(max_length=100, null=True, blank=True)
     postal_or_zip_code = models.CharField(max_length=100, null=True, blank=True)
+
+    order_return_condition = models.BooleanField(default=True)
 
 
     is_review = models.BooleanField(default=False)
