@@ -70,6 +70,7 @@ class ProductForHomeView(generics.ListAPIView):
 
         # search from web search box
         q_from_search = request.query_params.get("q", None)
+        
         if q_from_search:
             queryset = queryset.filter(
                 Q(name__icontains=q_from_search) |
@@ -78,6 +79,7 @@ class ProductForHomeView(generics.ListAPIView):
             )
             serializer = self.get_serializer(queryset, many=True)
             return self.get_paginated_response(serializer.data) if self.paginator else Response(serializer.data)
+        
 
         
         # home page suggested list

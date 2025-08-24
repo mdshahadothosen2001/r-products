@@ -117,7 +117,7 @@ export const getActivityLogs = (actionType, order_id) =>
   });
 
 
-  // ✅ Product based Recommendation API
+// ✅ Product based Recommendation API
 export const getRecommendations = (productId = null) => {
   const url = productId
     ? `/product/product-based-recommendations/${productId}/`
@@ -166,7 +166,7 @@ export const createOrder = (data) => API.post("/orders/", data);
 
 
 
-// Create review
+// Create review for an order
 export const postReview = (data) => {
   const token = localStorage.getItem("access_token");
   return API.post("/product/review/create/", data, {

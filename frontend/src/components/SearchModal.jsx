@@ -43,7 +43,7 @@ export default function SearchModal({
       {/* Recent Searches */}
       {query === "" && recentSearches.length > 0 && (
         <div className="px-4 py-2">
-          <h3 className="text-sm font-semibold text-gray-500 mb-2">Recent Searches</h3>
+          <h3 className="text-sm font-semibold text-gray-500 mb-2">Recent Searched</h3>
           {recentSearches.map((search, i) => (
             <div
               key={i}
@@ -56,7 +56,7 @@ export default function SearchModal({
         </div>
       )}
 
-      {/* Suggestions */}
+      {/* Suggestions
       {query !== "" && suggestions.length > 0 && (
         <div className="px-4 py-2">
           <h3 className="text-sm font-semibold text-gray-500 mb-2">Recently searched</h3>
@@ -70,7 +70,7 @@ export default function SearchModal({
             </div>
           ))}
         </div>
-      )}
+      )} */}
 
       {/* Product Cards */}
       {query !== "" && products.length > 0 && (
