@@ -84,7 +84,7 @@ const RecommendedProducts = ({ productId = null }) => {
             <div className="p-3">
               <h4 className="text-sm font-medium truncate">{product.name}</h4>
               <p className="text-xs text-gray-500">{product.brand}</p>
-              <p className="text-lg font-semibold text-indigo-600 mt-1">${product.price}</p>
+              <p className="text-lg font-semibold text-indigo-600 mt-1">${product.price_ceil}</p>
             </div>
           </div>
         ))}

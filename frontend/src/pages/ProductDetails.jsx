@@ -84,29 +84,53 @@ export default function ProductDetails() {
             )}
           </div>
 
-          {/* Right: Product info */}
+
+          {/* Product Information */}
           <div className="w-full lg:w-1/2 flex flex-col gap-4">
             <p className="text-gray-600 font-medium">Brand: {product.brand}</p>
-            <p className="text-gray-600 font-medium">
-              Category: {product.category_name}
-            </p>
-            {product.price && (
-              <p className="text-2xl font-bold text-blue-600">${product.price}</p>
-            )}
+            <p className="text-gray-600 font-medium">Category: {product.category_name}</p>
+
+            {product.price_ceil && product.discount_ceil && product.discount_price ? (
+              <div className="flex items-center gap-3">
+                <span className="text-gray-400 line-through text-lg">
+                  ${Number(product.price_ceil)}
+                </span>
+                <span className="bg-red-500 text-white text-sm px-2 py-1 rounded">
+                  -${Number(product.discount_ceil)}
+                </span>
+                <span className="text-2xl font-bold text-blue-600">
+                  ${ (Number(product.discount_price)) }
+                </span>
+              </div>
+            ) : product.price_ceil ? (
+              <span className="text-2xl font-bold text-blue-600">
+                ${Number(product.price_ceil)}
+              </span>
+            ) : null}
 
             <button
               onClick={handleAddToCart}
-              className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition mt-2"
+              className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors mt-2"
             >
               Add to Cart
             </button>
 
-            {/* Popup */}
-            {showPopup && (
-              <div className="fixed top-20 right-10 bg-green-500 text-white px-4 py-2 rounded shadow-lg">
-                Product added to cart!
-              </div>
-            )}
+          {/* Popup after add to cart */}
+          {showPopup && (
+            <div className="fixed top-20 right-10 bg-green-500 text-white px-6 py-4 rounded-xl shadow-2xl text-lg font-semibold flex items-center gap-3 transform transition-all duration-300 animate-bounce">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-16 w-16 text-white"
+                fill="none"
+                viewBox="0 0 44 84"
+                stroke="currentColor"
+                strokeWidth={2}
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+              </svg>
+              Product added to cart!
+            </div>
+          )}
 
             {/* Tabs */}
             <div className="mt-6">

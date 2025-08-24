@@ -50,7 +50,7 @@ const DeliveryProducts = () => {
                     <div className="product-info">
                       <h3>{product.name}</h3>
                       <p><strong>Rating:</strong> {product.rating} ⭐</p>
-                      <p><strong>Price:</strong> {product.price} BDT</p>
+                      <p><strong>Price:</strong> {product.pric_ceil} BDT</p>
                       <div className="delivery-icon flex flex-col items-start gap-1 text-gray-700">
                         <div className="flex items-center gap-2">
                           <FaTruck size={20} className="text-green-500" />

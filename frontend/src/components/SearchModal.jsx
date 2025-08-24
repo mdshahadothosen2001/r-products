@@ -80,7 +80,7 @@ export default function SearchModal({
                   <div>
                     <div className="font-medium text-sm">{product.name}</div>
                     <div className="text-xs text-gray-500">{product.brand}</div>
-                    <div className="text-sm text-green-600 font-semibold">৳ {product.price}</div>
+                    <div className="text-sm text-green-600 font-semibold">৳ {product.price_ceil}</div>
                   </div>
                 </div>
 

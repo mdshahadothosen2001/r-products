@@ -52,7 +52,7 @@ const [bestSellingProductList, setBestSellingProducts] = useState([]);
                 <div className="product-info">
                   <h3>{product.name}</h3>
                   <p><strong>Rating:</strong> {product.rating} ⭐</p>
-                  <p><strong>Price:</strong> {product.price} BDT</p>
+                  <p><strong>Price:</strong> {product.price_ceil} BDT</p>
                   <div className="flex items-center gap-2 text-red-600 font-semibold">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"

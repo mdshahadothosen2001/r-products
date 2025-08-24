@@ -49,7 +49,7 @@ const NewProducts = () => {
                     <div className="product-info">
                       <h3>{product.name}</h3>
                       <p><strong>Rating:</strong> {product.rating} ⭐</p>
-                      <p><strong>Price:</strong> {product.price} BDT</p>
+                      <p><strong>Price:</strong> {product.price_ceil} BDT</p>
                     </div>
                   </div>
               </Link>

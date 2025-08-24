@@ -50,7 +50,7 @@ const DiscountedProducts = () => {
                     <div className="product-info">
                       <h3>{product.name}</h3>
                       <p><strong>Rating:</strong> {product.rating} ⭐</p>
-                      <p><strong>Price:</strong> {product.price} BDT</p>
+                      <p><strong>Price:</strong> {product.price_ceil} BDT</p>
                       <div className="flex items-center gap-2 bg-green-100 text-green-800 font-semibold px-4 py-2 rounded-lg inline-block mb-4 shadow-sm">
                         <FaTag className="text-green-600" />
                         <span>50% Discount</span>

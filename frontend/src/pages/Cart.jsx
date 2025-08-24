@@ -84,17 +84,32 @@ export default function CartPage() {
   };
 
   const handleRemove = (productId) => {
-    const updatedCart = cartProducts.filter((p) => p.id !== productId);
-    setCartProducts(updatedCart);
+    Swal.fire({
+      title: "Are you sure?",
+      text: "Do you want to remove this product from your cart?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: "Yes, remove it",
+      cancelButtonText: "Cancel",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        const updatedCart = cartProducts.filter((p) => p.id !== productId);
+        setCartProducts(updatedCart);
 
-    const updatedSelected = selectedProducts.filter((id) => id !== productId);
-    setSelectedProducts(updatedSelected);
+        const updatedSelected = selectedProducts.filter((id) => id !== productId);
+        setSelectedProducts(updatedSelected);
 
-    const cartIds = JSON.parse(localStorage.getItem("cart")) || [];
-    const newCartIds = cartIds.filter((id) => id !== productId);
-    localStorage.setItem("cart", JSON.stringify(newCartIds));
+        const cartIds = JSON.parse(localStorage.getItem("cart")) || [];
+        const newCartIds = cartIds.filter((id) => id !== productId);
+        localStorage.setItem("cart", JSON.stringify(newCartIds));
 
-    updateCartAmount(updatedSelected, updatedCart);
+        updateCartAmount(updatedSelected, updatedCart);
+
+        Swal.fire("Removed!", "The product has been removed.", "success");
+      }
+    });
   };
 
 
@@ -226,7 +241,7 @@ export default function CartPage() {
                 />
                 <div className="flex-1">
                   <h2 className="text-xl font-bold">{product.name}</h2>
-                  <p className="text-blue-600 font-semibold">${product.price}</p>
+                  <p className="text-blue-600 font-semibold">${product.price_ceil}</p>
                   <div className="mt-2 flex items-center gap-2">
                     <button
                       onClick={() => handleQuantityChange(product.id, -1)}

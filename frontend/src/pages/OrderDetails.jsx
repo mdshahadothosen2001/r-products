@@ -91,6 +91,7 @@ export default function OrderDetails() {
                   try {
                     await cancelOrder(order.id);
                     setOrder({ ...order, status: "cancelled" });
+                    window.location.reload();
                   } catch (err) {
                     console.error("Failed to cancel order", err);
                   }
@@ -108,7 +109,12 @@ export default function OrderDetails() {
           <OrderSummary order={order} />
           <p>{order.is_review}</p>
 
-          <RatingReview order={order} />
+          
+          {(order.status === "cancelled" || order.status === "delivered") && (
+            <RatingReview order={order} />
+          )}
+
+          
           <TrackingUpdate actionType="order" order_id={order.id} />
         </div>
       ) : (
