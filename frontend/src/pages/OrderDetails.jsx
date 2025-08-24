@@ -49,26 +49,28 @@ export default function OrderDetails() {
       <WelcomeNavBar />
       <NavBar />
 
+      
+
       <OrderTrack />
+
+      {/* Order list btn only login */}
+      <div className="flex justify-center">
+        {localStorage.getItem("access_token") && (
+          <button
+            onClick={() => (window.location.href = "/orders/")}
+            className="bg-white text-blue-600 border border-blue-600 px-4 py-2 rounded hover:bg-blue-600 hover:text-white transition-colors mr-4"
+          >
+            Order List
+          </button>
+        )}
+      </div>
 
       {order ? (
         <div className="max-w-4xl mx-auto py-8 space-y-8">
           {/* Page Header */}
 
 
-          {/* Order list btn only login */}
-          <div className="flex justify-between items-center mb-6">
-            {localStorage.getItem("access_token") && (
-              <div className="flex justify-between items-center">
-                <button
-                  onClick={() => (window.location.href = "/orders/")}
-                  className="bg-white text-blue-600 border border-blue-600 px-4 py-2 rounded hover:bg-blue-600 hover:text-white transition-colors"
-                >
-                  Order List
-                </button>
-              </div>
-            )}
-          </div>
+          
 
           <div className="flex justify-between items-center mt-10">
             <h1 className="text-2xl font-bold">Order #{order.id}</h1>

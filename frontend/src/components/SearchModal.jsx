@@ -43,34 +43,20 @@ export default function SearchModal({
       {/* Recent Searches */}
       {query === "" && recentSearches.length > 0 && (
         <div className="px-4 py-2">
-          <h3 className="text-sm font-semibold text-gray-500 mb-2">Recent Searched</h3>
-          {recentSearches.map((search, i) => (
-            <div
-              key={i}
-              className="px-3 py-2 hover:bg-gray-100 cursor-pointer rounded"
-              onClick={() => onSelect(search)}
-            >
-              {search}
-            </div>
-          ))}
+          <h3 className="text-sm font-semibold text-gray-500 mb-2">Recently Searched</h3>
+          <div className="flex flex-wrap gap-2">
+            {recentSearches.map((search, i) => (
+              <button
+                key={i}
+                onClick={() => onSelect(search)}
+                className="text-sm px-3 py-1.5 rounded bg-gray-200 hover:bg-gray-300 cursor-pointer"
+              >
+                {search}
+              </button>
+            ))}
+          </div>
         </div>
       )}
-
-      {/* Suggestions
-      {query !== "" && suggestions.length > 0 && (
-        <div className="px-4 py-2">
-          <h3 className="text-sm font-semibold text-gray-500 mb-2">Recently searched</h3>
-          {suggestions.map((item, i) => (
-            <div
-              key={i}
-              className="px-3 py-2 hover:bg-gray-100 cursor-pointer rounded"
-              onClick={() => onSelect(item.name)}
-            >
-              {item.name}
-            </div>
-          ))}
-        </div>
-      )} */}
 
       {/* Product Cards */}
       {query !== "" && products.length > 0 && (

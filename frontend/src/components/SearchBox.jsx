@@ -60,7 +60,7 @@ export default function SearchBox() {
  const handleSearch = (text) => {
     if (!text) return;
 
-    const updated = [text, ...recentSearches.filter((s) => s !== text)].slice(0, 5);
+    const updated = [text, ...recentSearches.filter((s) => s !== text)].slice(0, 50);
     setRecentSearches(updated);
     localStorage.setItem("recentSearches", JSON.stringify(updated));
 
