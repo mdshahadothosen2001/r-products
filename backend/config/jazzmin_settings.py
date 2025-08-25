@@ -3,13 +3,13 @@ JAZZMIN_SETTINGS = {
     "site_title": "FemmeNest world : Here admin or staff can manage admin panel",
     "site_header": "FemmeNest world",
     "site_brand": "FemmeNest world",
-    "site_logo": "logo/product-icon.png",
+    "site_logo": "logo/admin-icon.png",
     
     #Login card
-    "login_logo":"logo/product-icon.png",
+    "login_logo":"logo/admin-icon.png",
     "login_logo_dark": None,
     "site_logo_classes": "img-circle",
-    "site_icon": "logo/product-icon.png",
+    "site_icon": "logo/admin-icon.png",
     "welcome_sign": "Welcome to the FemmeNest world",
 
     #Footer
@@ -63,22 +63,12 @@ JAZZMIN_SETTINGS = {
     # "order_with_respect_to": [],
 
     # # Custom links to append to app groups, keyed on app name
-    # "custom_links": {},
-    "custom_links": {
-        "used_ingredient": [ 
-            {
-                "name": "Order Management",
-                "url": "management_site",
-                "icon": "fas fa-link",
-            }
-        ]
-    },
+
 
     # Custom icons for side menu apps/models
     "icons": {
         "auth": "fas fa-users-cog",
         "auth.user": "fas fa-user",
-        "auth.Group": "fas fa-users",
     },
 
     # Default icons used when none are manually specified
