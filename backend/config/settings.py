@@ -39,6 +39,7 @@ LOCAL_APPS = [
     'activity',
     'rating',
     'wishlist',
+    'coupon',
 ]
 
 THIRD_PARTY_APPS = [

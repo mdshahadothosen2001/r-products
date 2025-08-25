@@ -43,6 +43,7 @@ const WishlistButton = ({ productId, productName }) => {
         onClick={handleAdd}
         disabled={loading}
         className="
+          ml-5
           flex items-center gap-2 px-4 py-2 
           border border-blue-500 text-blue-500 
           bg-transparent rounded-lg shadow

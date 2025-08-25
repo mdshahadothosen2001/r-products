@@ -23,6 +23,43 @@ export default function CartPage() {
 
   const navigate = useNavigate();
 
+  const [couponCode, setCouponCode] = useState("");
+
+  const handleApplyCoupon = async () => {
+    if (!couponCode) return;
+
+    try {
+      // Example: call your backend to validate/apply the coupon
+      const res = await applyCouponAPI({ code: couponCode, products: selectedProducts });
+      if (res.data.success) {
+        Swal.fire({
+          title: "✅ Coupon Applied",
+          text: res.data.message,
+          icon: "success",
+          confirmButtonColor: "#16a34a",
+        });
+
+        // Update amounts if needed
+        setAmounts(res.data.updatedAmounts);
+      } else {
+        Swal.fire({
+          title: "⚠️ Invalid Coupon",
+          text: res.data.message,
+          icon: "error",
+          confirmButtonColor: "#dc2626",
+        });
+      }
+    } catch (error) {
+      console.error("Coupon error:", error);
+      Swal.fire({
+        title: "❌ Error",
+        text: "Failed to apply coupon. Try again.",
+        icon: "error",
+        confirmButtonColor: "#dc2626",
+      });
+    }
+  };
+
   useEffect(() => {
     fetchCartProducts();
   }, []);
@@ -118,76 +155,77 @@ export default function CartPage() {
 
 
   const handleConfirmOrder = async () => {
-  if (selectedProducts.length === 0) return;
+      if (selectedProducts.length === 0) return;
 
-  // ✅ Check login
-  const token = localStorage.getItem("access_token");
-  if (!token) {
-    Swal.fire({
-      title: "⚠️ Login Required",
-      text: "Please login to confirm your order.",
-      icon: "warning",
-      confirmButtonText: "Go to Login",
-      confirmButtonColor: "#2563eb",
-    }).then(() => {
-      navigate("/login"); // redirect to login page
-    });
-    return;
-  }
+      // ✅ Check login
+      const token = localStorage.getItem("access_token");
+      if (!token) {
+        Swal.fire({
+          title: "⚠️ Login Required",
+          text: "Please login to confirm your order.",
+          icon: "warning",
+          confirmButtonText: "Go to Login",
+          confirmButtonColor: "#2563eb",
+        }).then(() => {
+          navigate("/login"); // redirect to login page
+        });
+        return;
+      }
 
-  setOrderLoading(true);
+      setOrderLoading(true);
 
-  const payload = selectedProducts.map((id) => {
-    const product = cartProducts.find((p) => p.id === id);
-    return { product_id: product.id, quantity: product.quantity };
-  });
+      const payload = selectedProducts.map((id) => {
+          const product = cartProducts.find((p) => p.id === id);
+          return { product_id: product.id, quantity: product.quantity, coupon_code: couponCode || null, };
+        });
 
-  try {
+      try {
     const res = await postOrder(payload);
-    const orderId = res.data?.order_id;
-    const message = res.data?.message || "Operation completed";
+        const orderId = res.data?.order_id;
+        const message = res.data?.message || "Operation completed";
 
-    if ((res.status === 201 || res.status === 200 || res.data.code === 2001) && orderId) {
-      Swal.fire({
-        title: "✅ Success",
-        text: message,
-        icon: "success",
-        confirmButtonColor: "#16a34a",
-      }).then(() => {
-        navigate(`/order/${orderId}/billing`);
-      });
+        if ((res.status === 201 || res.status === 200 || res.data.code === 2001) && orderId) {
+          Swal.fire({
+            title: "✅ Success",
+            text: message,
+            icon: "success",
+            confirmButtonColor: "#16a34a",
+          }).then(() => {
+            navigate(`/order/${orderId}/billing`);
+          });
 
-      // ✅ Update cart after order
-      const cartIds = JSON.parse(localStorage.getItem("cart")) || [];
-      const remainingCart = cartIds.filter((id) => !selectedProducts.includes(id));
-      localStorage.setItem("cart", JSON.stringify(remainingCart));
+          // ✅ Update cart after order
+          const cartIds = JSON.parse(localStorage.getItem("cart")) || [];
+          const remainingCart = cartIds.filter((id) => !selectedProducts.includes(id));
+          localStorage.setItem("cart", JSON.stringify(remainingCart));
 
-      const updatedCartProducts = cartProducts.filter(
-        (p) => !selectedProducts.includes(p.id)
-      );
-      setCartProducts(updatedCartProducts);
-      setSelectedProducts([]);
-      setAmounts({ total_amount: 0, payable_amount: 0, saved_money: 0 });
-    } else {
-      Swal.fire({
-        title: "⚠️ Failed",
-        text: message,
-        icon: "error",
-        confirmButtonColor: "#dc2626",
-      });
-    }
-  } catch (error) {
-    console.error("Order failed:", error);
-    Swal.fire({
-      title: "❌ Error",
-      text: error?.response?.data?.message || "Failed to place order. Please try again.",
-      icon: "error",
-      confirmButtonColor: "#dc2626",
-    });
-  } finally {
-    setOrderLoading(false);
-  }
-};
+          const updatedCartProducts = cartProducts.filter(
+            (p) => !selectedProducts.includes(p.id)
+          );
+          setCartProducts(updatedCartProducts);
+          setSelectedProducts([]);
+          setAmounts({ total_amount: 0, payable_amount: 0, saved_money: 0 });
+          setCouponCode("");
+        } else {
+          Swal.fire({
+            title: "⚠️ Failed",
+            text: message,
+            icon: "error",
+            confirmButtonColor: "#dc2626",
+          });
+        }
+      } catch (error) {
+        console.error("Order failed:", error);
+        Swal.fire({
+          title: "❌ Error",
+          text: error?.response?.data?.message || "Failed to place order. Please try again.",
+          icon: "error",
+          confirmButtonColor: "#dc2626",
+        });
+      } finally {
+        setOrderLoading(false);
+      }
+  };
 
 
 
@@ -311,6 +349,31 @@ export default function CartPage() {
                   </div>
                 </div>
 
+
+
+                {/* ✅ Coupon / Discount Box */}
+                <div className="mt-6">
+                  <label className="block text-gray-700 font-medium mb-2" htmlFor="coupon">
+                    Apply Coupon / Discount
+                  </label>
+                  <div className="flex gap-2">
+                    <input
+                      type="text"
+                      id="coupon"
+                      value={couponCode}
+                      onChange={(e) => setCouponCode(e.target.value)}
+                      placeholder="Enter your coupon code"
+                      className="flex-1 border border-gray-300 rounded-xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500"
+                    />
+                    {/* <button
+                      onClick={handleApplyCoupon}
+                      className="bg-green-600 text-white font-semibold px-4 py-2 rounded-xl hover:bg-green-700 transition"
+                    >
+                      Apply
+                    </button> */}
+                  </div>
+                </div>
+
                 <button
                   onClick={handleConfirmOrder}
                   disabled={orderLoading}
@@ -321,6 +384,8 @@ export default function CartPage() {
               </div>
             </div>
           )}
+
+
         </div>
       </div>
 

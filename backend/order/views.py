@@ -11,6 +11,7 @@ from order.models import Order, OrderItem
 from product.models import Product
 from order.serializers import OrderSerializer
 from activity.models import ActivityLog
+from coupon.models import Coupon
 
 User = get_user_model()
 
@@ -63,6 +64,8 @@ class OrderListCreateView(APIView):
         }
         """
         items_data = request.data.get("items")
+        coupon_code = None
+
         if not items_data or not isinstance(items_data, list):
             return Response({"error": "items list is required"}, status=status.HTTP_400_BAD_REQUEST)
 
@@ -78,6 +81,8 @@ class OrderListCreateView(APIView):
             
             product_id = item.get("product_id")
             quantity = item.get("quantity", 1)
+
+            coupon_code = item.get("coupon_code")
 
             if not product_id:
                 return Response({"error": "product_id is required for each item"}, status=status.HTTP_400_BAD_REQUEST)
@@ -102,15 +107,61 @@ class OrderListCreateView(APIView):
             total_price += order_item.discounted_price * quantity
             order_items.append(order_item)
 
-        order.total_price = total_price
+        
+
+        # coupon validation
+        message = 'Order placed by user without billing address'
+        payable_amount = total_price
+
+
+        if coupon_code:
+            try:
+                coupon = Coupon.objects.get(code=coupon_code)
+                if coupon.is_valid():
+                    # Calculate discount using the model method
+                    coupon_discounted_price = coupon.apply_discount(total_price)
+                    if coupon_discounted_price != 0:
+                        coupon.used_count += 1
+                        
+                        coupon.save()
+
+                        # Store applied coupon and discount in order
+                        order.applied_coupon = coupon_code
+                        order.coupon_price = total_price - coupon_discounted_price
+                        payable_amount = coupon_discounted_price
+
+                        
+
+                    if coupon_discounted_price == 0:
+                        message = (
+                            f"Order placed using coupon."
+                            f"But coupon amount is bigger than product payable, so coupon not use. The order total ({int(total_price)}) BDT. "
+                            f"Payable amount is capped at {int(payable_amount)} BDT without billing address."
+                        )
+                    else:
+                        message = (
+                            f"Order placed using coupon '{coupon_code}'. "
+                            f"Coupon discount: {int(coupon_discounted_price)} BDT, "
+                            f"Payable amount: {int(payable_amount)} BDT without billing address."
+                        )
+
+                
+                else:
+                    return Response({"error": "Coupon is invalid or expired"}, status=400)
+            except Coupon.DoesNotExist:
+                return Response({"error": "Coupon does not exist"}, status=404)
+
+        # Save final payable amount
+        order.total_price = payable_amount
         order.save()
+
 
         # activity log add
         user = get_object_or_404(User, id=request.user.id)
         ActivityLog.objects.create(
             action_type='order',
             order=order,
-            action='Order placed by user without billing address',
+            action= message,
             performed_by=user
         )
         return Response({
