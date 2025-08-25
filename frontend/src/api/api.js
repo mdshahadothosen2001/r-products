@@ -191,4 +191,31 @@ export const getProductReviews = (orderId) => {
   return API.get(`/product/review/${orderId}/`); // orderId instead of productId
 };
 
+
+
+
+// ✅ Wishlist API functions
+export const getWishlist = () => {
+  const token = localStorage.getItem("access_token");
+  return API.get("/wishlist/", {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+};
+
+export const addWishlist = (productId) => {
+  const token = localStorage.getItem("access_token");
+  return API.post(
+    "/wishlist/add",
+    { product_id: productId },
+    { headers: { Authorization: `Bearer ${token}` } }
+  );
+};
+
+export const deleteWishlist = (id) => {
+  const token = localStorage.getItem("access_token");
+  return API.delete(`/wishlist/${id}`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+};
+
 export default API;

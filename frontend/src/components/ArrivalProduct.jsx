@@ -4,13 +4,13 @@ import { GETarrivalProducts } from "../api/api";
 import "../pages/style.css";
 
 const ArrivalProducts = () => {
-const [arrivalProductList, setArrivalProducts] = useState([]);
+  const [arrivalProductList, setArrivalProducts] = useState([]);
 
-  useEffect(() => {
-      GETarrivalProducts()
-        .then((res) => setArrivalProducts(res.data))
-        .catch((err) => console.error("Failed to load products:", err));
-  }, []);
+    useEffect(() => {
+        GETarrivalProducts()
+          .then((res) => setArrivalProducts(res.data))
+          .catch((err) => console.error("Failed to load products:", err));
+    }, []);
   
 
   const scrollCarousel = (direction, id) => {

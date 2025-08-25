@@ -1,4 +1,6 @@
 import { FaShoppingCart, FaChartLine, FaBoxOpen } from "react-icons/fa";
+import { Heart } from "lucide-react";
+
 
 export default function WelcomeNavBar() {
   return (
@@ -10,6 +12,13 @@ export default function WelcomeNavBar() {
         </a>
         <a href="/recomm/products/" className="flex items-center gap-2 text-gray-700 hover:text-blue-600 transition">
           <FaChartLine /> Recommender
+        </a>
+        <a
+          href="/wishlist/"
+          className="flex items-center gap-2 text-gray-700 hover:text-pink-500 transition-colors duration-300"
+        >
+          <Heart className="h-5 w-5" />
+          Wishlist
         </a>
         <a href="/cart/" className="flex items-center gap-2 text-gray-700 hover:text-blue-600 transition">
           <FaShoppingCart /> Cart

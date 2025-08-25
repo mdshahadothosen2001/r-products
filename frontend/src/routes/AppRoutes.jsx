@@ -11,6 +11,8 @@ import Order from "../pages/OrderHistory";
 import OrderDetails from "../pages/OrderDetails";
 import SearchResult from "../pages/SearchResult";
 import RecomPage from "../pages/RecomPage";
+import WishList from "../pages/WishList";
+
 
 export default function AppRoutes() {
   return (
@@ -27,6 +29,7 @@ export default function AppRoutes() {
       <Route path="order/details" element={<OrderDetails />} />
       <Route path="order/:id/billing" element={<OrderBilling />} />
       <Route path="/products/s" element={<SearchResult />} />
+      <Route path="/wishlist" element={<WishList />} />
       <Route path="*" element={<NotFound />} />
     </Routes>
   );

@@ -7,6 +7,7 @@ import Category from "../components/Category";
 import WelcomeNavBar from "../components/WelcomeNavBar";
 import RecommendedProducts from "../components/RecommendedProducts";
 import FAQ from "../components/FAQ";
+import WishlistButton from "../components/WishListBtn";
 
 export default function ProductDetails() {
   const { id } = useParams();
@@ -116,6 +117,9 @@ export default function ProductDetails() {
               Add to Cart
             </button>
 
+            <WishlistButton productId={product.id}  productName={product.name}/>
+            
+
           {/* Popup after add to cart */}
           {showPopup && (
             <div className="fixed top-20 right-10 bg-green-500 text-white px-6 py-4 rounded-xl shadow-2xl text-lg font-semibold flex items-center gap-3 transform transition-all duration-300 animate-bounce">
@@ -197,7 +201,10 @@ export default function ProductDetails() {
         </div>
       </div>
 
+
       <RecommendedProducts productId={product.id} />
+
+
       <div className="h-40"></div>
 
       <FAQ />

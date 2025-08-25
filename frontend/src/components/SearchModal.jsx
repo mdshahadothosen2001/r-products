@@ -1,4 +1,5 @@
 import { useState } from "react";
+import WishlistButton from "./WishListBtn";
 
 export default function SearchModal({
   query,
@@ -94,6 +95,7 @@ export default function SearchModal({
                 >
                   {addedIds.includes(product.id) ? "Added" : "Add to Cart"}
                 </button>
+                <WishlistButton productId={product.id}  productName={product.name}/>
               </div>
             ))}
           </div>

@@ -38,6 +38,7 @@ LOCAL_APPS = [
     'banner',
     'activity',
     'rating',
+    'wishlist',
 ]
 
 THIRD_PARTY_APPS = [
