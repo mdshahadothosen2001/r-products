@@ -43,17 +43,20 @@ const WishlistButton = ({ productId, productName }) => {
         onClick={handleAdd}
         disabled={loading}
         className="
-          ml-5
-          flex items-center gap-2 px-4 py-2 
+          ml-2 sm:ml-5        /* Mobile small, laptop/desktop large margin */
+          flex items-center gap-1 sm:gap-2  /* smaller gap on mobile, larger on bigger screens */
+          px-3 py-2 sm:px-4 sm:py-2        /* padding responsive */
           border border-blue-500 text-blue-500 
           bg-transparent rounded-lg shadow
           hover:bg-blue-500 hover:text-white
           transition-colors duration-300
+          text-sm sm:text-base                /* font size responsive */
         "
       >
-        <Heart className="h-5 w-5" />
+        <Heart className="h-4 w-4 sm:h-5 sm:w-5" /> {/* icon size responsive */}
         {loading ? "Adding..." : "Add to Wishlist"}
       </button>
+      
     </div>
   );
 };
