@@ -1,0 +1,58 @@
+@startuml
+title Backend Architecture - r-products
+
+actor "User / Client" as Client
+
+package "Edge" {
+  [Browser / Mobile App] as Frontend
+  [CDN / Static Hosting] as CDN
+}
+
+package "Ingress" {
+  [Load Balancer / NGINX] as LB
+  [API Gateway] as Gateway
+}
+
+package "Application" {
+  rectangle "Django REST API" as API
+  rectangle "Auth (JWT)" as Auth
+  rectangle "Product Service" as ProductSvc
+  rectangle "Order Service" as OrderSvc
+  rectangle "Admin / Management" as Admin
+  rectangle "Celery Workers" as Workers
+}
+
+package "Integration & Storage" {
+  database "PostgreSQL (prod) / SQLite (dev)" as DB
+  cloud "Redis (cache & Celery broker)" as Redis
+  storage "S3 / MinIO (media)" as S3
+  [Payment Gateway] as PG
+  [Email/SMS Provider] as ES
+  [Monitoring / Metrics (Prometheus, Grafana)] as Monitor
+}
+
+Client --> Frontend : UI requests
+Frontend --> CDN : static assets
+Frontend --> Gateway : API requests (HTTPS)
+Gateway --> LB
+LB --> API : forward
+API --> Auth : authenticate/authorize
+API --> ProductSvc : product/catalog APIs
+API --> OrderSvc : order & payment APIs
+API --> DB : read/write
+API --> Redis : cache, rate-limit
+API --> S3 : upload/download media
+OrderSvc --> PG : initiate payment
+OrderSvc --> Workers : enqueue background tasks
+Workers --> ES : send email/sms
+Workers --> DB : write logs / update
+Workers --> Redis : caching / task state
+API --> Monitor : metrics / traces
+
+note right of API
+  - Containerized (Docker)
+  - Scaled horizontally behind LB
+  - Environment variables for secrets
+end note
+
+@enduml
