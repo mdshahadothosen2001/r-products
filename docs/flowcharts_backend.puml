@@ -1,0 +1,28 @@
+@startuml
+' Flowcharts for backend processes - r-products
+
+start
+:User sends create order request;
+if (Validate cart items & stock) then (ok)
+  :Calculate subtotal;
+  if (Coupon provided?) then (yes)
+    :Validate coupon;
+    if (coupon valid?) then (apply discount)
+    else (invalid)
+      :Return error;
+    endif
+  endif
+  :Create Order (status='pending');
+  :Create OrderItems; 
+  :Reduce Product.stock;
+  fork
+    :Enqueue payment processing;
+    :Enqueue notification task;
+  end fork
+  :Return order confirmation;
+else (invalid)
+  :Return error (out of stock);
+endif
+stop
+
+@enduml

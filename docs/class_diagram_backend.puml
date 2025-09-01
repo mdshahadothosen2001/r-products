@@ -1,0 +1,118 @@
+@startuml
+' Class diagram for backend (r-products)
+skinparam classAttributeIconSize 0
+
+class UserAccount {
+  +id: int
+  +phone_number: string
+  +email: string
+  +name: string
+  +is_staff: bool
+  +is_active: bool
+  +created_at: datetime
+  +updated_at: datetime
+  +set_password(pw)
+  +check_password(pw)
+}
+
+class Category {
+  +id: int
+  +name: string
+  +priority: int
+  +is_active: bool
+}
+
+class Product {
+  +id: int
+  +name: string
+  +price: decimal
+  +stock: int
+  +category_id: int
+  +discount: decimal
+  +thumbnail: string
+  +rating: decimal
+  +is_active: bool
+  +update_stock(delta)
+}
+
+class Order {
+  +id: int
+  +user_id: int
+  +status: string
+  +total_price: decimal
+  +created_at: datetime
+  +updated_at: datetime
+  +calculate_total()
+  +add_item(item)
+  +change_status(new_status)
+}
+
+class OrderItem {
+  +id: int
+  +order_id: int
+  +product_id: int
+  +product_name: string
+  +price: decimal
+  +discounted_price: decimal
+  +quantity: int
+  +get_total_price()
+}
+
+class Wishlist {
+  +id: int
+  +user_id: int
+  +product_id: int
+  +created_at: datetime
+}
+
+class Coupon {
+  +id: int
+  +code: string
+  +discount_type: string
+  +discount_value: decimal
+  +min_order_amount: decimal
+  +max_discount_amount: decimal
+  +active: bool
+  +is_valid()
+  +apply_discount(amount)
+}
+
+class ProductReview {
+  +id: int
+  +user_id: int
+  +order_id: int
+  +rating: int
+  +review: text
+  +created_at: datetime
+}
+
+class ActivityLog {
+  +id: int
+  +action_type: string
+  +order_id: int
+  +action: text
+  +timestamp: datetime
+  +performed_by_id: int
+}
+
+class Banner {
+  +id: int
+  +title: string
+  +image: string
+  +link: string
+  +is_active: bool
+}
+
+' Relations
+UserAccount "1" -- "*" Order : places
+Order "1" -- "*" OrderItem : contains
+UserAccount "1" -- "*" Wishlist : owns
+Product "1" -- "*" Wishlist : appears_in
+Category "1" -- "*" Product : contains
+UserAccount "1" -- "*" ProductReview : writes
+Order "1" -- "*" ProductReview : related_to
+Order "1" -- "*" ActivityLog : logs
+UserAccount "1" -- "*" ActivityLog : performs
+Product "*" -- "1" Category : belongs_to
+
+@enduml
