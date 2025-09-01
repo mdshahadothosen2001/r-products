@@ -1,0 +1,40 @@
+@startuml
+!define RECTANGLE class
+skinparam componentStyle rectangle
+
+title DFD - r-products (Context + Level 1)
+
+actor Customer as C
+rectangle "Frontend (React)" as FE
+rectangle "Backend API (Django REST)" as API
+database "DB (SQLite)" as DB
+rectangle "Payment Gateway" as PG
+rectangle "Email/SMS Service" as ES
+
+C --> FE : Browse products, login, place order
+FE --> API : API requests (products, auth, orders)
+API --> DB : Read/Write (users, products, orders, reviews)
+API --> PG : Process payment
+API --> ES : Send order confirmation, OTP
+
+' Level 1 - decomposed backend
+node "Auth Service" as Auth
+node "Product Service" as ProductSvc
+node "Order Service" as OrderSvc
+node "Cart/Wishlist" as Cart
+node "Notification" as Notif
+
+FE --> Auth : login/register
+Auth --> DB : user table
+FE --> ProductSvc : product list/detail
+ProductSvc --> DB : product, category, banner
+FE --> Cart : add/remove wishlist
+Cart --> DB : wishlist, cart (order items)
+FE --> OrderSvc : place order
+OrderSvc --> DB : order, orderitem, coupon
+OrderSvc --> PG : payment
+OrderSvc --> Notif : notify user
+Notif --> ES : send email/sms
+OrderSvc --> ProductSvc : update stock, reviews
+
+@enduml

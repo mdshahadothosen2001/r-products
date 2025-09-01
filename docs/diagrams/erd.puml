@@ -1,0 +1,164 @@
+@startuml
+' ERD for r-products (Django models summary)
+hide circle
+skinparam linetype ortho
+
+entity "UserAccount" as UserAccount {
+  * id : PK
+  --
+  phone_number : varchar(11) [unique]
+  email : varchar
+  name : varchar
+  gender : varchar
+  date_of_birth : date
+  picture : varchar
+  is_student : bool
+  is_active : bool
+  is_staff : bool
+  is_superuser : bool
+  created_at : datetime
+  updated_at : datetime
+}
+
+entity "Category" as Category {
+  * id : PK
+  --
+  name : varchar [unique]
+  priority : smallint
+  is_active : bool
+}
+
+entity "Product" as Product {
+  * id : PK
+  --
+  name : varchar
+  category_id : FK -> Category.id
+  brand : varchar
+  description : text
+  detail : text
+  specifications : text
+  price : decimal
+  thumbnail : varchar
+  color : varchar
+  size : varchar
+  discount : decimal
+  discount_percent : decimal
+  stock : int
+  status : varchar
+  made_in : varchar
+  made_for : varchar
+  created_at : datetime
+  updated_at : datetime
+  rating : decimal
+  is_active : bool
+  is_best_selling : bool
+  is_new_arrival : bool
+  is_top_brand : bool
+  is_featured : bool
+  is_free_delivery : bool
+  is_trending : bool
+}
+
+entity "Order" as Order {
+  * id : PK
+  --
+  user_id : FK -> UserAccount.id
+  created_at : datetime
+  updated_at : datetime
+  status : varchar
+  total_price : decimal
+  receiver_phone : varchar
+  first_name : varchar
+  last_name : varchar
+  address_line_1 : varchar
+  address_line_2 : varchar
+  city : varchar
+  postal_or_zip_code : varchar
+  applied_coupon : varchar
+  coupon_price : decimal
+  order_return_condition : bool
+  is_review : bool
+}
+
+entity "OrderItem" as OrderItem {
+  * id : PK
+  --
+  order_id : FK -> Order.id
+  product_id : int
+  product_name : varchar
+  price : decimal
+  saved_amount : decimal
+  discounted_price : decimal
+  quantity : int
+}
+
+entity "Wishlist" as Wishlist {
+  * id : PK
+  --
+  user_id : FK -> UserAccount.id
+  product_id : FK -> Product.id
+  created_at : datetime
+}
+
+entity "Coupon" as Coupon {
+  * id : PK
+  --
+  code : varchar [unique]
+  discount_type : varchar
+  discount_value : decimal
+  min_order_amount : decimal
+  max_discount_amount : decimal
+  active : bool
+  start_date : datetime
+  end_date : datetime
+  usage_limit : int
+  used_count : int
+  created_at : datetime
+  updated_at : datetime
+}
+
+entity "Banner" as Banner {
+  * id : PK
+  --
+  title : varchar
+  image : varchar
+  link : varchar
+  is_active : bool
+  created_at : datetime
+  updated_at : datetime
+}
+
+entity "ProductReview" as ProductReview {
+  * id : PK
+  --
+  user_id : FK -> UserAccount.id
+  product_ids : varchar
+  order_id : FK -> Order.id
+  rating : int
+  review : text
+  have_product_ids : bool
+  created_at : datetime
+}
+
+entity "ActivityLog" as ActivityLog {
+  * id : PK
+  --
+  action_type : varchar
+  order_id : FK -> Order.id
+  action : text
+  timestamp : datetime
+  performed_by_id : FK -> UserAccount.id
+}
+
+' Relationships
+UserAccount ||--o{ Order : "places"
+Order ||--o{ OrderItem : "contains"
+UserAccount ||--o{ Wishlist : "has"
+Product ||--o{ Wishlist : "listed_in"
+Category ||--o{ Product : "categorizes"
+UserAccount ||--o{ ProductReview : "writes"
+Order ||--o{ ProductReview : "belongs_to"
+Order ||--o{ ActivityLog : "logged_in"
+UserAccount ||--o{ ActivityLog : "performed"
+
+@enduml
