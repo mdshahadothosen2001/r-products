@@ -17,6 +17,7 @@ import ViewProducts from "../components/ViewProduct";
 import ForYouProducts from "../components/ForYouProduct";
 import DiscountedProducts from "../components/DiscountedProduct";
 import FAQ from "../components/FAQ";
+import AdDisplay from "../components/AdDisplay";
 
 
 export default function HomePage() {
@@ -31,6 +32,18 @@ export default function HomePage() {
       <Category />
 
       <Banner></Banner>
+
+      {/* Example ad placement after banner */}
+      <div className="max-w-6xl mx-auto px-4 mt-20 my-6 border border-gray-300 rounded-lg">
+        <AdDisplay
+          imageUrl="https://www.socialfix.com/wp-content/uploads/2021/04/ban-2.jpg"
+          link="#"
+          alt="Top Homepage Ad"
+          imageHeight={80}
+          caption={"Limited Time Offer: Up to 50% OFF"}
+          ctaText={"Shop Now"}
+        />
+      </div>
 
 
       <section className="scroll-section">
