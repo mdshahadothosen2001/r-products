@@ -11,6 +11,7 @@ import OrderSummary from "../components/OrderSummary";
 import OrderTrack from "../components/OrderTrack";
 import RatingReview from "../components/RatingReview";
 import { FaShoppingBag, FaTimesCircle, FaUndo } from "react-icons/fa";
+import Swal from 'sweetalert2';
 
 
 export default function OrderDetails() {
@@ -90,12 +91,27 @@ export default function OrderDetails() {
             {order.status !== "cancelled" && order.status !== "delivered" && (
               <button
                 onClick={async () => {
-                  try {
-                    await cancelOrder(order.id);
-                    setOrder({ ...order, status: "cancelled" });
-                    window.location.reload();
-                  } catch (err) {
-                    console.error("Failed to cancel order", err);
+                  const result = await Swal.fire({
+                    title: 'Cancel Order',
+                    text: 'Are you sure you want to cancel this order?',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#d33',
+                    confirmButtonText: 'Yes, cancel it',
+                    cancelButtonText: 'No, keep it'
+                  });
+
+                  if (result.isConfirmed) {
+                    try {
+                      await cancelOrder(order.id);
+                      setOrder({ ...order, status: "cancelled" });
+                      Swal.fire('Cancelled!', 'Your order has been cancelled.', 'success');
+                      // refresh to ensure consistent state across app
+                      window.location.reload();
+                    } catch (err) {
+                      console.error("Failed to cancel order", err);
+                      Swal.fire('Error', 'Failed to cancel order. Please try again.', 'error');
+                    }
                   }
                 }}
                 className="flex items-center gap-2 bg-red-600 text-white px-6 py-2 rounded-lg shadow-md hover:bg-red-700 transition-colors"
