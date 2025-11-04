@@ -296,7 +296,7 @@ export default function CartPage() {
                 />
                 <div className="flex-1">
                   <h2 className="text-xl font-bold">{product.name}</h2>
-                  <p className="text-blue-600 font-semibold">${product.price_ceil}</p>
+                  <p className="text-blue-600 font-semibold">{product.price_ceil} BDT</p>
                   <div className="mt-2 flex items-center gap-2">
                     <button
                       onClick={() => handleQuantityChange(product.id, -1)}
@@ -333,18 +333,18 @@ export default function CartPage() {
                 <div className="space-y-3">
                   <div className="flex justify-between text-gray-700">
                     <span>Total Amount:</span>
-                    <span className="font-semibold">${amounts.total_amount.toFixed(2)}</span>
+                    <span className="font-semibold">{amounts.total_amount.toFixed(2)} BDT</span>
                   </div>
                   <div className="flex justify-between text-gray-700">
                     <span>Payable Amount:</span>
                     <span className="font-bold text-green-600">
-                      ${amounts.payable_amount.toFixed(2)}
+                      {amounts.payable_amount.toFixed(2)} BDT
                     </span>
                   </div>
                   <div className="flex justify-between text-gray-700">
                     <span>Saved Money:</span>
                     <span className="font-semibold text-blue-600">
-                      ${amounts.saved_money.toFixed(2)}
+                      {amounts.saved_money.toFixed(2)} BDT
                     </span>
                   </div>
                 </div>

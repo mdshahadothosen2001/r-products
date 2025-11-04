@@ -68,7 +68,7 @@ const Order = () => {
                 </span>
               </div>
               <p className="text-gray-600 mb-1">
-                Total Price: <span className="font-medium">${order.total_price}</span>
+                Total Price: <span className="font-medium">{order.total_price} BDT</span>
               </p>
               <p className="text-gray-500 text-sm">
                 Date: {new Date(order.created_at).toLocaleString()}

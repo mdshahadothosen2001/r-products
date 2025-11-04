@@ -95,18 +95,18 @@ export default function ProductDetails() {
             {product.price_ceil && product.discount_ceil && product.discount_price ? (
               <div className="flex items-center gap-3">
                 <span className="text-gray-400 line-through text-lg">
-                  ${Number(product.price_ceil)}
+                  {Number(product.price_ceil)} BDT
                 </span>
                 <span className="bg-red-500 text-white text-sm px-2 py-1 rounded">
-                  -${Number(product.discount_ceil)}
+                  -{Number(product.discount_ceil)} BDT
                 </span>
                 <span className="text-2xl font-bold text-blue-600">
-                  ${ (Number(product.discount_price)) }
+                  {Number(product.discount_price)} BDT
                 </span>
               </div>
             ) : product.price_ceil ? (
               <span className="text-2xl font-bold text-blue-600">
-                ${Number(product.price_ceil)}
+                {Number(product.price_ceil)} BDT
               </span>
             ) : null}
 

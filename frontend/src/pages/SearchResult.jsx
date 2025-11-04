@@ -87,7 +87,7 @@ export default function SearchResult() {
                     dangerouslySetInnerHTML={{ __html: product.description }}
                   />
                   <p className="text-blue-600 font-semibold text-md mb-4">
-                    ${parseFloat(product.price_ceil).toFixed(2)}
+                    {parseFloat(product.price_ceil).toFixed(2)} BDT
                   </p>
                   <button
                     onClick={(e) => {

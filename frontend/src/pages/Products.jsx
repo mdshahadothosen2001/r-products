@@ -154,7 +154,7 @@ export default function Products() {
                   <p className="text-sm text-gray-600 mb-1">
                     Brand: <span className="font-medium">{prod.brand}</span>
                   </p>
-                  <p className="text-sm text-gray-700 mb-2">{prod.price_ceil}</p>
+                  <p className="text-sm text-gray-700 mb-2 price-highlight">{prod.price_ceil} BDT</p>
                   <span className="mt-3 text-blue-600 text-sm font-medium">
                     Category: {prod.category_name}
                   </span>

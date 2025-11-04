@@ -47,6 +47,7 @@ THIRD_PARTY_APPS = [
     "corsheaders",
     'ckeditor',
     'ckeditor_uploader',
+    'django_seed',
 ]
 
 INSTALLED_APPS = DJANGO_APPS + LOCAL_APPS + THIRD_PARTY_APPS

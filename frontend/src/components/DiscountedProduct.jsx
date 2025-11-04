@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import { FaTag } from "react-icons/fa";
 import { GETfreeDeliveryProducts } from "../api/api";
@@ -13,17 +13,15 @@ const DiscountedProducts = () => {
           .catch((err) => console.error("Failed to load products:", err));
     }, []);
 
-    const scrollCarousel = (direction, id) => {
-        const container = document.getElementById(id);
-        if (!container) return;
-        const scrollAmount = 250;
+  const carouselRef = useRef(null);
 
-        if (direction === "left") {
-        container.scrollBy({ left: -scrollAmount, behavior: "smooth" });
-        } else {
-        container.scrollBy({ left: scrollAmount, behavior: "smooth" });
-        }
-    };
+  const scrollCarousel = (direction) => {
+    const container = carouselRef.current;
+    if (!container) return;
+    const scrollAmount = 250;
+
+    container.scrollBy({ left: direction === "left" ? -scrollAmount : scrollAmount, behavior: "smooth" });
+  };
 
   return (
     <div className="top-rated-products-section">
@@ -31,14 +29,16 @@ const DiscountedProducts = () => {
       <h2 className="section-title">Discounted Products</h2>
 
         <div className="scroll-carousel">
-          <button 
-            className="arrow left" 
-            onClick={() => scrollCarousel("left", "free-delivery-products-carousel")}
+          <button
+            className="arrow left"
+            onClick={() => scrollCarousel("left")}
+            onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); scrollCarousel('left'); } }}
+            aria-label="Scroll left"
           >
             &lt;
           </button>
 
-          <div className="cards-container" id="free-delivery-products-carousel">
+          <div className="cards-container" id="free-delivery-products-carousel" ref={carouselRef}>
             {discountedProductList.map(product => (
               <Link
                 to={`/products/details/${product.id}`}
@@ -51,7 +51,7 @@ const DiscountedProducts = () => {
                       <h3>{product.name}</h3>
                       <p><strong>Rating:</strong> {product.rating} ⭐</p>
                       <p><strong>Price:</strong> {product.price_ceil} BDT</p>
-                      <div className="flex items-center gap-2 bg-green-100 text-green-800 font-semibold px-4 py-2 rounded-lg inline-block mb-4 shadow-sm">
+                      <div className="flex items-center gap-2 bg-green-100 text-green-800 font-semibold px-4 py-2 rounded-lg mb-4 shadow-sm">
                         <FaTag className="text-green-600" />
                         <span>50% Discount</span>
                       </div>
@@ -62,9 +62,11 @@ const DiscountedProducts = () => {
             ))}
           </div>
 
-          <button 
-            className="arrow right" 
-            onClick={() => scrollCarousel("right", "free-delivery-products-carousel")}
+          <button
+            className="arrow right"
+            onClick={() => scrollCarousel("right")}
+            onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); scrollCarousel('right'); } }}
+            aria-label="Scroll right"
           >
             &gt;
           </button>

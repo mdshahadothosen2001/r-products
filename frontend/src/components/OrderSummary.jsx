@@ -25,7 +25,7 @@ export default function OrderSummaryPro({ order }) {
           <div>
             <p className="text-gray-500">COD</p>
             <p className="text-lg font-semibold text-green-600">
-              ${order.total_price}
+              {order.total_price} BDT
             </p>
           </div>
         </div>
@@ -91,9 +91,9 @@ export default function OrderSummaryPro({ order }) {
                   >
                     <td className="p-3 border">{item.product_name}</td>
                     <td className="p-3 border">{item.quantity}</td>
-                    <td className="p-3 border">${item.price}</td>
+                    <td className="p-3 border">৳{item.price}</td>
                     <td className="p-3 border font-semibold text-gray-800">
-                      ${item.price * item.quantity}
+                      ৳{item.price * item.quantity}
                     </td>
                   </tr>
                 ))}

@@ -144,6 +144,7 @@ class ProductRecommendationView(APIView):
                 "name": p.name,
                 "brand": p.brand,
                 "price": str(p.price),
+                "price_ceil": round(p.price),
                 "discount_percent": float(p.discount_percent),
                 "rating": float(p.rating),
                 "thumbnail": request.build_absolute_uri(p.thumbnail.url) if p.thumbnail else None,
