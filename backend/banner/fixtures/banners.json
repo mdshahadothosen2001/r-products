@@ -1,0 +1,38 @@
+[
+  {
+    "model": "banner.banner",
+    "pk": 1,
+    "fields": {
+      "title": "Homepage Banner 1",
+      "image": "banners/b1.webp",
+      "link": "",
+      "is_active": true,
+      "created_at": "2024-06-10T12:00:00Z",
+      "updated_at": "2024-06-10T12:00:00Z"
+    }
+  },
+  {
+    "model": "banner.banner",
+    "pk": 2,
+    "fields": {
+      "title": "Homepage Banner 2",
+      "image": "banners/b2.webp",
+      "link": "",
+      "is_active": true,
+      "created_at": "2024-06-10T12:00:00Z",
+      "updated_at": "2024-06-10T12:00:00Z"
+    }
+  },
+  {
+    "model": "banner.banner",
+    "pk": 3,
+    "fields": {
+      "title": "Homepage Banner 3",
+      "image": "banners/b3.png",
+      "link": "",
+      "is_active": true,
+      "created_at": "2024-06-10T12:00:00Z",
+      "updated_at": "2024-06-10T12:00:00Z"
+    }
+  }
+]
