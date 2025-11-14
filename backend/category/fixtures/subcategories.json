@@ -1,0 +1,449 @@
+[
+  {
+    "model": "category.subcategory",
+    "pk": 1,
+    "fields": {
+      "category": 9,
+      "name": "Tops & T-Shirts",
+      "priority": 1,
+      "is_active": true
+    }
+  },
+  {
+    "model": "category.subcategory",
+    "pk": 2,
+    "fields": {
+      "category": 9,
+      "name": "Kurtis & Tunics",
+      "priority": 1,
+      "is_active": true
+    }
+  },
+  {
+    "model": "category.subcategory",
+    "pk": 3,
+    "fields": {
+      "category": 9,
+      "name": "Sarees",
+      "priority": 1,
+      "is_active": true
+    }
+  },
+  {
+    "model": "category.subcategory",
+    "pk": 4,
+    "fields": {
+      "category": 9,
+      "name": "Salwar Kameez",
+      "priority": 1,
+      "is_active": true
+    }
+  },
+  {
+    "model": "category.subcategory",
+    "pk": 5,
+    "fields": {
+      "category": 9,
+      "name": "Dresses & Gowns",
+      "priority": 1,
+      "is_active": true
+    }
+  },
+  {
+    "model": "category.subcategory",
+    "pk": 6,
+    "fields": {
+      "category": 9,
+      "name": "Jeans & Trousers",
+      "priority": 1,
+      "is_active": true
+    }
+  },
+  {
+    "model": "category.subcategory",
+    "pk": 7,
+    "fields": {
+      "category": 9,
+      "name": "Skirts & Shorts",
+      "priority": 1,
+      "is_active": true
+    }
+  },
+  {
+    "model": "category.subcategory",
+    "pk": 8,
+    "fields": {
+      "category": 9,
+      "name": "Jackets & Shrugs",
+      "priority": 1,
+      "is_active": true
+    }
+  },
+  {
+    "model": "category.subcategory",
+    "pk": 9,
+    "fields": {
+      "category": 9,
+      "name": "Ethnic Wear",
+      "priority": 1,
+      "is_active": true
+    }
+  },
+  {
+    "model": "category.subcategory",
+    "pk": 10,
+    "fields": {
+      "category": 9,
+      "name": "Innerwear & Lingerie",
+      "priority": 1,
+      "is_active": true
+    }
+  },
+
+  {
+    "model": "category.subcategory",
+    "pk": 11,
+    "fields": {
+      "category": 10,
+      "name": "Heels",
+      "priority": 1,
+      "is_active": true
+    }
+  },
+  {
+    "model": "category.subcategory",
+    "pk": 12,
+    "fields": {
+      "category": 10,
+      "name": "Flats & Sandals",
+      "priority": 1,
+      "is_active": true
+    }
+  },
+  {
+    "model": "category.subcategory",
+    "pk": 13,
+    "fields": {
+      "category": 10,
+      "name": "Sneakers",
+      "priority": 1,
+      "is_active": true
+    }
+  },
+  {
+    "model": "category.subcategory",
+    "pk": 14,
+    "fields": {
+      "category": 10,
+      "name": "Boots",
+      "priority": 1,
+      "is_active": true
+    }
+  },
+  {
+    "model": "category.subcategory",
+    "pk": 15,
+    "fields": {
+      "category": 10,
+      "name": "Ethnic Footwear",
+      "priority": 1,
+      "is_active": true
+    }
+  },
+
+  {
+    "model": "category.subcategory",
+    "pk": 16,
+    "fields": {
+      "category": 11,
+      "name": "Handbags",
+      "priority": 1,
+      "is_active": true
+    }
+  },
+  {
+    "model": "category.subcategory",
+    "pk": 17,
+    "fields": {
+      "category": 11,
+      "name": "Clutches",
+      "priority": 1,
+      "is_active": true
+    }
+  },
+  {
+    "model": "category.subcategory",
+    "pk": 18,
+    "fields": {
+      "category": 11,
+      "name": "Sling Bags",
+      "priority": 1,
+      "is_active": true
+    }
+  },
+  {
+    "model": "category.subcategory",
+    "pk": 19,
+    "fields": {
+      "category": 11,
+      "name": "Backpacks",
+      "priority": 1,
+      "is_active": true
+    }
+  },
+  {
+    "model": "category.subcategory",
+    "pk": 20,
+    "fields": {
+      "category": 11,
+      "name": "Wallets",
+      "priority": 1,
+      "is_active": true
+    }
+  },
+
+  {
+    "model": "category.subcategory",
+    "pk": 21,
+    "fields": {
+      "category": 12,
+      "name": "Earrings",
+      "priority": 1,
+      "is_active": true
+    }
+  },
+  {
+    "model": "category.subcategory",
+    "pk": 22,
+    "fields": {
+      "category": 12,
+      "name": "Necklaces",
+      "priority": 1,
+      "is_active": true
+    }
+  },
+  {
+    "model": "category.subcategory",
+    "pk": 23,
+    "fields": {
+      "category": 12,
+      "name": "Bangles & Bracelets",
+      "priority": 1,
+      "is_active": true
+    }
+  },
+  {
+    "model": "category.subcategory",
+    "pk": 24,
+    "fields": {
+      "category": 12,
+      "name": "Rings",
+      "priority": 1,
+      "is_active": true
+    }
+  },
+  {
+    "model": "category.subcategory",
+    "pk": 25,
+    "fields": {
+      "category": 12,
+      "name": "Nose Pins",
+      "priority": 1,
+      "is_active": true
+    }
+  },
+  {
+    "model": "category.subcategory",
+    "pk": 26,
+    "fields": {
+      "category": 12,
+      "name": "Anklets",
+      "priority": 1,
+      "is_active": true
+    }
+  },
+
+  {
+    "model": "category.subcategory",
+    "pk": 27,
+    "fields": {
+      "category": 13,
+      "name": "Makeup (Lipstick, Foundation, Mascara, etc.)",
+      "priority": 1,
+      "is_active": true
+    }
+  },
+  {
+    "model": "category.subcategory",
+    "pk": 28,
+    "fields": {
+      "category": 13,
+      "name": "Skincare (Creams, Serums, Lotions)",
+      "priority": 1,
+      "is_active": true
+    }
+  },
+  {
+    "model": "category.subcategory",
+    "pk": 29,
+    "fields": {
+      "category": 13,
+      "name": "Haircare (Shampoo, Oil, Conditioner)",
+      "priority": 1,
+      "is_active": true
+    }
+  },
+  {
+    "model": "category.subcategory",
+    "pk": 30,
+    "fields": {
+      "category": 13,
+      "name": "Perfumes & Deodorants",
+      "priority": 1,
+      "is_active": true
+    }
+  },
+  {
+    "model": "category.subcategory",
+    "pk": 31,
+    "fields": {
+      "category": 13,
+      "name": "Beauty Tools",
+      "priority": 1,
+      "is_active": true
+    }
+  },
+
+  {
+    "model": "category.subcategory",
+    "pk": 32,
+    "fields": {
+      "category": 14,
+      "name": "Watches",
+      "priority": 1,
+      "is_active": true
+    }
+  },
+  {
+    "model": "category.subcategory",
+    "pk": 33,
+    "fields": {
+      "category": 14,
+      "name": "Sunglasses",
+      "priority": 1,
+      "is_active": true
+    }
+  },
+  {
+    "model": "category.subcategory",
+    "pk": 34,
+    "fields": {
+      "category": 14,
+      "name": "Belts",
+      "priority": 1,
+      "is_active": true
+    }
+  },
+  {
+    "model": "category.subcategory",
+    "pk": 35,
+    "fields": {
+      "category": 14,
+      "name": "Scarves & Stoles",
+      "priority": 1,
+      "is_active": true
+    }
+  },
+  {
+    "model": "category.subcategory",
+    "pk": 36,
+    "fields": {
+      "category": 14,
+      "name": "Hair Accessories",
+      "priority": 1,
+      "is_active": true
+    }
+  },
+
+  {
+    "model": "category.subcategory",
+    "pk": 37,
+    "fields": {
+      "category": 15,
+      "name": "Sleepwear",
+      "priority": 1,
+      "is_active": true
+    }
+  },
+  {
+    "model": "category.subcategory",
+    "pk": 38,
+    "fields": {
+      "category": 15,
+      "name": "Loungewear",
+      "priority": 1,
+      "is_active": true
+    }
+  },
+  {
+    "model": "category.subcategory",
+    "pk": 39,
+    "fields": {
+      "category": 15,
+      "name": "Night Dresses",
+      "priority": 1,
+      "is_active": true
+    }
+  },
+  {
+    "model": "category.subcategory",
+    "pk": 40,
+    "fields": {
+      "category": 15,
+      "name": "Activewear / Gym Wear",
+      "priority": 1,
+      "is_active": true
+    }
+  },
+
+  {
+    "model": "category.subcategory",
+    "pk": 41,
+    "fields": {
+      "category": 16,
+      "name": "Bridal Collection",
+      "priority": 1,
+      "is_active": true
+    }
+  },
+  {
+    "model": "category.subcategory",
+    "pk": 42,
+    "fields": {
+      "category": 16,
+      "name": "Party Wear",
+      "priority": 1,
+      "is_active": true
+    }
+  },
+  {
+    "model": "category.subcategory",
+    "pk": 43,
+    "fields": {
+      "category": 16,
+      "name": "Festive Sarees",
+      "priority": 1,
+      "is_active": true
+    }
+  },
+  {
+    "model": "category.subcategory",
+    "pk": 44,
+    "fields": {
+      "category": 16,
+      "name": "Jewelry Sets",
+      "priority": 1,
+      "is_active": true
+    }
+  }
+]

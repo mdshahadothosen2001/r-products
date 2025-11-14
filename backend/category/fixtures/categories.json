@@ -3,21 +3,145 @@
     "model": "category.category",
     "pk": 1,
     "fields": {
-      "name": "Top Selling"
+      "name": "Top Selling",
+      "priority": 1,
+      "is_active": true
     }
   },
   {
     "model": "category.category",
     "pk": 2,
     "fields": {
-      "name": "New Arrivals"
+      "name": "New Arrivals",
+      "priority": 1,
+      "is_active": true
     }
   },
   {
     "model": "category.category",
     "pk": 3,
     "fields": {
-      "name": "Discounted Items"
+      "name": "Discounted Items",
+      "priority": 1,
+      "is_active": true
+    }
+  },
+  {
+    "model": "category.category",
+    "pk": 4,
+    "fields": {
+      "name": "Just For You",
+      "priority": 1,
+      "is_active": true
+    }
+  },
+  {
+    "model": "category.category",
+    "pk": 5,
+    "fields": {
+      "name": "Top brand",
+      "priority": 1,
+      "is_active": true
+    }
+  },
+  {
+    "model": "category.category",
+    "pk": 6,
+    "fields": {
+      "name": "Newest",
+      "priority": 1,
+      "is_active": true
+    }
+  },
+  {
+    "model": "category.category",
+    "pk": 7,
+    "fields": {
+      "name": "Special Offers",
+      "priority": 1,
+      "is_active": true
+    }
+  },
+  {
+    "model": "category.category",
+    "pk": 8,
+    "fields": {
+      "name": "Our Kids's Products",
+      "priority": 1,
+      "is_active": true
+    }
+  },
+  {
+    "model": "category.category",
+    "pk": 9,
+    "fields": {
+      "name": "Clothing",
+      "priority": 1,
+      "is_active": true
+    }
+  },
+  {
+    "model": "category.category",
+    "pk": 10,
+    "fields": {
+      "name": "Footwear",
+      "priority": 1,
+      "is_active": true
+    }
+  },
+  {
+    "model": "category.category",
+    "pk": 11,
+    "fields": {
+      "name": "Bags & Purses",
+      "priority": 1,
+      "is_active": true
+    }
+  },
+  {
+    "model": "category.category",
+    "pk": 12,
+    "fields": {
+      "name": "Jewellery",
+      "priority": 1,
+      "is_active": true
+    }
+  },
+  {
+    "model": "category.category",
+    "pk": 13,
+    "fields": {
+      "name": "Beauty & Personal Care",
+      "priority": 1,
+      "is_active": true
+    }
+  },
+  {
+    "model": "category.category",
+    "pk": 14,
+    "fields": {
+      "name": "Accessories",
+      "priority": 1,
+      "is_active": true
+    }
+  },
+  {
+    "model": "category.category",
+    "pk": 15,
+    "fields": {
+      "name": "Home & Lifestyle",
+      "priority": 1,
+      "is_active": true
+    }
+  },
+  {
+    "model": "category.category",
+    "pk": 16,
+    "fields": {
+      "name": "Traditional & Festival Collection",
+      "priority": 1,
+      "is_active": true
     }
   }
 ]
+
