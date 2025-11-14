@@ -57,7 +57,8 @@ export default function Category() {
   };
 
   return (
-    <div className="categories-wrap">
+    <div className="category-section">
+      <div className="categories-wrap">
       {categories.map((cat) => (
         <div
           key={cat.id}
@@ -87,6 +88,7 @@ export default function Category() {
           )}
         </div>
       ))}
+      </div>
     </div>
   );
 }

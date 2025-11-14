@@ -75,6 +75,10 @@
   gap: 0.12rem; /* further reduced spacing between categories */
   align-items: center;
   flex-wrap: wrap;
+  justify-content: center; /* center items horizontally */
+  width: 100%;
+  padding: 0 1rem; /* equal left/right padding */
+  box-sizing: border-box;
 }
 .category-with-sub {
   position: relative;
@@ -82,15 +86,15 @@
 .category-btn {
   background: transparent;
   border: none;
-  padding: 0.12rem 0.3rem;
+  padding: 0.18rem 0.5rem;
   cursor: pointer;
   color: #374151;
   font-weight: 500;
-  font-size: 12px; /* smaller font to avoid horizontal scrolling */
-  white-space: nowrap;
-  max-width: 140px;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  font-size: 13px;
+  white-space: normal; /* allow wrapping to show full name */
+  max-width: none;
+  overflow: visible;
+  text-overflow: unset;
 }
 .sub-toggle {
   background: transparent;
@@ -104,7 +108,7 @@
   top: calc(100% + 6px);
   left: 0;
   min-width: 260px; /* wider to display full subcategory names */
-  max-width: 380px;
+  max-width: 580px;
   background: white;
   border-radius: 8px;
   box-shadow: 0 8px 24px rgba(0,0,0,0.12);
@@ -121,15 +125,37 @@
   white-space: normal; /* allow wrapping of long subcategory names */
 }
 .subcategory-dropdown.drawer .sub-item:hover {
-  color: #3b82f6; /* project blue */
-  background: rgba(59,130,246,0.06);
+  color: #ffffff; /* white text on blue */
+  background: #2563EB; /* project blue */
+  transform: translateX(0);
+}
+
+/* also support keyboard focus for accessibility */
+.subcategory-dropdown.drawer .sub-item:focus {
+  outline: none;
+  background: #2563EB;
+  color: #ffffff;
 }
 .subcategory-dropdown.drawer .sub-item:hover {
-  background: #f3f4f6;
+  background: #2563EB;
+  color: #ffffff;
 }
 
 /* small layout adjustments */
 .no-sub { padding: 8px 12px; color: #6b7280 }
+
+/* visual section wrapper that mirrors navbar look */
+.category-section {
+  background: #ffffff;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+  padding: 8px 0; /* small vertical padding */
+}
+
+.subcat-section {
+  background: #ffffff;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+  padding: 8px 0; /* small vertical padding */
+}
 
 /* Products page subcategory button bar */
 .products-subcat-bar {
@@ -147,9 +173,17 @@
   font-size: 13px;
 }
 .products-subcat-bar .page-btn:hover {
-  background: rgba(59,130,246,0.08);
-  color: #1e40af;
+  background: #2563EB;
+  color: #ffffff;
   transform: translateY(-1px);
+}
+
+/* product page subcategory pills focus state */
+.products-subcat-bar .page-btn:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(59,130,246,0.12);
+  background: #2563EB;
+  color: #ffffff;
 }
 
 

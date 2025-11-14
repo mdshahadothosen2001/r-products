@@ -117,16 +117,18 @@ export default function Products() {
 
       {/* If on a category products page, show subcategory buttons under header/navbar */}
       {subcats.length > 0 && (
-        <div className="products-subcat-bar flex gap-2 items-center justify-center mt-4">
-          {subcats.map((s) => (
-            <button
-              key={s.id}
-              className="page-btn"
-              onClick={() => navigate(`/products/${id}?subcategory_id=${s.id}`)}
-            >
-              {s.name}
-            </button>
-          ))}
+        <div className="subcat-section">
+          <div className="products-subcat-bar flex gap-2 items-center justify-center mt-4">
+            {subcats.map((s) => (
+              <button
+                key={s.id}
+                className="page-btn"
+                onClick={() => navigate(`/products/${id}?subcategory_id=${s.id}`)}
+              >
+                {s.name}
+              </button>
+            ))}
+          </div>
         </div>
       )}
 
