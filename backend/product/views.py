@@ -1,4 +1,5 @@
 from django.db.models import Count, Q
+import random
 
 from django_filters.rest_framework import DjangoFilterBackend
 
@@ -119,31 +120,83 @@ class ProductRecommendationView(APIView):
     permission_classes = [permissions.AllowAny]
     
     def get(self, request, pk=None):
-        queryset = Product.objects.filter(is_active=True)
+        base_qs = Product.objects.filter(is_active=True)
+
+        # Build candidate id list depending on whether a pk was provided
+        candidate_ids = []
+        product = None
 
         if pk:
             try:
-                product = Product.objects.get(pk=pk, is_active=True)
-                same_brand = queryset.filter(brand=product.brand).exclude(pk=product.pk)
-                same_category = queryset.filter(category=product.category).exclude(pk=product.pk)
+                product = base_qs.get(pk=pk)
+                # same subcategory (if available), brand, category
+                if getattr(product, 'subcategory', None):
+                    candidate_ids.extend(base_qs.filter(subcategory=product.subcategory).exclude(pk=product.pk).values_list('id', flat=True))
+                candidate_ids.extend(base_qs.filter(brand=product.brand).exclude(pk=product.pk).values_list('id', flat=True))
+                candidate_ids.extend(base_qs.filter(category=product.category).exclude(pk=product.pk).values_list('id', flat=True))
 
-                queryset = (same_brand | same_category |
-                            queryset.filter(
-                                Q(is_best_selling=True) |
-                                Q(is_trending=True) |
-                                Q(is_featured=True)
-                            )).distinct()
+                # add high-signal products
+                candidate_ids.extend(base_qs.filter(Q(is_best_selling=True) | Q(is_trending=True) | Q(is_featured=True)).exclude(pk=product.pk).values_list('id', flat=True))
             except Product.DoesNotExist:
-                queryset = queryset.filter(
-                    Q(is_best_selling=True) |
-                    Q(is_trending=True) |
-                    Q(is_featured=True)
-                )
+                product = None
 
-        queryset = queryset.order_by('-rating', '-discount_percent', '-stock')[:20]
+        if not candidate_ids:
+            # no pk or no candidates from pk -> use global high-signal pool
+            candidate_ids = list(base_qs.filter(Q(is_best_selling=True) | Q(is_trending=True) | Q(is_featured=True)).values_list('id', flat=True))
 
-        data = [
-            {
+        # Fallback to all active product ids if still empty
+        if not candidate_ids:
+            candidate_ids = list(base_qs.values_list('id', flat=True))
+
+        # Deduplicate ids while preserving order
+        seen = set()
+        deduped_ids = []
+        for i in candidate_ids:
+            if i not in seen:
+                seen.add(i)
+                deduped_ids.append(i)
+
+        # Always shuffle deduped ids so responses vary across requests (even when <= sample size)
+        random.shuffle(deduped_ids)
+
+        # Randomize / sample to ensure varied responses across requests
+        sample_size = min(20, len(deduped_ids))
+        # Take the first `sample_size` after shuffle
+        sampled_ids = deduped_ids[:sample_size]
+
+        # Fetch products for sampled ids and preserve sampled order
+        products_map = {p.id: p for p in base_qs.filter(id__in=sampled_ids)}
+        ordered_products = [products_map[i] for i in sampled_ids if i in products_map]
+
+        def reasons_for(p):
+            reasons = []
+            if product:
+                if getattr(product, 'subcategory', None) and getattr(p, 'subcategory', None) and p.subcategory_id == product.subcategory_id:
+                    reasons.append('same_subcategory')
+                if p.brand == product.brand:
+                    reasons.append('same_brand')
+                if p.category_id == product.category_id:
+                    reasons.append('same_category')
+            # global signals
+            if getattr(p, 'is_best_selling', False):
+                reasons.append('best_selling')
+            if getattr(p, 'is_trending', False):
+                reasons.append('trending')
+            if getattr(p, 'is_featured', False):
+                reasons.append('featured')
+            # derived signals
+            try:
+                if float(getattr(p, 'discount_percent', 0)) >= 20:
+                    reasons.append('high_discount')
+            except Exception:
+                pass
+            if getattr(p, 'rating', 0) >= 4.5:
+                reasons.append('top_rated')
+            return reasons or ['related']
+
+        data = []
+        for p in ordered_products:
+            data.append({
                 "id": p.id,
                 "name": p.name,
                 "brand": p.brand,
@@ -152,7 +205,7 @@ class ProductRecommendationView(APIView):
                 "discount_percent": float(p.discount_percent),
                 "rating": float(p.rating),
                 "thumbnail": request.build_absolute_uri(p.thumbnail.url) if p.thumbnail else None,
-            }
-            for p in queryset
-        ]
+                "reasons": reasons_for(p),
+            })
+
         return Response(data)
