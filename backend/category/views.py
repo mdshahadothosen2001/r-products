@@ -3,7 +3,7 @@ from rest_framework.response import Response
 from rest_framework import status, permissions
 
 from category.models import Category
-from category.serializers import CategorySerializer
+from category.serializers import CategorySerializer, SubCategorySerializer
 
 
 class CategoryListView(APIView):
@@ -13,3 +13,16 @@ class CategoryListView(APIView):
         categories = Category.objects.filter(is_active=True).order_by("priority")
         serializer = CategorySerializer(categories, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class SubCategoryListView(APIView):
+    permission_classes = [permissions.AllowAny]
+
+    def get(self, request, category_id):
+        try:
+            category = Category.objects.get(pk=category_id, is_active=True)
+            subcategories = category.subcategories.filter(is_active=True).order_by("priority")
+            serializer = SubCategorySerializer(subcategories, many=True)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        except Category.DoesNotExist:
+            return Response({"detail": "Category not found."}, status=status.HTTP_404_NOT_FOUND)

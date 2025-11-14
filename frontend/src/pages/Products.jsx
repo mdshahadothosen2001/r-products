@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { useParams, Link } from "react-router-dom";
-import { getProducts } from "../api/api";
+import { useParams, Link, useLocation, useNavigate } from "react-router-dom";
+import { getProducts, getSubcategories } from "../api/api";
 import NavBar from "../components/NavBar"
 import Category from "../components/Category"
 import Footer from "../components/Footer";
@@ -13,22 +13,43 @@ import FAQ from "../components/FAQ";
 
 export default function Products() {
   const { id } = useParams();
+  const location = useLocation();
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [count, setCount] = useState(0);
   const [pageSize, setPageSize] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
   const [filter, setFilter] = useState("");
+  const [subcats, setSubcats] = useState([]);
+  const navigate = useNavigate();
 
 
   useEffect(() => {
     fetchProducts(1);
+  }, [id, location.search]);
+
+  useEffect(() => {
+    // fetch subcategories for this category to show as top buttons when on products page
+    const fetchSubs = async () => {
+      if (!id) return setSubcats([]);
+      try {
+        const res = await getSubcategories(id);
+        setSubcats(res.data || []);
+      } catch (err) {
+        console.error("Error fetching subcategories for products page", err);
+        setSubcats([]);
+      }
+    };
+    fetchSubs();
   }, [id]);
 
   const fetchProducts = async (page = 1, appliedFilter = filter) => {
     try {
       setLoading(true);
-      const res = await getProducts(id, { page, filter: appliedFilter });
+      // read subcategory_id from query string if present
+      const search = new URLSearchParams(location.search);
+      const subcategory_id = search.get("subcategory_id");
+      const res = await getProducts(id, { page, filter: appliedFilter, subcategory_id });
       const response = res.data;
       setProducts(response.results);
       setCount(response.count);
@@ -93,6 +114,21 @@ export default function Products() {
       <WelcomeNavBar />
       <NavBar />
       <Category />
+
+      {/* If on a category products page, show subcategory buttons under header/navbar */}
+      {subcats.length > 0 && (
+        <div className="products-subcat-bar flex gap-2 items-center justify-center mt-4">
+          {subcats.map((s) => (
+            <button
+              key={s.id}
+              className="page-btn"
+              onClick={() => navigate(`/products/${id}?subcategory_id=${s.id}`)}
+            >
+              {s.name}
+            </button>
+          ))}
+        </div>
+      )}
 
 
 

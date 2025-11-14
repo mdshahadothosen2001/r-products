@@ -69,6 +69,90 @@
 }
 
 
+/* Category dropdown/drawer styles */
+.categories-wrap {
+  display: flex;
+  gap: 0.12rem; /* further reduced spacing between categories */
+  align-items: center;
+  flex-wrap: wrap;
+}
+.category-with-sub {
+  position: relative;
+}
+.category-btn {
+  background: transparent;
+  border: none;
+  padding: 0.12rem 0.3rem;
+  cursor: pointer;
+  color: #374151;
+  font-weight: 500;
+  font-size: 12px; /* smaller font to avoid horizontal scrolling */
+  white-space: nowrap;
+  max-width: 140px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.sub-toggle {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0 0.4rem;
+  color: #6b7280;
+}
+.subcategory-dropdown.drawer {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  min-width: 260px; /* wider to display full subcategory names */
+  max-width: 380px;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+  z-index: 60;
+  padding: 8px 6px;
+  transform-origin: top left;
+  transition: transform 160ms ease, opacity 160ms ease;
+}
+.subcategory-dropdown.drawer .sub-item {
+  padding: 8px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  color: #111827;
+  white-space: normal; /* allow wrapping of long subcategory names */
+}
+.subcategory-dropdown.drawer .sub-item:hover {
+  color: #3b82f6; /* project blue */
+  background: rgba(59,130,246,0.06);
+}
+.subcategory-dropdown.drawer .sub-item:hover {
+  background: #f3f4f6;
+}
+
+/* small layout adjustments */
+.no-sub { padding: 8px 12px; color: #6b7280 }
+
+/* Products page subcategory button bar */
+.products-subcat-bar {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  justify-content: center;
+  padding: 0.5rem 1rem;
+}
+.products-subcat-bar .page-btn {
+  background: #f8fafc;
+  border: 1px solid #e6eef8;
+  padding: 0.35rem 0.75rem;
+  border-radius: 999px;
+  font-size: 13px;
+}
+.products-subcat-bar .page-btn:hover {
+  background: rgba(59,130,246,0.08);
+  color: #1e40af;
+  transform: translateY(-1px);
+}
+
+
 
 
 /* Mobile styles */

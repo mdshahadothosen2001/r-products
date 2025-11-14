@@ -15,13 +15,22 @@ export const userProfile = (data) => API.get("/auth/profile/", data);
 export const bannerList = (data) => API.get("/banner/", data);
 
 export const getCategories = () => API.get("/category/");
+// Get subcategories for a given category id
+export const getSubcategories = (categoryId) => API.get(`/category/${categoryId}/subcategories/`);
 
 // Products
 export const fetchProducts = () => API.get("/products/");
 
 export const getProducts = (categoryId, filters = {}) => {
-  // filters: { filter: "price" | "sold" | "newest" }
-  let query = `category_id=${categoryId}`;
+  // filters: { filter: "price" | "sold" | "newest", subcategory_id }
+  let query = "";
+
+  // If subcategory filter is provided, prefer it
+  if (filters.subcategory_id) {
+    query = `subcategory_id=${filters.subcategory_id}`;
+  } else {
+    query = `category_id=${categoryId}`;
+  }
 
   if (filters.filter) {
     query += `&filter=${filters.filter}`;
