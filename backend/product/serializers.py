@@ -7,6 +7,7 @@ from product.models import Product
 
 class ProductSerializer(serializers.ModelSerializer):
     category_name = serializers.CharField(source="category.name", read_only=True)
+    subcategory_name = serializers.CharField(source="subcategory.name", read_only=True)
     price_ceil = serializers.SerializerMethodField()
     discount_ceil = serializers.SerializerMethodField()
     discount_price = serializers.SerializerMethodField()

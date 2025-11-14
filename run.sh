@@ -12,7 +12,7 @@ python manage.py migrate
 echo "🟢 Creating superuser (admin)..."
 python manage.py shell -c "from user.models import UserAccount; UserAccount.objects.filter(phone_number='01611111111').exists() or UserAccount.objects.create_superuser('01611111111', '12345')"
 
-python manage.py runserver 5174 &
+python manage.py runserver 8000 &
 BACKEND_PID=$!
 
 echo "🔹 Starting Frontend..."

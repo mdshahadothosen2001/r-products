@@ -25,7 +25,11 @@ class ProductListView(generics.ListAPIView):
         
         # Filter by category
         category_id = self.request.query_params.get("category_id")
-        if category_id:
+        subcategory_id = self.request.query_params.get("subcategory_id")
+        # If subcategory filter is provided, prefer it (more specific). Otherwise fall back to category.
+        if subcategory_id:
+            queryset = queryset.filter(subcategory__id=subcategory_id)
+        elif category_id:
             queryset = queryset.filter(category__id=category_id)
         
         # Apply sorting/filtering based on the 'filter' query param

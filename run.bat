@@ -30,7 +30,7 @@ echo 🟢 Creating superuser (admin)...
 python manage.py shell -c "from user.models import UserAccount; User.objects.filter(phone_number='01611111111').exists() or User.objects.create_superuser('01611111111', 'admin@gmail.com', '12345')"
 
 :: Start backend server
-start cmd /k "python manage.py runserver 5174"
+start cmd /k "python manage.py runserver 8000"
 
 :: Go back to root
 cd ..

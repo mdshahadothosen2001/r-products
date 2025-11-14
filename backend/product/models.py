@@ -8,6 +8,12 @@ class Product(models.Model):
     #major attributes
     name = models.CharField(max_length=255)
     category = models.ForeignKey(Category, on_delete=models.PROTECT, related_name='products')
+    # Optional subcategory to support hierarchical categories without breaking existing relations.
+    # Keep it nullable so existing products remain valid until you backfill data.
+    subcategory = models.ForeignKey(
+        'category.SubCategory', on_delete=models.PROTECT,
+        related_name='products', null=True, blank=True
+    )
     brand = models.CharField(max_length=255, null=True, blank=True)
     description = RichTextField(null=True, blank=True)
     detail = RichTextField(null=True, blank=True)
