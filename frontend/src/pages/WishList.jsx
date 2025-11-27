@@ -141,17 +141,19 @@ const WishList = () => {
                 </div>
             ) : (
                 <div className="grid gap-4">
-                {wishlist.map((item) => (
-                    <div
-                    key={item.id}
-                    className="flex items-center justify-between bg-white border rounded-2xl shadow-sm p-4 hover:shadow-md transition"
-                    >
+        {wishlist.map((item) => {
+          const imageUrl = item?.product?.image || item?.product?.thumbnail || item?.product?.image_url || null;
+          return (
+          <div
+          key={item.id}
+          className="flex items-center justify-between bg-white border rounded-2xl shadow-sm p-4 hover:shadow-md transition"
+          >
           <Link to={`/products/details/${item.product.id}`} className="flex items-center gap-4 no-underline text-inherit">
-            {item.product.image ? (
+            {imageUrl ? (
             <img
-              src={item.product.image}
+              src={imageUrl}
               alt={item.product.name}
-              className="w-16 h-16 object-cover rounded-lg border"
+              className="w-16 h-16 object-contain rounded-lg border bg-white"
             />
             ) : (
             <div className="w-16 h-16 bg-gray-100 rounded-lg flex items-center justify-center text-gray-400">
@@ -165,24 +167,25 @@ const WishList = () => {
             </div>
           </Link>
 
-                    <div className="flex gap-2">
-                        <button
-                        onClick={() => handleAddToCart(item.product)}
-                        className="flex items-center gap-1 px-3 py-2 bg-green-500 text-white rounded-lg shadow hover:bg-green-600"
-                        >
-                        <ShoppingCart size={18} />
-                        Add to Cart
-                        </button>
-                        <button
-                        onClick={() => handleRemove(item.id, item.product.name)}
-                        className="flex items-center gap-1 px-3 py-2 bg-red-500 text-white rounded-lg shadow hover:bg-red-600"
-                        >
-                        <Trash2 size={18} />
-                        Remove
-                        </button>
-                    </div>
-                    </div>
-                ))}
+          <div className="flex gap-2">
+            <button
+            onClick={() => handleAddToCart(item.product)}
+            className="flex items-center gap-1 px-3 py-2 bg-green-500 text-white rounded-lg shadow hover:bg-green-600"
+            >
+            <ShoppingCart size={18} />
+            Add to Cart
+            </button>
+            <button
+            onClick={() => handleRemove(item.id, item.product.name)}
+            className="flex items-center gap-1 px-3 py-2 bg-red-500 text-white rounded-lg shadow hover:bg-red-600"
+            >
+            <Trash2 size={18} />
+            Remove
+            </button>
+          </div>
+          </div>
+          )
+        })}
                 </div>
             )}
         </div>
