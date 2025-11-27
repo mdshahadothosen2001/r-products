@@ -71,7 +71,7 @@ export default function ProductDetails() {
               <img
                 src={selectedImage}
                 alt={product.name}
-                className="w-full h-96 object-cover rounded-xl shadow-md mb-4"
+                className="w-full h-96 object-contain rounded-xl shadow-md mb-4 bg-white"
               />
             )}
             {product.thumbnail && (
@@ -79,7 +79,7 @@ export default function ProductDetails() {
                 <img
                   src={product.thumbnail}
                   alt="thumbnail"
-                  className="w-20 h-20 object-cover rounded-lg cursor-pointer border-2 border-gray-200 hover:border-blue-500"
+                  className="w-20 h-20 object-contain rounded-lg cursor-pointer border-2 border-gray-200 hover:border-blue-500 bg-white"
                   onClick={() => setSelectedImage(product.thumbnail)}
                 />
               </div>

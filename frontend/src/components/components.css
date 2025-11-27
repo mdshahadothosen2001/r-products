@@ -51,8 +51,10 @@
 }
 .product-img {
   width: 100%;
-  height: 200px;
-  object-fit: cover;
+  height: 200px; /* keep card height but don't crop image */
+  object-fit: contain; /* show whole image */
+  background-color: #f8fafc; /* neutral bg for letterboxing */
+  display: block;
 }
 .page-btn {
   padding: 0.5rem 0.9rem;

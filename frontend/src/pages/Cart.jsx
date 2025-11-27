@@ -5,7 +5,7 @@ import Footer from "../components/Footer";
 import Category from "../components/Category";
 import WelcomeNavBar from "../components/WelcomeNavBar";
 import Swal from "sweetalert2";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { FaShoppingCart,  FaSmile, FaCoins, FaMoneyCheckAlt } from "react-icons/fa";
 import FAQ from "../components/FAQ";
 
@@ -322,30 +322,38 @@ export default function CartPage() {
                   onChange={(e) => handleCheckboxChange(product.id, e.target.checked)}
                   className="w-5 h-5"
                 />
-                <img
-                  src={product.thumbnail}
-                  alt={product.name}
-                  className="w-32 h-32 object-cover rounded-lg"
-                />
-                <div className="flex-1">
-                  <h2 className="text-xl font-bold">{product.name}</h2>
-                  <p className="text-blue-600 font-semibold">{product.price_ceil} BDT</p>
-                  <div className="mt-2 flex items-center gap-2">
-                    <button
-                      onClick={() => handleQuantityChange(product.id, -1)}
-                      className="bg-gray-200 px-2 py-1 rounded hover:bg-gray-300"
-                    >
-                      -
-                    </button>
-                    <span className="px-3">{product.quantity}</span>
-                    <button
-                      onClick={() => handleQuantityChange(product.id, 1)}
-                      className="bg-gray-200 px-2 py-1 rounded hover:bg-gray-300"
-                    >
-                      +
-                    </button>
+
+                {/* clickable area: image + title navigates to product details */}
+                <Link
+                  to={`/products/details/${product.id}`}
+                  className="flex items-center gap-4 flex-1 no-underline text-inherit"
+                >
+                  <img
+                    src={product.thumbnail}
+                    alt={product.name}
+                    className="w-32 h-32 object-cover rounded-lg"
+                  />
+                  <div className="flex-1">
+                    <h2 className="text-xl font-bold">{product.name}</h2>
+                    <p className="text-blue-600 font-semibold">{product.price_ceil} BDT</p>
+                    <div className="mt-2 flex items-center gap-2">
+                      <button
+                        onClick={(e) => { e.preventDefault(); handleQuantityChange(product.id, -1); }}
+                        className="bg-gray-200 px-2 py-1 rounded hover:bg-gray-300"
+                      >
+                        -
+                      </button>
+                      <span className="px-3">{product.quantity}</span>
+                      <button
+                        onClick={(e) => { e.preventDefault(); handleQuantityChange(product.id, 1); }}
+                        className="bg-gray-200 px-2 py-1 rounded hover:bg-gray-300"
+                      >
+                        +
+                      </button>
+                    </div>
                   </div>
-                </div>
+                </Link>
+
                 <button
                   onClick={() => handleRemove(product.id)}
                   className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700 transition"

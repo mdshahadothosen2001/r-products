@@ -146,24 +146,24 @@ const WishList = () => {
                     key={item.id}
                     className="flex items-center justify-between bg-white border rounded-2xl shadow-sm p-4 hover:shadow-md transition"
                     >
-                    <div className="flex items-center gap-4">
-                        {item.product.image ? (
-                        <img
-                            src={item.product.image}
-                            alt={item.product.name}
-                            className="w-16 h-16 object-cover rounded-lg border"
-                        />
-                        ) : (
-                        <div className="w-16 h-16 bg-gray-100 rounded-lg flex items-center justify-center text-gray-400">
-                            <ShoppingCart size={24} />
-                        </div>
-                        )}
+          <Link to={`/products/details/${item.product.id}`} className="flex items-center gap-4 no-underline text-inherit">
+            {item.product.image ? (
+            <img
+              src={item.product.image}
+              alt={item.product.name}
+              className="w-16 h-16 object-cover rounded-lg border"
+            />
+            ) : (
+            <div className="w-16 h-16 bg-gray-100 rounded-lg flex items-center justify-center text-gray-400">
+              <ShoppingCart size={24} />
+            </div>
+            )}
 
-                        <div>
-                        <h3 className="font-semibold text-gray-800">{item.product.name}</h3>
-                        <p className="text-gray-500">{item.product.price} BDT</p>
-                        </div>
-                    </div>
+            <div>
+            <h3 className="font-semibold text-gray-800">{item.product.name}</h3>
+            <p className="text-gray-500">{item.product.price} BDT</p>
+            </div>
+          </Link>
 
                     <div className="flex gap-2">
                         <button
