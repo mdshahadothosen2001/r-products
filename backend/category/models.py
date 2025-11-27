@@ -5,6 +5,8 @@ class Category(models.Model):
     name = models.CharField(max_length=120, unique=True)
     priority = models.PositiveSmallIntegerField(default=1)
     is_active = models.BooleanField(default=True)
+    # allow admin to toggle whether category is shown in navbar
+    is_display_nav = models.BooleanField(default=True)
 
     def __str__(self):
         return self.name

@@ -59,7 +59,7 @@ export default function Category() {
   return (
     <div className="category-section">
       <div className="categories-wrap">
-      {categories.map((cat) => (
+  {categories.filter(cat => cat.is_display_nav !== false).map((cat) => (
         <div
           key={cat.id}
           className="category-with-sub"

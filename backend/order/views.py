@@ -1,13 +1,14 @@
 from django.contrib.auth import get_user_model
 from django.db import transaction
 from django.shortcuts import get_object_or_404
+import uuid
 
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework import status
 
-from order.models import Order, OrderItem
+from order.models import Order, OrderItem, Payment
 from product.models import Product
 from order.serializers import OrderSerializer
 from activity.models import ActivityLog
@@ -227,8 +228,10 @@ class OrderStatusUpdateView(APIView):
 
 
 class OrderBillingView(APIView):
-    permission_classes = [AllowAny]
+    # require authentication to update billing and/or submit payment
+    permission_classes = [IsAuthenticated]
 
+    @transaction.atomic
     def post(self, request, order_id):
         """
         Update order billing info (all fields required).
@@ -239,7 +242,11 @@ class OrderBillingView(APIView):
             "address1": "...",
             "address2": "...",
             "city": "...",
-            "postal_code": "..."
+            "postal_code": "...",
+            // optional payment fields:
+            "payment_method": "card|nagad|rocket|bkash|billing",
+            // card: card_number, expiry, cvc
+            // mobile: mobile_number, password
         }
         """
         order = get_object_or_404(Order, id=order_id)
@@ -263,24 +270,70 @@ class OrderBillingView(APIView):
         order.postal_or_zip_code = request.data["postal_code"]
         order.status = "address"
 
-
         user = get_object_or_404(User, id=request.user.id)        
         ActivityLog.objects.create(
             action_type='order',
             order=order,
-            action = (
-                        "Billing Information added: "
-                        f"{request.data['first_name']}  {request.data['last_name']} "
-                        f"{request.data['phone']}, "
-                        f"{request.data['address1']}, "
-                        f"{request.data['address2']}, "
-                        f"{request.data['city']}, "
-                        f"{request.data['postal_code']}"
-                    ),
+            action=(
+                "Billing Information added: "
+                f"{request.data['first_name']}  {request.data['last_name']} "
+                f"{request.data['phone']}, "
+                f"{request.data['address1']}, "
+                f"{request.data['address2']}, "
+                f"{request.data['city']}, "
+                f"{request.data['postal_code']}"
+            ),
             performed_by=user
         )
 
         order.save()
+
+        # If payment info is provided, create a Payment and update order status
+        payment_method = (request.data.get("payment_method") or "").lower()
+
+        if payment_method and payment_method != "billing":
+            # validate payment fields
+            if payment_method in ["card", "mastercard", "visa"]:
+                card_number = request.data.get("card_number")
+                expiry = request.data.get("expiry")
+                cvc = request.data.get("cvc")
+                if not (card_number and expiry and cvc):
+                    return Response({"success": False, "message": "card_number, expiry and cvc are required for card payments."}, status=status.HTTP_400_BAD_REQUEST)
+            elif payment_method in ["nagad", "rocket", "bkash", "mobile"]:
+                mobile_number = request.data.get("mobile_number")
+                password = request.data.get("password")
+                if not (mobile_number and password):
+                    return Response({"success": False, "message": "mobile_number and password are required for mobile payments."}, status=status.HTTP_400_BAD_REQUEST)
+            else:
+                return Response({"success": False, "message": f"Unsupported payment method: {payment_method}"}, status=status.HTTP_400_BAD_REQUEST)
+
+            # create transaction id and payment record
+            txn_id = f"txn_{uuid.uuid4().hex[:12]}"
+            payment_payload = request.data.copy()
+
+            payment = Payment.objects.create(
+                order=order,
+                user=user,
+                method=payment_method,
+                transaction_id=txn_id,
+                amount=order.total_price,
+                payload=payment_payload,
+                status='success'
+            )
+
+            # update order status to pending after payment
+            order.status = 'pending'
+            order.save()
+
+            # activity log for payment
+            ActivityLog.objects.create(
+                action_type='payment',
+                order=order,
+                action=f"Payment received via {payment_method}. TXN: {txn_id}",
+                performed_by=user
+            )
+
+            return Response({"success": True, "message": "Order billing information and payment recorded", "order_id": order.id, "transaction_id": txn_id}, status=status.HTTP_200_OK)
 
         return Response(
             {"success": True, "message": "Order billing information updated", "order_id": order.id},

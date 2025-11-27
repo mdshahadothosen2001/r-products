@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.db import models
-from .models import Order, OrderItem
+from .models import Order, OrderItem, Payment
 from activity.models import ActivityLog
 
 # Existing OrderItemInline
@@ -48,3 +48,6 @@ class OrderAdmin(admin.ModelAdmin):
         # Sum all saved_amount from related OrderItems
         return obj.items.aggregate(total=models.Sum('saved_amount'))['total'] or 0
     total_saved_amount.short_description = 'Total Saved Amount'
+
+admin.site.register(Payment)
+# Note: ActivityLogInline is read-only in this admin interface.

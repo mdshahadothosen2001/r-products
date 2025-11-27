@@ -63,3 +63,37 @@ class OrderItem(models.Model):
 
     def __str__(self):
         return f"{self.product_name} (x{self.quantity})"
+
+
+class Payment(models.Model):
+    order = models.ForeignKey(
+        Order,
+        on_delete=models.CASCADE,
+        related_name="payments",
+        null=True,
+        blank=True,
+    )
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='payments'
+    )
+    method = models.CharField(max_length=50)
+    transaction_id = models.CharField(max_length=64, unique=True)
+    amount = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
+    # Use Django's built-in JSONField where available (works with sqlite on modern Django)
+    try:
+        # Django 3.1+
+        payload_field = models.JSONField
+    except Exception:
+        # Fallback to TextField if JSONField not available
+        payload_field = models.TextField
+
+    payload = payload_field(null=True, blank=True)
+    status = models.CharField(max_length=20, default='success')
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Payment {self.transaction_id} - {self.method} - {self.status}"

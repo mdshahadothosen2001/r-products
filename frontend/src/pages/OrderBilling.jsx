@@ -18,11 +18,15 @@ const OrderBilling = () => {
   const [formData, setFormData] = useState({
     first_name: "",
     last_name: "",
+    phone: "",
     address1: "",
     address2: "",
     city: "",
     postal_code: "",
   });
+  const [paymentMethod, setPaymentMethod] = useState("billing");
+  const [cardInfo, setCardInfo] = useState({ card_number: "", expiry: "", cvc: "", cardholder_name: "" });
+  const [mobileInfo, setMobileInfo] = useState({ mobile_number: "", password: "" });
   const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
@@ -34,7 +38,26 @@ const OrderBilling = () => {
     e.preventDefault();
     setLoading(true);
     try {
-      const response = await postBillingInfoOrder(orderId, formData);
+      // assemble payload: billing fields + optional payment fields
+      const payload = {
+        ...formData,
+      };
+
+      if (paymentMethod && paymentMethod !== "billing") {
+        payload.payment_method = paymentMethod;
+        if (paymentMethod === "card") {
+          payload.card_number = cardInfo.card_number;
+          payload.expiry = cardInfo.expiry;
+          payload.cvc = cardInfo.cvc;
+          payload.cardholder_name = cardInfo.cardholder_name;
+        } else {
+          // mobile banking
+          payload.mobile_number = mobileInfo.mobile_number;
+          payload.password = mobileInfo.password;
+        }
+      }
+
+      const response = await postBillingInfoOrder(orderId, payload);
 
       Swal.fire({
         icon: "success",
@@ -55,6 +78,9 @@ const OrderBilling = () => {
         city: "",
         postal_code: "",
       });
+      setPaymentMethod("billing");
+      setCardInfo({ card_number: "", expiry: "", cvc: "", cardholder_name: "" });
+      setMobileInfo({ mobile_number: "", password: "" });
     } catch (err) {
       console.error(err);
       Swal.fire({
@@ -97,6 +123,18 @@ const OrderBilling = () => {
       </button>
     </div>
     <div className="h-20"></div>
+
+      {/* Payment method selector */}
+      <div className="mb-4">
+        <label className="block text-gray-700 font-medium mb-2">Payment method</label>
+        <div className="flex gap-2 flex-wrap">
+          <button type="button" onClick={() => setPaymentMethod('billing')} className={`px-3 py-2 rounded ${paymentMethod==='billing' ? 'bg-green-600 text-white' : 'bg-gray-100'}`}>Billing (Home delivery)</button>
+          <button type="button" onClick={() => setPaymentMethod('card')} className={`px-3 py-2 rounded ${paymentMethod==='card' ? 'bg-green-600 text-white' : 'bg-gray-100'}`}>Card</button>
+          <button type="button" onClick={() => setPaymentMethod('nagad')} className={`px-3 py-2 rounded ${paymentMethod==='nagad' ? 'bg-green-600 text-white' : 'bg-gray-100'}`}>Nagad</button>
+          <button type="button" onClick={() => setPaymentMethod('rocket')} className={`px-3 py-2 rounded ${paymentMethod==='rocket' ? 'bg-green-600 text-white' : 'bg-gray-100'}`}>Rocket</button>
+          <button type="button" onClick={() => setPaymentMethod('bkash')} className={`px-3 py-2 rounded ${paymentMethod==='bkash' ? 'bg-green-600 text-white' : 'bg-gray-100'}`}>BKash</button>
+        </div>
+      </div>
 
 
       {/* First + Last Name */}
@@ -144,6 +182,67 @@ const OrderBilling = () => {
           className="w-full border-gray-300 rounded-xl p-3 border focus:ring-2 focus:ring-blue-500 focus:outline-none"
         />
       </div>
+
+      {/* Payment fields when needed */}
+      {paymentMethod === 'card' && (
+        <div className="space-y-3">
+          <input
+            type="text"
+            placeholder="Card number"
+            value={cardInfo.card_number}
+            onChange={(e) => setCardInfo({ ...cardInfo, card_number: e.target.value })}
+            className="w-full border rounded px-3 py-2"
+            required
+          />
+          <div className="flex gap-2">
+            <input
+              type="text"
+              placeholder="MM/YY"
+              value={cardInfo.expiry}
+              onChange={(e) => setCardInfo({ ...cardInfo, expiry: e.target.value })}
+              className="flex-1 border rounded px-3 py-2"
+              required
+            />
+            <input
+              type="text"
+              placeholder="CVC"
+              value={cardInfo.cvc}
+              onChange={(e) => setCardInfo({ ...cardInfo, cvc: e.target.value })}
+              className="w-28 border rounded px-3 py-2"
+              required
+            />
+          </div>
+          <input
+            type="text"
+            placeholder="Full name on card"
+            value={cardInfo.cardholder_name}
+            onChange={(e) => setCardInfo({ ...cardInfo, cardholder_name: e.target.value })}
+            className="w-full border rounded px-3 py-2"
+            required
+          />
+        </div>
+      )}
+
+      {['nagad','rocket','bkash'].includes(paymentMethod) && (
+        <div className="space-y-3">
+          <input
+            type="text"
+            placeholder="Mobile number"
+            value={mobileInfo.mobile_number}
+            onChange={(e) => setMobileInfo({ ...mobileInfo, mobile_number: e.target.value })}
+            className="w-full border rounded px-3 py-2"
+            required
+          />
+          <input
+            type="password"
+            placeholder="Password / PIN"
+            value={mobileInfo.password}
+            onChange={(e) => setMobileInfo({ ...mobileInfo, password: e.target.value })}
+            className="w-full border rounded px-3 py-2"
+            required
+          />
+        </div>
+      )}
 
       {/* Address */}
       <div>

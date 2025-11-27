@@ -69,6 +69,17 @@ export const GetCartAmount = async (payload) => {
 };
 
 
+// Dummy payment endpoint
+export const postCartPayment = (data) => {
+  const token = localStorage.getItem("access_token");
+  return API.post("/cart/payment/", data, {
+    headers: token
+      ? { Authorization: `Bearer ${token}` }
+      : {},
+  });
+};
+
+
 //B:: make order
 export const postOrder = (items) => {
   const token = localStorage.getItem("access_token");
