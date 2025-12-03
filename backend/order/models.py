@@ -34,10 +34,18 @@ class Order(models.Model):
     postal_or_zip_code = models.CharField(max_length=100, null=True, blank=True)
     applied_coupon = models.CharField(max_length=200, null=True, blank=True)
     coupon_price = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
+    
+    payment_type = models.CharField(
+        max_length=20,
+        choices=[
+            ("paid", "Paid"),
+            ("cash_on_delivery", "Cash on Delivery"),
+        ],
+        default="cash_on_delivery",
+        help_text="Payment type: paid (online payment) or cash on delivery"
+    )
 
     order_return_condition = models.BooleanField(default=True)
-
-
     is_review = models.BooleanField(default=False)
 
 
@@ -80,7 +88,7 @@ class Payment(models.Model):
         blank=True,
         related_name='payments'
     )
-    method = models.CharField(max_length=50)
+    method = models.CharField(max_length=50)  # card, nagad, rocket, bkash, cash_on_delivery
     transaction_id = models.CharField(max_length=64, unique=True)
     amount = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
     # Use Django's built-in JSONField where available (works with sqlite on modern Django)
@@ -92,7 +100,7 @@ class Payment(models.Model):
         payload_field = models.TextField
 
     payload = payload_field(null=True, blank=True)
-    status = models.CharField(max_length=20, default='success')
+    status = models.CharField(max_length=20, default='success')  # success, pending, failed
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):

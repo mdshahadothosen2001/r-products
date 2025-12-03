@@ -18,9 +18,9 @@ class OrderSerializer(serializers.ModelSerializer):
         model = Order
         fields = (
             'id', 'user', 'status', 'total_price', 'created_at', 'items', 'is_review', "order_return_condition",
-            'sender_info', 'receiver_info'
+            'payment_type', 'sender_info', 'receiver_info'
         )
-        read_only_fields = ('user', 'total_price', 'is_review', 'created_at')
+        read_only_fields = ('user', 'total_price', 'is_review', 'created_at', 'payment_type')
 
     def get_sender_info(self, obj):
         return {

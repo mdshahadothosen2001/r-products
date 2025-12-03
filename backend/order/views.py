@@ -228,13 +228,12 @@ class OrderStatusUpdateView(APIView):
 
 
 class OrderBillingView(APIView):
-    # require authentication to update billing and/or submit payment
     permission_classes = [IsAuthenticated]
 
     @transaction.atomic
     def post(self, request, order_id):
         """
-        Update order billing info (all fields required).
+        Update order billing info and handle payment.
         POST data: {
             "phone": "...",
             "first_name": "...",
@@ -243,9 +242,10 @@ class OrderBillingView(APIView):
             "address2": "...",
             "city": "...",
             "postal_code": "...",
-            // optional payment fields:
-            "payment_method": "card|nagad|rocket|bkash|billing",
-            // card: card_number, expiry, cvc
+            "pay_now": true/false,
+            // if pay_now is true:
+            "payment_method": "card|nagad|rocket|bkash",
+            // card: card_number, expiry, cvc, cardholder_name
             // mobile: mobile_number, password
         }
         """
@@ -261,6 +261,7 @@ class OrderBillingView(APIView):
                 status=status.HTTP_400_BAD_REQUEST
             )
 
+        # Update billing information
         order.receiver_phone = request.data["phone"]
         order.first_name = request.data["first_name"]
         order.last_name = request.data["last_name"]
@@ -268,7 +269,6 @@ class OrderBillingView(APIView):
         order.address_line_2 = request.data["address2"]
         order.city = request.data["city"]
         order.postal_or_zip_code = request.data["postal_code"]
-        order.status = "address"
 
         user = get_object_or_404(User, id=request.user.id)        
         ActivityLog.objects.create(
@@ -276,7 +276,7 @@ class OrderBillingView(APIView):
             order=order,
             action=(
                 "Billing Information added: "
-                f"{request.data['first_name']}  {request.data['last_name']} "
+                f"{request.data['first_name']} {request.data['last_name']}, "
                 f"{request.data['phone']}, "
                 f"{request.data['address1']}, "
                 f"{request.data['address2']}, "
@@ -286,32 +286,49 @@ class OrderBillingView(APIView):
             performed_by=user
         )
 
-        order.save()
+        # Check if user wants to pay now
+        pay_now = request.data.get("pay_now", False)
 
-        # If payment info is provided, create a Payment and update order status
-        payment_method = (request.data.get("payment_method") or "").lower()
+        if pay_now:
+            # User wants to pay now - validate payment method and fields
+            payment_method = (request.data.get("payment_method") or "").lower()
+            
+            if not payment_method:
+                return Response(
+                    {"success": False, "message": "payment_method is required when pay_now is true"},
+                    status=status.HTTP_400_BAD_REQUEST
+                )
 
-        if payment_method and payment_method != "billing":
-            # validate payment fields
-            if payment_method in ["card", "mastercard", "visa"]:
+            # Validate payment fields based on method
+            if payment_method == "card":
                 card_number = request.data.get("card_number")
                 expiry = request.data.get("expiry")
                 cvc = request.data.get("cvc")
+                cardholder_name = request.data.get("cardholder_name")
                 if not (card_number and expiry and cvc):
-                    return Response({"success": False, "message": "card_number, expiry and cvc are required for card payments."}, status=status.HTTP_400_BAD_REQUEST)
-            elif payment_method in ["nagad", "rocket", "bkash", "mobile"]:
+                    return Response(
+                        {"success": False, "message": "card_number, expiry and cvc are required for card payments"},
+                        status=status.HTTP_400_BAD_REQUEST
+                    )
+            elif payment_method in ["nagad", "rocket", "bkash"]:
                 mobile_number = request.data.get("mobile_number")
                 password = request.data.get("password")
                 if not (mobile_number and password):
-                    return Response({"success": False, "message": "mobile_number and password are required for mobile payments."}, status=status.HTTP_400_BAD_REQUEST)
+                    return Response(
+                        {"success": False, "message": "mobile_number and password are required for mobile payments"},
+                        status=status.HTTP_400_BAD_REQUEST
+                    )
             else:
-                return Response({"success": False, "message": f"Unsupported payment method: {payment_method}"}, status=status.HTTP_400_BAD_REQUEST)
+                return Response(
+                    {"success": False, "message": f"Unsupported payment method: {payment_method}"},
+                    status=status.HTTP_400_BAD_REQUEST
+                )
 
-            # create transaction id and payment record
+            # Create transaction id and payment record
             txn_id = f"txn_{uuid.uuid4().hex[:12]}"
             payment_payload = request.data.copy()
 
-            payment = Payment.objects.create(
+            Payment.objects.create(
                 order=order,
                 user=user,
                 method=payment_method,
@@ -321,11 +338,12 @@ class OrderBillingView(APIView):
                 status='success'
             )
 
-            # update order status to pending after payment
+            # Update order status and payment type
             order.status = 'pending'
+            order.payment_type = 'paid'
             order.save()
 
-            # activity log for payment
+            # Activity log for payment
             ActivityLog.objects.create(
                 action_type='payment',
                 order=order,
@@ -333,9 +351,36 @@ class OrderBillingView(APIView):
                 performed_by=user
             )
 
-            return Response({"success": True, "message": "Order billing information and payment recorded", "order_id": order.id, "transaction_id": txn_id}, status=status.HTTP_200_OK)
+            return Response(
+                {
+                    "success": True,
+                    "message": "Order and payment confirmed successfully",
+                    "order_id": order.id,
+                    "transaction_id": txn_id,
+                    "payment_method": payment_method
+                },
+                status=status.HTTP_200_OK
+            )
+        else:
+            # Cash on delivery - no payment record needed
+            order.status = 'pending'
+            order.payment_type = 'cash_on_delivery'
+            order.save()
 
-        return Response(
-            {"success": True, "message": "Order billing information updated", "order_id": order.id},
-            status=status.HTTP_200_OK
-        )
+            # Activity log for cash on delivery
+            ActivityLog.objects.create(
+                action_type='order',
+                order=order,
+                action="Order confirmed with Cash on Delivery",
+                performed_by=user
+            )
+
+            return Response(
+                {
+                    "success": True,
+                    "message": "Order confirmed with Cash on Delivery",
+                    "order_id": order.id,
+                    "payment_method": "cash_on_delivery"
+                },
+                status=status.HTTP_200_OK
+            )

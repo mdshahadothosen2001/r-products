@@ -81,11 +81,11 @@ export const postCartPayment = (data) => {
 
 
 //B:: make order
-export const postOrder = (items) => {
+export const postOrder = (data) => {
   const token = localStorage.getItem("access_token");
   return API.post(
     "/order/",
-    { items },
+    data,
     {
       headers: {
         Authorization: `Bearer ${token}`,

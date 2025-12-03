@@ -20,12 +20,6 @@ export default function CartPage() {
     saved_money: 0,
   });
   const [orderLoading, setOrderLoading] = useState(false);
-  const [showPayment, setShowPayment] = useState(false);
-  const [paymentMethod, setPaymentMethod] = useState("card");
-  const [cardInfo, setCardInfo] = useState({ cardNumber: "", expiry: "", cvc: "", cardName: "" });
-  const [mobileInfo, setMobileInfo] = useState({ mobileNumber: "", password: "" });
-  const [paymentLoading, setPaymentLoading] = useState(false);
-  const [orderPayloadState, setOrderPayloadState] = useState([]);
 
   const navigate = useNavigate();
 
@@ -161,101 +155,68 @@ export default function CartPage() {
 
 
   const handleConfirmOrder = async () => {
-      if (selectedProducts.length === 0) return;
+    if (selectedProducts.length === 0) return;
 
-      // ✅ Check login
-      const token = localStorage.getItem("access_token");
-      if (!token) {
-        Swal.fire({
-          title: "⚠️ Login Required",
-          text: "Please login to confirm your order.",
-          icon: "warning",
-          confirmButtonText: "Go to Login",
-          confirmButtonColor: "#2563eb",
-        }).then(() => {
-          navigate("/login"); // redirect to login page
-        });
-        return;
-      }
-
-      // Instead of directly posting order, open payment UI and store payload
-      const payload = selectedProducts.map((id) => {
-          const product = cartProducts.find((p) => p.id === id);
-          return { product_id: product.id, quantity: product.quantity, coupon_code: couponCode || null, };
-        });
-
-      setOrderPayloadState(payload);
-      setShowPayment(true);
-  };
-
-
-  const handlePaymentSubmit = async () => {
-    if (!orderPayloadState || orderPayloadState.length === 0) return;
-
-    // basic validation for payment fields
-    if (paymentMethod === "card") {
-      const { cardNumber, expiry, cvc } = cardInfo;
-      if (!cardNumber || !expiry || !cvc) {
-        Swal.fire("⚠️ Incomplete", "Please fill card number, expiry and cvc.", "warning");
-        return;
-      }
-    } else {
-      const { mobileNumber, password } = mobileInfo;
-      if (!mobileNumber || !password) {
-        Swal.fire("⚠️ Incomplete", "Please fill mobile number and password.", "warning");
-        return;
-      }
+    // Check login
+    const token = localStorage.getItem("access_token");
+    if (!token) {
+      Swal.fire({
+        title: "⚠️ Login Required",
+        text: "Please login to confirm your order.",
+        icon: "warning",
+        confirmButtonText: "Go to Login",
+        confirmButtonColor: "#2563eb",
+      }).then(() => {
+        navigate("/login");
+      });
+      return;
     }
 
-    setPaymentLoading(true);
+    setOrderLoading(true);
     try {
-      const paymentPayload = {
-        payment_method: paymentMethod,
-        items: orderPayloadState,
-        ...(paymentMethod === "card"
-          ? { card_number: cardInfo.cardNumber, expiry: cardInfo.expiry, cvc: cardInfo.cvc, cardholder_name: cardInfo.cardName }
-          : { mobile_number: mobileInfo.mobileNumber, password: mobileInfo.password }),
+      const payload = {
+        items: selectedProducts.map((id) => {
+          const product = cartProducts.find((p) => p.id === id);
+          return { 
+            product_id: product.id, 
+            quantity: product.quantity, 
+            coupon_code: couponCode || null 
+          };
+        })
       };
 
-      const payRes = await postCartPayment(paymentPayload);
-      if (payRes.status === 200 && payRes.data?.status === "success") {
-        // The payment endpoint now creates the order and payment record and returns order_id
-        const orderId = payRes.data?.order_id;
-        const txnId = payRes.data?.transaction_id;
-        const message = payRes.data?.message || "Payment accepted and order created (dummy).";
+      const response = await postOrder(payload);
 
-        if (orderId) {
-          Swal.fire({
-            title: "✅ Success",
-            text: `${message} (TXN: ${txnId})`,
-            icon: "success",
-            confirmButtonColor: "#16a34a",
-          }).then(() => {
-            navigate(`/order/${orderId}/billing`);
-          });
+      if (response.data.success && response.data.order_id) {
+        // Update cart after order creation
+        const cartIds = JSON.parse(localStorage.getItem("cart")) || [];
+        const remainingCart = cartIds.filter((id) => !selectedProducts.includes(id));
+        localStorage.setItem("cart", JSON.stringify(remainingCart));
 
-          // Update cart after order
-          const cartIds = JSON.parse(localStorage.getItem("cart")) || [];
-          const remainingCart = cartIds.filter((id) => !selectedProducts.includes(id));
-          localStorage.setItem("cart", JSON.stringify(remainingCart));
+        const updatedCartProducts = cartProducts.filter((p) => !selectedProducts.includes(p.id));
+        setCartProducts(updatedCartProducts);
+        setSelectedProducts([]);
+        setAmounts({ total_amount: 0, payable_amount: 0, saved_money: 0 });
+        setCouponCode("");
 
-          const updatedCartProducts = cartProducts.filter((p) => !selectedProducts.includes(p.id));
-          setCartProducts(updatedCartProducts);
-          setSelectedProducts([]);
-          setAmounts({ total_amount: 0, payable_amount: 0, saved_money: 0 });
-          setCouponCode("");
-          setShowPayment(false);
-        } else {
-          Swal.fire({ title: "⚠️ Failed", text: message, icon: "error", confirmButtonColor: "#dc2626" });
-        }
-      } else {
-        Swal.fire({ title: "⚠️ Payment Failed", text: payRes.data?.error || "Payment failed.", icon: "error" });
+        // Navigate to billing page
+        Swal.fire({
+          title: "✅ Order Created",
+          text: "Please complete billing information",
+          icon: "success",
+          confirmButtonColor: "#16a34a",
+        }).then(() => {
+          navigate(`/order/${response.data.order_id}/billing`);
+        });
       }
     } catch (error) {
-      console.error("Payment/order failed:", error);
-      Swal.fire({ title: "❌ Error", text: error?.response?.data?.error || "Failed to process payment or order.", icon: "error" });
+      console.error("Order creation failed:", error);
+      Swal.fire({
+        title: "❌ Error",
+        text: error?.response?.data?.error || "Failed to create order",
+        icon: "error",
+      });
     } finally {
-      setPaymentLoading(false);
       setOrderLoading(false);
     }
   };
@@ -415,86 +376,13 @@ export default function CartPage() {
                   </div>
                 </div>
 
-                {!showPayment ? (
-                  <button
-                    onClick={handleConfirmOrder}
-                    disabled={orderLoading}
-                    className="w-full bg-green-600 text-white font-semibold py-3 rounded-xl mt-6 hover:bg-green-700 transition disabled:opacity-50"
-                  >
-                    {orderLoading ? "Placing Order..." : "Confirm Order"}
-                  </button>
-                ) : (
-                  <div className="mt-4 space-y-4">
-                    <label className="block text-gray-700 font-medium">Select Payment Method</label>
-                    <div className="flex gap-2 flex-wrap">
-                      <button type="button" onClick={() => setPaymentMethod('card')} className={`px-3 py-2 rounded ${paymentMethod==='card' ? 'bg-green-600 text-white' : 'bg-gray-100'}`}>Card</button>
-                      <button type="button" onClick={() => setPaymentMethod('nagad')} className={`px-3 py-2 rounded ${paymentMethod==='nagad' ? 'bg-green-600 text-white' : 'bg-gray-100'}`}>Nagad</button>
-                      <button type="button" onClick={() => setPaymentMethod('rocket')} className={`px-3 py-2 rounded ${paymentMethod==='rocket' ? 'bg-green-600 text-white' : 'bg-gray-100'}`}>Rocket</button>
-                      <button type="button" onClick={() => setPaymentMethod('bkash')} className={`px-3 py-2 rounded ${paymentMethod==='bkash' ? 'bg-green-600 text-white' : 'bg-gray-100'}`}>BKash</button>
-                    </div>
-
-                    {/* Card fields */}
-                    {paymentMethod === 'card' && (
-                      <div className="space-y-2">
-                        <input
-                          type="text"
-                          placeholder="Card number"
-                          value={cardInfo.cardNumber}
-                          onChange={(e) => setCardInfo({ ...cardInfo, cardNumber: e.target.value })}
-                          className="w-full border rounded px-3 py-2"
-                        />
-                        <div className="flex gap-2">
-                          <input
-                            type="text"
-                            placeholder="MM/YY"
-                            value={cardInfo.expiry}
-                            onChange={(e) => setCardInfo({ ...cardInfo, expiry: e.target.value })}
-                            className="flex-1 border rounded px-3 py-2"
-                          />
-                          <input
-                            type="text"
-                            placeholder="CVC"
-                            value={cardInfo.cvc}
-                            onChange={(e) => setCardInfo({ ...cardInfo, cvc: e.target.value })}
-                            className="w-28 border rounded px-3 py-2"
-                          />
-                        </div>
-                        <input
-                          type="text"
-                          placeholder="Full name on card"
-                          value={cardInfo.cardName}
-                          onChange={(e) => setCardInfo({ ...cardInfo, cardName: e.target.value })}
-                          className="w-full border rounded px-3 py-2"
-                        />
-                      </div>
-                    )}
-
-                    {/* Mobile banking fields */}
-                    {['nagad','rocket','bkash'].includes(paymentMethod) && (
-                      <div className="space-y-2">
-                        <input
-                          type="text"
-                          placeholder="Mobile number"
-                          value={mobileInfo.mobileNumber}
-                          onChange={(e) => setMobileInfo({ ...mobileInfo, mobileNumber: e.target.value })}
-                          className="w-full border rounded px-3 py-2"
-                        />
-                        <input
-                          type="password"
-                          placeholder="Password / PIN"
-                          value={mobileInfo.password}
-                          onChange={(e) => setMobileInfo({ ...mobileInfo, password: e.target.value })}
-                          className="w-full border rounded px-3 py-2"
-                        />
-                      </div>
-                    )}
-
-                    <div className="flex gap-2">
-                      <button onClick={handlePaymentSubmit} disabled={paymentLoading} className="flex-1 bg-blue-600 text-white px-4 py-2 rounded">{paymentLoading ? 'Processing...' : 'Pay & Place Order'}</button>
-                      <button onClick={() => setShowPayment(false)} disabled={paymentLoading} className="flex-1 bg-gray-200 px-4 py-2 rounded">Cancel</button>
-                    </div>
-                  </div>
-                )}
+                <button
+                  onClick={handleConfirmOrder}
+                  disabled={orderLoading}
+                  className="w-full bg-green-600 text-white font-semibold py-3 rounded-xl mt-6 hover:bg-green-700 transition disabled:opacity-50"
+                >
+                  {orderLoading ? "Creating Order..." : "Proceed to Billing"}
+                </button>
               </div>
             </div>
           )}

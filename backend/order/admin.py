@@ -39,7 +39,8 @@ class ActivityLogInline(admin.TabularInline):
 
 @admin.register(Order)
 class OrderAdmin(admin.ModelAdmin):
-    list_display = ('id', 'user', 'status', 'total_price', 'total_saved_amount', 'coupon_price', 'is_review', "order_return_condition", 'created_at')
+    list_display = ('id', 'user', 'status', 'total_price', 'total_saved_amount', 'coupon_price', 'payment_type', "order_return_condition", 'created_at')
+    list_display_links = ('id', 'user', 'status', 'total_price', 'total_saved_amount', 'coupon_price', 'payment_type', "order_return_condition", 'created_at')
     list_filter = ('status', 'created_at', 'updated_at')
     search_fields = ('user__username', 'id')
     inlines = [OrderItemInline, ActivityLogInline]
